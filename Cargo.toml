@@ -1,0 +1,17 @@
+[package]
+name = "hdfs"
+version = "0.0.1"
+authors = [ "Hyunsik Choi <hyunsik.choi@gmail.com>" ]
+build = "build.rs"
+
+[lib]
+name = "hdfs"
+path = "src/lib.rs"
+
+[dependencies]
+lazy_static = "0.1.*"
+log = "0.3.1"
+url = "0.2.31"
+
+[build-dependencies]
+gcc = "0.3.5"
