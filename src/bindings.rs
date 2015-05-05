@@ -1,4 +1,4 @@
-use libc::{c_char, c_int, c_short, c_uchar, int32_t, int64_t, uint16_t, c_void};
+use libc::{c_char, c_int, c_short, c_uchar, c_void, int32_t, int64_t, uint16_t, time_t};
 
 // Opaque Pointer of hdfsFS
 pub enum hdfsFS {}
@@ -19,25 +19,41 @@ pub struct HdfsReadStatistics {
 }
 
 pub type tSize = int32_t;
+pub type tTime = time_t;
+pub type tOffset = int64_t;
+pub type tPort = uint16_t;
 
 #[link(name="hdfs")]
 extern "C" {
   
   /// Determine if a file is open for read.
   ///
+  /// #### Params
+  /// * file - the HDFS file
+  ///
+  /// #### Return
   /// Return 1 if the file is open for read; 0 otherwise
   pub fn hdfsFileIsOpenForRead(fs: *mut hdfsFile) -> c_int;
   
   /// Determine if a file is open for write.
   /// 
+  /// #### Params
+  /// * file - the HDFS file
+  ///
+  /// #### Return
   /// Return 1 if the file is open for write; 0 otherwise.
   pub fn hdfsFileIsOpenForWrite(file: *mut hdfsFile) -> c_int;
   
   /// Get read statistics about a file.  This is only applicable to files 
   /// opened for reading.
   ///
-  /// # Return Value
-  /// 
+  /// #### Params
+  /// * file - The HDFS file
+  /// * stats - (out parameter) on a successful return, the read statistics.  
+  /// Unchanged otherwise. You must free the returned statistics with 
+  /// hdfsFileFreeReadStatistics.
+  ///
+  /// #### Return
   /// * 0 if the statistics were successfully returned,
   /// * -1 otherwise.  On a failure, please check errno against
   /// * ENOTSUP. webhdfs, LocalFilesystem, and so forth may 
@@ -47,73 +63,226 @@ extern "C" {
   
   /// HDFS read statistics for a file,
   /// 
+  /// #### Params
+  /// * stats - HDFS read statistics for a file.
+  /// 
+  /// #### Return
   /// Return the number of remote bytes read.
   pub fn hdfsReadStatisticsGetRemoteBytesRead(
     stats: *const HdfsReadStatistics) -> int64_t;
   
   /// Free some HDFS read statistics.
+  ///
+  /// #### Params
+  /// * stats - The HDFS read statistics to free.
   pub fn hdfsFileFreeReadStatistics(stats: *mut HdfsReadStatistics);
   
-  /// hdfsConnectAsUser - Connect to a hdfs file system as a specific user.
+  /// Connect to a hdfs file system as a specific user.
   ///
+  /// #### Params
+  /// * nn - The NameNode.  See hdfsBuilderSetNameNode for details.
+  /// * port - The port on which the server is listening.
+  /// * param - user the user name (this is hadoop domain user). 
+  /// Or NULL is equivelant to hhdfsConnect(host, port)
+  /// 
+  /// #### Return
   /// Returns a handle to the filesystem or NULL on error.  
   pub fn hdfsConnectAsUser(host: *const c_char, 
                        uint16_t: u16, user: 
                        *const c_char) -> *mut hdfsFS;
   
-  /// hdfsConnect - Connect to a hdfs file system.
+  /// Connect to a hdfs file system.
   ///
-  /// Returns a handle to the filesystem or NULL on error.  
+  /// This API is deprecated. Use hdfsBuilderConnect instead.
+  ///
+  /// #### Params
+  /// * nn - The NameNode.  See hdfsBuilderSetNameNode for details.
+  /// * port - The port on which the server is listening.
+  ///
+  /// #### Return
+  /// Returns a handle to the filesystem or NULL on error.
   pub fn hdfsConnect(host: *const c_char, uint16_t: u16) -> *mut hdfsFS;
   
-  /// hdfsConnect - Connect to an hdfs file system.
+  /// Connect to an hdfs file system.
   /// 
-  /// Forces a new instance to be created
+  /// Forces a new instance to be created. This API is deprecated.
+  /// Use hdfsBuilderConnect instead. 
   ///
+  /// #### Params
+  /// * nn - The NameNode.  See hdfsBuilderSetNameNode for details.
+  /// * port - The port on which the server is listening.
+  /// * user - The user name to use when connecting
+  ///
+  /// #### Return
   /// Returns a handle to the filesystem or NULL on error.
   pub fn hdfsConnectAsUserNewInstance(host: *const c_char, 
                     uint16_t: u16,
                     user: *const c_char) -> *mut hdfsFS;
   
+  /// Connect to an hdfs file system.
+  /// 
+  /// Forces a new instance to be created. This API is deprecated.
+  /// Use hdfsBuilderConnect instead. 
+  ///
+  /// #### Params
+  /// * nn - The NameNode.  See hdfsBuilderSetNameNode for details.
+  /// * port - The port on which the server is listening.
+  ///
+  /// #### Return
+  /// Returns a handle to the filesystem or NULL on error.
   pub fn hdfsConnectNewInstance(host: *const c_char, 
                             uint16_t: u16) -> *mut hdfsFS;
   
+  /// Connect to HDFS using the parameters defined by the builder.
+  ///
+  /// The HDFS builder will be freed, whether or not the connection was successful.
+  ///
+  /// Every successful call to hdfsBuilderConnect should be matched with a call
+  /// to hdfsDisconnect, when the hdfsFS is no longer needed.
+  /// 
+  /// #### Params
+  /// * bld - The HDFS builder
+  ///
+  /// #### Return
+  /// Returns a handle to the filesystem, or NULL on error.
+  pub fn hdfsBuilderConnect(bld : *mut hdfsBuilder) -> *mut hdfsFS;
+
+
+  /// Create an HDFS builder.
+  ///
+  /// #### Return
+  /// The HDFS builder, or NULL on error.
   pub fn hdfsNewBuilder() -> *mut hdfsBuilder;
   
+  /// Force the builder to always create a new instance of the FileSystem,
+  /// rather than possibly finding one in the cache.
+  ///
+  /// #### Params
+  /// * bld - The HDFS builder
+  pub fn hdfsBuilderSetForceNewInstance(bld: *mut hdfsBuilder);
+
+  /// Set the HDFS NameNode to connect to.
+  ///
+  /// #### Params
+  /// * bld - The HDFS builder
+  /// * nn - The NameNode to use. If the string given is 'default', the default NameNode
+  /// configuration will be used (from the XML configuration files).
+  /// If NULL is given, a LocalFileSystem will be created.
+  /// If the string starts with a protocol type such as ```file://``` or
+  /// ```hdfs://```, this protocol type will be used.  If not, the
+  /// ```hdfs://``` protocol type will be used.
+  /// You may specify a NameNode port in the usual way by
+  /// passing a string of the format ```hdfs://<hostname>:<port>```.
+  /// Alternately, you may set the port with hdfsBuilderSetNameNodePort.
+  /// However, you must not pass the port in two different ways.
+  pub fn hdfsBuilderSetNameNode(bld: *mut hdfsBuilder, host: *const c_char);
+
+  /// Set the port of the HDFS NameNode to connect to.
+  ///
+  /// #### Params
+  /// * bld - The HDFS builder
+  /// * port - The port.
+  pub fn hdfsBuilderSetNameNodePort(bld: *mut hdfsBuilder, port : uint16_t);
+
+  /// Set the username to use when connecting to the HDFS cluster.
+  ///
+  /// #### Params
+  /// * bld - The HDFS builder
+  /// * userName - The user name.  The string will be shallow-copied.
+  pub fn hdfsBuilderSetUserName(bld: *mut hdfsBuilder, userName: *const c_char);
+
+  /// Set the path to the Kerberos ticket cache to use when connecting to
+  /// the HDFS cluster.
+  ///
+  /// #### Params
+  /// * ```bld``` - The HDFS builder
+  /// * ```kerbTicketCachePath``` - The Kerberos ticket cache path.  The string
+  /// will be shallow-copied.
+  pub fn hdfsBuilderSetKerbTicketCachePath(bld: *mut hdfsBuilder, 
+      kerbTicketCachePath: *const c_char);
+
+  /// Free an HDFS builder.
+  ///
+  /// It is normally not necessary to call this function since
+  /// hdfsBuilderConnect frees the builder.
+  ///
+  /// #### Params
+  /// * ```bld``` - The HDFS builder
   pub fn hdfsFreeBuilder(bld: *mut hdfsBuilder);
   
-  pub fn hdfsBuilderSetNameNode(bld: *mut hdfsBuilder, host: *const c_char);
-  
-  pub fn hdfsBuilderSetNameNodePort(bld: *mut hdfsBuilder, port : uint16_t);
-  
-  pub fn hdfsBuilderSetUserName(bld: *mut hdfsBuilder, userName: *const c_char);
-  
-  pub fn hdfsBuilderSetKerbTicketCachePath(bld: *mut hdfsBuilder, 
-                       kerbTicketCachePath: *const c_char);
-  
+  /// Set a configuration string for an HdfsBuilder.
+  ///
+  /// #### Params
+  /// * ```key``` - The key to set.
+  /// * ```val``` - The value, or NULL to set no value.
+  /// This will be shallow-copied.  You are responsible for
+  /// ensuring that it remains valid until the builder is freed.
+  ///
+  /// #### Return
+  /// 0 on success; nonzero error code otherwise.
   pub fn hdfsBuilderConfSetStr(bld: *mut hdfsBuilder, 
                            key: *const c_char , value: *const c_char) -> c_int;
   
-//  fn hdfsConfGetStr(value : *const c_char, **c_char val) -> c_int
+  /// Get a configuration string.
+  ///
+  /// #### Params
+  /// * ```key``` - The key to find
+  /// * ```val``` - (out param) The value.  This will be set to NULL if the
+  /// key isn't found.  You must free this string with
+  /// ```hdfsConfStrFree```.
+  ///
+  /// #### Return
+  /// 0 on success; nonzero error code otherwise. 
+  /// Failure to find the key is not an error.
+  pub fn hdfsConfGetStr(value : *const c_char, val: *mut *mut c_char) -> c_int;
 
+  /// Get a configuration integer.
+  /// 
+  /// #### Params
+  /// * ```key``` - The key to find
+  /// * ```val``` - (out param) The value.  This will NOT be changed if the
+  /// key isn't found.
+  ///
+  /// #### Return
+  /// 0 on success; nonzero error code otherwise.
+  /// Failure to find the key is not an error.
   pub fn hdfsConfGetInt(key: *const c_char, val: *mut int32_t) -> c_int;
   
-  pub fn hdfsConfStrFree(val: *const c_char);
-  
-  /// 
-  /// Try to connect a specific HDFS namenode.
+  /// Free a configuration string found with hdfsConfGetStr. 
   ///
+  /// #### Params
+  /// * ```val``` - A configuration string obtained from hdfsConfGetStr
+  pub fn hdfsConfStrFree(val: *const c_char);
+   
+  /// hdfsDisconnect - Disconnect from the hdfs file system.
+  /// Disconnect from hdfs.
+  ///
+  /// #### Params
+  /// * ```fs``` - The configured filesystem handle.
   /// 
-  pub fn hdfsBuilderConnect(bld : *mut hdfsBuilder) -> *mut hdfsFS;
-  
+  /// #### Return
+  /// Returns 0 on success, -1 on error.
+  /// Even if there is an error, the resources associated with the
+  /// hdfsFS will be freed.
   pub fn hdfsDisconnect(fs: *mut hdfsFS) -> c_int;
 
   /// Open a hdfs file in given mode.
   /// 
   /// #### Params
-  /// * fs The configured filesystem handle.
-  /// * file The file handle.
-  /// 
+  /// * ```fs``` - The configured filesystem handle.
+  /// * ```file``` - The file handle.
+  /// * ```flags``` - an ```|``` of ```bits/fcntl.h``` file flags - 
+  /// supported flags are O_RDONLY, O_WRONLY (meaning create or overwrite 
+  /// i.e., implies O_TRUNCAT), O_WRONLY|O_APPEND. Other flags are generally 
+  /// ignored other than (O_RDWR || (O_EXCL & O_CREAT)) which return NULL and 
+  /// set errno equal ENOTSUP.
+  /// * ```bufferSize``` - Size of buffer for read/write - pass 0 if you want
+  /// to use the default configured values.
+  /// * ```replication``` Block replication - pass 0 if you want to use
+  /// the default configured values.
+  /// * ```blocksize``` - Size of block - pass 0 if you want to use the
+  /// default configured values.
+  ///
   /// #### Return
   /// Returns 0 on success, -1 on error. On error, errno will be set appropriately.
   /// If the hdfs file was valid, the memory associated with it will
@@ -124,9 +293,10 @@ extern "C" {
 
 
   /// Close an open file. 
+  ///
   /// #### Params
-  /// * fs The configured filesystem handle.
-  /// * file The file handle.
+  /// * ```fs``` - The configured filesystem handle.
+  /// * ```file``` - The file handle.
   ///
   /// #### Return
   /// Returns 0 on success, -1 on error.  On error, errno will be set appropriately.
@@ -135,9 +305,10 @@ extern "C" {
   pub fn hdfsCloseFile(fs: *mut hdfsFS, file: *mut hdfsFile) -> c_int;
 
   /// Checks if a given path exsits on the filesystem 
+  ///
   /// #### Params
-  /// * fs The configured filesystem handle.
-  /// * path The path to look for
+  /// * ```fs``` - The configured filesystem handle.
+  /// * ```path``` - The path to look for
   ///
   /// #### Return
   /// Returns 0 on success, -1 on error.  
