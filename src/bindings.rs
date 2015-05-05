@@ -1,14 +1,37 @@
-use libc::{c_char, c_int, c_short, c_uchar, c_void, int32_t, int64_t, uint16_t, time_t};
+use libc::{c_char, c_int, c_short, c_uchar, c_void, int16_t, int32_t, 
+  int64_t, uint16_t, size_t, time_t};
 
-// Opaque Pointer of hdfsFS
+/// Opaque Pointer of hdfsFS
 pub enum hdfsFS {}
 
-// Opaque Pointer of hdfsFile
+/// Opaque Pointer of hdfsFile
 pub enum hdfsFile {}
 
-// Opaque Pointer of hdfsBuilder
+/// Opaque Pointer of hdfsBuilder
 pub enum hdfsBuilder {}
 
+/// Opaque Pointer of hadoopRzOptions
+pub enum hadoopRzOptions {}
+
+/// Opaque Pointer of hadoopRzBuffer
+pub enum hadoopRzBuffer {}
+
+/// size of data for read/write io ops
+pub type tSize = int32_t;
+/// time type in seconds
+pub type tTime = time_t;
+/// offset within the file
+pub type tOffset = int64_t;
+/// port
+pub type tPort = uint16_t;
+
+#[repr(C)]
+pub enum tObjectKind {
+  kObjectKindFile = 0x46, // 'F'
+  kObjectKindDirectory = 0x44 // 'D'
+}
+
+/// Information about a file/directory.
 #[repr(C)]
 #[allow(non_snake_case)]
 pub struct HdfsReadStatistics {
@@ -18,10 +41,28 @@ pub struct HdfsReadStatistics {
   pub totalZeroCopyBytesRead : u64
 }
 
-pub type tSize = int32_t;
-pub type tTime = time_t;
-pub type tOffset = int64_t;
-pub type tPort = uint16_t;
+#[repr(C)]
+#[allow(non_snake_case)]
+pub struct hdfsFileInfo {
+  /// file or directory
+  mKind: tObjectKind,
+  /// the name of the file
+  mName: *mut c_char,
+  /// the last modification time for the file in seconds
+  mLastMod: tTime,
+  /// the count of replicas
+  mReplication: c_short,
+  /// the block size for the file
+  mBlockSize: tOffset,
+  /// the owner of the file
+  mOwner: *mut c_char,
+  /// the group associated with the file
+  mGroup: *mut c_char,
+  /// the permissions associated with the file
+  mPermissions: c_short,
+  /// the last access time for the file in seconds
+  mLastAccess: tTime,
+}
 
 #[link(name="hdfs")]
 extern "C" {
@@ -313,6 +354,104 @@ extern "C" {
   /// #### Return
   /// Returns 0 on success, -1 on error.  
   pub fn hdfsExists(fs: *mut hdfsFS, path: *const c_char) -> c_int;
+
+
+  pub fn hdfsSeek(fs: *mut hdfsFS, file: *mut hdfsFile, 
+    desiredPos: tOffset) -> c_int;
+
+  pub fn hdfsTell(fs: *mut hdfsFS, file: *mut hdfsFile) -> tOffset;
+
+  pub fn hdfsRead(fs: *mut hdfsFS, file: *mut hdfsFile, buffer: *mut c_void, 
+    length: tSize) -> tSize;
+
+  pub fn hdfsPread(fs: *mut hdfsFS, file: *mut hdfsFile, position: tOffset,
+    buffer: *mut c_void, length: tSize) -> tSize;
+
+  pub fn hdfsWrite(fs: *mut hdfsFS, file: *mut hdfsFile, 
+    buffer: *const c_void, length: tSize) -> tSize;
+
+  pub fn hdfsFlush(fs: *mut hdfsFS, file: *mut hdfsFile) -> c_int;
+
+  pub fn hdfsHFlush(fs: *mut hdfsFS, file: *mut hdfsFile) -> c_int;
+
+  pub fn hdfsHSync(fs: *mut hdfsFS, file: *mut hdfsFile) -> c_int;
+
+  pub fn hdfsAvailable(fs: *mut hdfsFS, file: *mut hdfsFile) -> c_int;
+
+  pub fn hdfsCopy(srcFS: *mut hdfsFS, src: *const c_char, 
+    dstFS: *mut hdfsFS, dst: *const c_char) -> c_int;
+
+  pub fn hdfsMove(srcFS: *mut hdfsFS, src: *const c_char, 
+    dstFS: *mut hdfsFS, dst: *const c_char) -> c_int;
+
+  pub fn hdfsDelete(srcFS: *mut hdfsFS, path: *const c_char, 
+    recursive: c_int) -> c_int;
+
+  pub fn hdfsRename(srcFS: *mut hdfsFS, oldPath: *const c_char, 
+    newPath: *const c_char) -> c_int;
+
+  pub fn hdfsGetWorkingDirectory(fs: *mut hdfsFS, buffer: *mut c_char, 
+    bufferSize: size_t) -> *mut c_char;
+
+  pub fn hdfsSetWorkingDirectory(fs: *mut hdfsFS, path: *const c_char) 
+    -> c_int;
+
+  pub fn hdfsCreateDirectory(fs: *mut hdfsFS, path: *const c_char) -> c_int;
+
+  pub fn hdfsSetReplication(fs: *mut hdfsFS, path: *const c_char, 
+    replication: int16_t) -> c_int;
+
+  pub fn hdfsListDirectory(fs: *mut hdfsFS, path: *const c_char,
+    numEntries: *mut c_int) -> *mut hdfsFileInfo;
+
+  pub fn hdfsGetPathInfo(fs: *mut hdfsFS, path: *const c_char) 
+    -> *mut hdfsFileInfo;
+
+  pub fn hdfsFreeFileInfo(hdfsFileInfo: *mut hdfsFileInfo, numEntries: c_int);
+
+  pub fn hdfsFileIsEncrypted(hdfsFileInfo: *mut hdfsFileInfo) -> c_int;
+
+  pub fn hdfsGetHosts(fs: *mut hdfsFS, path: *const c_char,
+            start: tOffset, length: tOffset) -> *mut *mut *mut c_char;
+
+  pub fn hdfsFreeHosts(blockHosts: *mut *mut *mut c_char);
+
+  pub fn hdfsGetDefaultBlockSize(fs: *mut hdfsFS) -> tOffset;
+
+  pub fn hdfsGetDefaultBlockSizeAtPath(fs: *mut hdfsFS, path: *const c_char) 
+    -> tOffset;
+
+  pub fn hdfsGetCapacity(fs: *mut hdfsFS) -> tOffset;
+
+  pub fn hdfsGetUsed(fs: *mut hdfsFS) -> tOffset;
+
+  pub fn hdfsChown(fs: *mut hdfsFS, path: *const c_char,
+    owner: *const c_char, group: *const c_char) -> c_int;
+
+  pub fn hdfsChmod(fs: *mut hdfsFS, path: *const c_char, mode: c_short) 
+    -> c_int;
+
+  pub fn hdfsUtime(fs: *mut hdfsFS, path: *const c_char, mtime: tTime, 
+    atime: tTime) -> c_int;
+
+  pub fn hadoopRzOptionsAlloc() -> *mut hadoopRzOptions;
+
+  pub fn hadoopRzOptionsSetSkipChecksum(
+            opts: *mut hadoopRzOptions, skip: c_int) -> c_int;
+
+  pub fn hadoopRzOptionsSetByteBufferPool(
+            opts: *mut hadoopRzOptions, className: *const c_char) -> c_int;
+
+  pub fn hadoopRzOptionsFree(opts: *mut hadoopRzOptions);
+
+  pub fn hadoopReadZero(file: *mut hdfsFile, opts: *mut hadoopRzOptions, 
+    maxLength: int32_t) -> *mut hadoopRzBuffer;
+
+  pub fn hadoopRzBufferLength(buffer: *const hadoopRzBuffer) -> int32_t;
+
+  pub fn hadoopRzBufferGet(buffer: *const hadoopRzBuffer) -> *const c_void;
+
+  pub fn hadoopRzBufferFree(file: *mut hdfsFile, buffer: *mut hadoopRzBuffer);
 }
 
 pub enum NativeMiniDfsCluster {}
