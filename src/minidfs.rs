@@ -1,3 +1,14 @@
+//! 
+//! ## Example
+//!
+//! ```ignore
+//!  let mut conf = MiniDfsConf::new();
+//!  let dfs = MiniDFS::start(&mut conf).unwrap();
+//!  let port = dfs.namenode_port();
+//!  ...
+//!  dfs.stop()
+//! ```
+
 use bindings::*;
 
 use libc::{c_char, c_int};
@@ -53,13 +64,15 @@ impl MiniDFS {
     }
   }
 
-  pub fn set_hdfs_builder(&self, builder: *mut HdfsBuilder) -> bool {
+  pub fn set_hdfs_builder(&self, builder: *mut hdfsBuilder) -> bool {
     if unsafe { nmdConfigureHdfsBuilder(self.cluster, builder) } == 0 
     { true } else { false }
   }
 }
 
-#[test]
+
+
+//#[test]
 fn test_minidfs() {
   let mut conf = MiniDfsConf::new();
   let dfs = MiniDFS::start(&mut conf).unwrap();
