@@ -3,10 +3,9 @@ use std::ffi::CString;
 use std::marker::PhantomData;
 use std::string::String;
 use std::sync::{Arc, Mutex};
-use url::{Url, UrlParser, SchemeType};
+use url::{UrlParser, SchemeType};
 use bindings::*;
-use minidfs::*;
-use libc::{c_char, c_int, c_short, c_void, int32_t};
+use libc::{c_char, c_int, c_short, int32_t};
 
 pub static LOCALFS_SCHEME: &'static str = "file";
 
@@ -57,7 +56,7 @@ impl<'a> HdfsFsCache<'a> {
       }
     };
 
-    let lock_guard = self.lock.lock();
+    self.lock.lock();
 
     info!("Connect to Namenode ({})", namenode_uri.as_str());
 
@@ -88,8 +87,8 @@ const O_WRONLY: c_int = 1;
 const O_APPEND: c_int = 1024;
 
 pub enum HdfsErr {
-  FILE_NOT_FOUND(String),
-  FILE_ALREADY_EXISTS(String),
+  FileNotFound(String),
+  FileAlreadyExists(String),
   UNKNOWN 
 }
 
@@ -157,7 +156,7 @@ impl<'a> HdfsFS<'a> {
     block_size: i32) -> Result<HdfsFile, HdfsErr> {
 
     if !overwrite && self.exist(path) {
-      return Err(HdfsErr::FILE_ALREADY_EXISTS(path.to_owned()));
+      return Err(HdfsErr::FileAlreadyExists(path.to_owned()));
     }
 
     let file = unsafe { 
@@ -174,7 +173,7 @@ impl<'a> HdfsFS<'a> {
 
   pub fn append(&self, path: &str) -> Result<HdfsFile, HdfsErr> {    
     if !self.exist(path) {
-      return Err(HdfsErr::FILE_NOT_FOUND(path.to_owned()));
+      return Err(HdfsErr::FileNotFound(path.to_owned()));
     }
 
     let file = unsafe { 
@@ -206,6 +205,10 @@ pub struct HdfsFile<'a> {
 
 impl<'a> HdfsFile<'a> {
 
+  pub fn path(&'a self) -> &'a str {
+    self.path.as_str()
+  }
+
   pub fn close(&self) -> Result<bool, HdfsErr> {
     match unsafe {hdfsCloseFile(self.fs.fs, self.file)} {
       0 => Ok(true),
@@ -227,6 +230,7 @@ fn hdfs_scheme_handler(scheme: &str) -> SchemeType {
 
 #[test]
 fn test_hdfs_connection() {
+  use minidfs::*;
 
   let mut conf = MiniDfsConf::new();
   let dfs = MiniDFS::start(&mut conf).unwrap();

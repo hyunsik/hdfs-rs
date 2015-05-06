@@ -71,7 +71,7 @@ impl MiniDFS {
 }
 
 
-
+#[allow(dead_code)]
 //#[test]
 fn test_minidfs() {
   let mut conf = MiniDfsConf::new();
@@ -84,7 +84,7 @@ fn test_minidfs() {
   assert_eq!("localhost", http_addr.unwrap().0);
   assert!(http_addr.unwrap().1 > 0);
 
-  let mut builder = unsafe { hdfsNewBuilder() };
+  let builder = unsafe { hdfsNewBuilder() };
   let fs = unsafe { hdfsBuilderConnect(builder) };
   assert!(!fs.is_null());
   unsafe { hdfsDisconnect(fs); }
