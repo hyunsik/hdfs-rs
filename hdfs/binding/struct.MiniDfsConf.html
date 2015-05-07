@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `MiniDfsConf` struct in crate `hdfs`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, MiniDfsConf">
+
+    <title>hdfs::binding::MiniDfsConf - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='../index.html'>hdfs</a>::<wbr><a href='index.html'>binding</a></p><script>window.sidebarCurrent = {name: 'MiniDfsConf', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>hdfs</a>::<wbr><a href='index.html'>binding</a>::<wbr><a class='struct' href=''>MiniDfsConf</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
+        </span><a id='src-805' class='srclink' href='../../src/hdfs/binding.rs.html#828-837' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct MiniDfsConf {
+    // some fields omitted
+}</pre><div class='docblock'><p>Represents a configuration to use for creating a Native MiniDFSCluster</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../hdfs/binding/struct.MiniDfsConf.html' title='hdfs::binding::MiniDfsConf'>MiniDfsConf</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; <a class='struct' href='../../hdfs/binding/struct.MiniDfsConf.html' title='hdfs::binding::MiniDfsConf'>MiniDfsConf</a></code></h4>
+<h4 id='method.set_do_format' class='method'><code>fn <a href='#method.set_do_format' class='fnname'>set_do_format</a>(&amp;mut self, on: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>) -&gt; &amp;mut <a class='struct' href='../../hdfs/binding/struct.MiniDfsConf.html' title='hdfs::binding::MiniDfsConf'>MiniDfsConf</a></code></h4>
+<div class='docblock'><p>Set TRUE if the cluster should be formatted prior to startup</p>
+</div><h4 id='method.do_format' class='method'><code>fn <a href='#method.do_format' class='fnname'>do_format</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>The cluster will be formatted prior to startup if TRUE</p>
+</div><h4 id='method.set_web_hdfs' class='method'><code>fn <a href='#method.set_web_hdfs' class='fnname'>set_web_hdfs</a>(&amp;mut self, enable: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>) -&gt; &amp;mut <a class='struct' href='../../hdfs/binding/struct.MiniDfsConf.html' title='hdfs::binding::MiniDfsConf'>MiniDfsConf</a></code></h4>
+<div class='docblock'><p>Set TRUE in order to enable webhdfs in MiniDfsCluster</p>
+</div><h4 id='method.web_hdfs_enabled' class='method'><code>fn <a href='#method.web_hdfs_enabled' class='fnname'>web_hdfs_enabled</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>webhdfs in MiniDfsCluster will be available if TRUE</p>
+</div><h4 id='method.set_http_port' class='method'><code>fn <a href='#method.set_http_port' class='fnname'>set_http_port</a>(&amp;mut self, port: <a href='http://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; &amp;mut <a class='struct' href='../../hdfs/binding/struct.MiniDfsConf.html' title='hdfs::binding::MiniDfsConf'>MiniDfsConf</a></code></h4>
+<div class='docblock'><p>Set http port of the namenode in MiniDfsCluster</p>
+</div><h4 id='method.http_port' class='method'><code>fn <a href='#method.http_port' class='fnname'>http_port</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a></code></h4>
+<div class='docblock'><p>The http port of the namenode in MiniDfsCluster</p>
+</div><h4 id='method.set_short_circuit' class='method'><code>fn <a href='#method.set_short_circuit' class='fnname'>set_short_circuit</a>(&amp;mut self, enable: <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>) -&gt; &amp;mut <a class='struct' href='../../hdfs/binding/struct.MiniDfsConf.html' title='hdfs::binding::MiniDfsConf'>MiniDfsConf</a></code></h4>
+<div class='docblock'><p>Set TRUE if we should configure short circuit.</p>
+</div><h4 id='method.short_circuit_enabled' class='method'><code>fn <a href='#method.short_circuit_enabled' class='fnname'>short_circuit_enabled</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>short circuit will be available if TRUE</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "hdfs";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

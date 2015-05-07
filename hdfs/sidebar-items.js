@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["binding","libhdfs binding APIs"],["dfs","Rust APIs wrapping libhdfs API, providing better semantic and abstraction"],["minidfs","Mini HDFS Cluster for easily building unit tests"]]});

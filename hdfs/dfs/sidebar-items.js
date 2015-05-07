@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["HdfsErr",""]],"static":[["LOCALFS_SCHEME",""]],"struct":[["HdfsFS",""],["HdfsFile",""],["HdfsFsCache",""]]});
