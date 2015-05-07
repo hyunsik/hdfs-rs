@@ -1,11 +1,15 @@
 [package]
 name = "hdfs"
 description = "libhdfs binding library and rust-style new API"
-version = "0.0.1"
+version = "0.0.2"
 authors = [ "Hyunsik Choi <hyunsik dot choi at gmail dot com>" ]
-readme = "README.md"
-keywords = ["hdfs", "hadoop"]
 license = "Apache-2.0"
+
+keywords = ["hdfs", "hadoop"]
+documentation = "http://hyunsik.github.io/hdfs-rs/"
+homepage = "https://github.com/hyunsik/hdfs-rs"
+repository = "https://github.com/hyunsik/hdfs-rs.git"
+readme = "README.md"
 
 build = "build.rs"
 
