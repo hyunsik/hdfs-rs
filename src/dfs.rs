@@ -4,7 +4,7 @@ use std::marker::PhantomData;
 use std::string::String;
 use std::sync::{Arc, Mutex};
 use url::{UrlParser, SchemeType};
-use bindings::*;
+use binding::*;
 use libc::{c_char, c_int, c_short, int32_t};
 
 pub static LOCALFS_SCHEME: &'static str = "file";

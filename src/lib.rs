@@ -22,13 +22,11 @@
 #![feature(libc)]
 extern crate libc;
 #[macro_use]
-extern crate lazy_static;
-#[macro_use]
 extern crate log;
 extern crate url;
 
-/// libhdfs API bindings
-pub mod bindings;
+/// libhdfs binding APIs
+pub mod binding;
 
 /// Rust APIs wrapping libhdfs API, providing better semantic and abstraction
 pub mod dfs;

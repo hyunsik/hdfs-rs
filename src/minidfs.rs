@@ -9,7 +9,7 @@
 //!  dfs.stop()
 //! ```
 
-use bindings::*;
+use binding::*;
 
 use libc::{c_char, c_int};
 use std::ffi;
