@@ -13,5 +13,5 @@ hdfs = "0.0.1"
 
 and this to your crate root:
 ```rust
-extern crate bytesize;
+extern crate hdfs;
 ```
