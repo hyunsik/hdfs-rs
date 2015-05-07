@@ -1,7 +1,7 @@
 # hdfs-rs
 
 
-libhdfs binding library and rust-style new API
+libhdfs binding library and rust APIs which safely wraps libhdfs binding APIs
 
 ## Usage
 Add this to your Cargo.toml:
