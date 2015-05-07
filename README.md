@@ -3,6 +3,9 @@
 
 libhdfs binding library and rust APIs which safely wraps libhdfs binding APIs
 
+## Documentation
+* [API documentation] (http://hyunsik.github.io/hdfs-rs/)
+
 ## Usage
 Add this to your Cargo.toml:
 
