@@ -84,7 +84,7 @@ extern "C" {
   ///
   /// #### Return
   /// Return 1 if the file is open for read; 0 otherwise
-  pub fn hdfsFileIsOpenForRead(fs: *mut hdfsFile) -> c_int;
+  pub fn hdfsFileIsOpenForRead(fs: *const hdfsFile) -> c_int;
   
   /// Determine if a file is open for write.
   /// 
@@ -93,7 +93,7 @@ extern "C" {
   ///
   /// #### Return
   /// Return 1 if the file is open for write; 0 otherwise.
-  pub fn hdfsFileIsOpenForWrite(file: *mut hdfsFile) -> c_int;
+  pub fn hdfsFileIsOpenForWrite(file: *const hdfsFile) -> c_int;
   
   /// Get read statistics about a file.  This is only applicable to files 
   /// opened for reading.
@@ -109,7 +109,7 @@ extern "C" {
   /// * -1 otherwise.  On a failure, please check errno against
   /// * ENOTSUP. webhdfs, LocalFilesystem, and so forth may 
   /// not support read statistics.
-  pub fn hdfsFileGetReadStatistics(file: *mut hdfsFile, 
+  pub fn hdfsFileGetReadStatistics(file: *const hdfsFile, 
                    stats: &mut *mut hdfsReadStatistics) -> c_int;
   
   /// HDFS read statistics for a file,
@@ -140,7 +140,7 @@ extern "C" {
   /// Returns a handle to the filesystem or ```NULL``` on error.  
   pub fn hdfsConnectAsUser(host: *const c_char, 
                        uint16_t: u16, user: 
-                       *const c_char) -> *mut hdfsFS;
+                       *const c_char) -> *const hdfsFS;
   
   /// Connect to a hdfs file system.
   ///
@@ -152,7 +152,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns a handle to the filesystem or ```NULL``` on error.
-  pub fn hdfsConnect(host: *const c_char, uint16_t: tPort) -> *mut hdfsFS;
+  pub fn hdfsConnect(host: *const c_char, uint16_t: tPort) -> *const hdfsFS;
   
   /// Connect to an hdfs file system.
   /// 
@@ -168,7 +168,7 @@ extern "C" {
   /// Returns a handle to the filesystem or ```NULL``` on error.
   pub fn hdfsConnectAsUserNewInstance(host: *const c_char, 
                     uint16_t: tPort,
-                    user: *const c_char) -> *mut hdfsFS;
+                    user: *const c_char) -> *const hdfsFS;
   
   /// Connect to an hdfs file system.
   /// 
@@ -182,7 +182,7 @@ extern "C" {
   /// #### Return
   /// Returns a handle to the filesystem or ```NULL``` on error.
   pub fn hdfsConnectNewInstance(host: *const c_char, 
-                            uint16_t: tPort) -> *mut hdfsFS;
+                            uint16_t: tPort) -> *const hdfsFS;
   
   /// Connect to HDFS using the parameters defined by the builder.
   ///
@@ -196,7 +196,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns a handle to the filesystem, or ```NULL``` on error.
-  pub fn hdfsBuilderConnect(bld : *mut hdfsBuilder) -> *mut hdfsFS;
+  pub fn hdfsBuilderConnect(bld : *mut hdfsBuilder) -> *const hdfsFS;
 
 
   /// Create an HDFS builder.
@@ -315,7 +315,7 @@ extern "C" {
   /// Returns 0 on success, -1 on error.
   /// Even if there is an error, the resources associated with the
   /// hdfsFS will be freed.
-  pub fn hdfsDisconnect(fs: *mut hdfsFS) -> c_int;
+  pub fn hdfsDisconnect(fs: *const hdfsFS) -> c_int;
 
   /// Open a hdfs file in given mode.
   /// 
@@ -338,9 +338,9 @@ extern "C" {
   /// Returns 0 on success, -1 on error. On error, errno will be set appropriately.
   /// If the hdfs file was valid, the memory associated with it will
   /// be freed at the end of this call, even if there was an I/O error.
-  pub fn hdfsOpenFile(fs: *mut hdfsFS, path: *const c_char, flags: c_int, 
+  pub fn hdfsOpenFile(fs: *const hdfsFS, path: *const c_char, flags: c_int, 
                       bufferSize: c_int, replication: c_short, 
-                      blocksize: int32_t) -> *mut hdfsFile;
+                      blocksize: int32_t) -> *const hdfsFile;
 
 
   /// Close an open file. 
@@ -354,7 +354,7 @@ extern "C" {
   /// appropriately.If the hdfs file was valid, the memory associated 
   /// with it will be freed at the end of this call, even if there was 
   /// an I/O error.
-  pub fn hdfsCloseFile(fs: *mut hdfsFS, file: *mut hdfsFile) -> c_int;
+  pub fn hdfsCloseFile(fs: *const hdfsFS, file: *const hdfsFile) -> c_int;
 
   /// Checks if a given path exsits on the filesystem 
   ///
@@ -364,7 +364,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns 0 on success, -1 on error.  
-  pub fn hdfsExists(fs: *mut hdfsFS, path: *const c_char) -> c_int;
+  pub fn hdfsExists(fs: *const hdfsFS, path: *const c_char) -> c_int;
 
    
   /// Seek to given offset in file.
@@ -378,7 +378,7 @@ extern "C" {
   ///
   /// #### Return
   /// @return Returns 0 on success, -1 on error.
-  pub fn hdfsSeek(fs: *mut hdfsFS, file: *mut hdfsFile, 
+  pub fn hdfsSeek(fs: *const hdfsFS, file: *const hdfsFile, 
     desiredPos: tOffset) -> c_int;
 
   /// Get the current offset in the file, in bytes.
@@ -390,7 +390,7 @@ extern "C" {
   ///
   /// #### Return
   /// Current offset, -1 on error.
-  pub fn hdfsTell(fs: *mut hdfsFS, file: *mut hdfsFile) -> tOffset;
+  pub fn hdfsTell(fs: *const hdfsFS, file: *const hdfsFile) -> tOffset;
 
   /// Read data from an open file.
   ///
@@ -406,7 +406,7 @@ extern "C" {
   /// Just like the POSIX read function, hdfsRead will return -1
   /// and set errno to EINTR if data is temporarily unavailable,
   /// but we are not yet at the end of the file.
-  pub fn hdfsRead(fs: *mut hdfsFS, file: *mut hdfsFile, buffer: *mut c_void, 
+  pub fn hdfsRead(fs: *const hdfsFS, file: *const hdfsFile, buffer: *mut c_void, 
     length: tSize) -> tSize;
 
   /// Positional read of data from an open file.
@@ -420,7 +420,7 @@ extern "C" {
   ///
   /// #### Return
   /// See hdfsRead
-  pub fn hdfsPread(fs: *mut hdfsFS, file: *mut hdfsFile, position: tOffset,
+  pub fn hdfsPread(fs: *const hdfsFS, file: *const hdfsFile, position: tOffset,
     buffer: *mut c_void, length: tSize) -> tSize;
 
   /// Write data into an open file.
@@ -433,7 +433,7 @@ extern "C" {
   ///
   /// #### Return
   /// the number of bytes written, -1 on error.
-  pub fn hdfsWrite(fs: *mut hdfsFS, file: *mut hdfsFile, 
+  pub fn hdfsWrite(fs: *const hdfsFS, file: *const hdfsFile, 
     buffer: *const c_void, length: tSize) -> tSize;
 
   /// Flush the data. 
@@ -444,7 +444,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns 0 on success, -1 on error. 
-  pub fn hdfsFlush(fs: *mut hdfsFS, file: *mut hdfsFile) -> c_int;
+  pub fn hdfsFlush(fs: *const hdfsFS, file: *const hdfsFile) -> c_int;
 
   /// Flush out the data in client's user buffer. After the return of this 
   /// call, new readers will see the data.
@@ -455,7 +455,7 @@ extern "C" {
   ///
   /// #### Return
   /// 0 on success, -1 on error and sets errno
-  pub fn hdfsHFlush(fs: *mut hdfsFS, file: *mut hdfsFile) -> c_int;
+  pub fn hdfsHFlush(fs: *const hdfsFS, file: *const hdfsFile) -> c_int;
 
   /// Similar to posix fsync, Flush out the data in client's 
   /// user buffer. all the way to the disk device (but the disk may have
@@ -467,7 +467,7 @@ extern "C" {
   ///
   /// #### Return
   /// 0 on success, -1 on error and sets errno
-  pub fn hdfsHSync(fs: *mut hdfsFS, file: *mut hdfsFile) -> c_int;
+  pub fn hdfsHSync(fs: *const hdfsFS, file: *const hdfsFile) -> c_int;
 
   /// Number of bytes that can be read from this input stream without 
   /// blocking.
@@ -478,7 +478,7 @@ extern "C" {
   ///
   /// #### Return
   /// 0 on success, -1 on error and sets errno
-  pub fn hdfsAvailable(fs: *mut hdfsFS, file: *mut hdfsFile) -> c_int;
+  pub fn hdfsAvailable(fs: *const hdfsFS, file: *const hdfsFile) -> c_int;
 
   /// Copy file from one filesystem to another.
   ///
@@ -490,8 +490,8 @@ extern "C" {
   ///
   /// #### Return
   /// Returns 0 on success, -1 on error.
-  pub fn hdfsCopy(srcFS: *mut hdfsFS, src: *const c_char, 
-    dstFS: *mut hdfsFS, dst: *const c_char) -> c_int;
+  pub fn hdfsCopy(srcFS: *const hdfsFS, src: *const c_char, 
+    dstFS: *const hdfsFS, dst: *const c_char) -> c_int;
 
   /// Move file from one filesystem to another.
   ///
@@ -503,8 +503,8 @@ extern "C" {
   ///
   /// #### Return
   /// Returns 0 on success, -1 on error.
-  pub fn hdfsMove(srcFS: *mut hdfsFS, src: *const c_char, 
-    dstFS: *mut hdfsFS, dst: *const c_char) -> c_int;
+  pub fn hdfsMove(srcFS: *const hdfsFS, src: *const c_char, 
+    dstFS: *const hdfsFS, dst: *const c_char) -> c_int;
 
   /// Delete file. 
   ///
@@ -517,7 +517,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns 0 on success, -1 on error. 
-  pub fn hdfsDelete(srcFS: *mut hdfsFS, path: *const c_char, 
+  pub fn hdfsDelete(srcFS: *const hdfsFS, path: *const c_char, 
     recursive: c_int) -> c_int;
 
   /// Rename file. 
@@ -529,7 +529,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns 0 on success, -1 on error.
-  pub fn hdfsRename(srcFS: *mut hdfsFS, oldPath: *const c_char, 
+  pub fn hdfsRename(srcFS: *const hdfsFS, oldPath: *const c_char, 
     newPath: *const c_char) -> c_int;
 
   /// Get the current working directory for the given filesystem.
@@ -541,7 +541,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns buffer, ```NULL``` on error.
-  pub fn hdfsGetWorkingDirectory(fs: *mut hdfsFS, buffer: *mut c_char, 
+  pub fn hdfsGetWorkingDirectory(fs: *const hdfsFS, buffer: *mut c_char, 
     bufferSize: size_t) -> *mut c_char;
 
   /// Set the working directory. All relative paths will be resolved relative 
@@ -553,7 +553,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns 0 on success, -1 on error. 
-  pub fn hdfsSetWorkingDirectory(fs: *mut hdfsFS, path: *const c_char) 
+  pub fn hdfsSetWorkingDirectory(fs: *const hdfsFS, path: *const c_char) 
     -> c_int;
 
   /// Make the given file and all non-existent parents into directories.
@@ -564,7 +564,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns 0 on success, -1 on error. 
-  pub fn hdfsCreateDirectory(fs: *mut hdfsFS, path: *const c_char) -> c_int;
+  pub fn hdfsCreateDirectory(fs: *const hdfsFS, path: *const c_char) -> c_int;
 
   /// Set the replication of the specified file to the supplied value
   ///
@@ -574,7 +574,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns 0 on success, -1 on error. 
-  pub fn hdfsSetReplication(fs: *mut hdfsFS, path: *const c_char, 
+  pub fn hdfsSetReplication(fs: *const hdfsFS, path: *const c_char, 
     replication: int16_t) -> c_int;
 
 
@@ -589,8 +589,8 @@ extern "C" {
   /// #### Return
   /// Returns a dynamically-allocated array of hdfsFileInfo objects; ```NULL``` on 
   /// error.
-  pub fn hdfsListDirectory(fs: *mut hdfsFS, path: *const c_char,
-    numEntries: *mut c_int) -> *mut hdfsFileInfo;
+  pub fn hdfsListDirectory(fs: *const hdfsFS, path: *const c_char,
+    numEntries: *mut c_int) -> *const hdfsFileInfo;
 
   /// Get information about a path as a (dynamically allocated) single
   /// hdfsFileInfo struct. hdfsFreeFileInfo should be called when the 
@@ -602,15 +602,15 @@ extern "C" {
   /// 
   /// #### Params
   /// Returns a dynamically-allocated hdfsFileInfo object; ```NULL``` on error.
-  pub fn hdfsGetPathInfo(fs: *mut hdfsFS, path: *const c_char) 
-    -> *mut hdfsFileInfo;
+  pub fn hdfsGetPathInfo(fs: *const hdfsFS, path: *const c_char) 
+    -> *const hdfsFileInfo;
 
   /// Free up the hdfsFileInfo array (including fields) 
   ///
   /// #### Params
   /// * ```hdfsFileInfo``` The array of dynamically-allocated hdfsFileInfo objects.
   /// * ```numEntries``` The size of the array.
-  pub fn hdfsFreeFileInfo(hdfsFileInfo: *mut hdfsFileInfo, numEntries: c_int);
+  pub fn hdfsFreeFileInfo(hdfsFileInfo: *const hdfsFileInfo, numEntries: c_int);
 
   /// hdfsFileIsEncrypted: determine if a file is encrypted based on its
   /// hdfsFileInfo.
@@ -618,7 +618,7 @@ extern "C" {
   /// #### Return
   /// -1 if there was an error (errno will be set), 0 if the file is
   /// not encrypted, 1 if the file is encrypted.
-  pub fn hdfsFileIsEncrypted(hdfsFileInfo: *mut hdfsFileInfo) -> c_int;
+  pub fn hdfsFileIsEncrypted(hdfsFileInfo: *const hdfsFileInfo) -> c_int;
 
   /// Get hostnames where a particular block (determined by pos & blocksize) 
   /// of a file is stored. The last element in the array is ```NULL```. 
@@ -632,7 +632,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns a dynamically-allocated 2-d array of blocks-hosts; ```NULL``` on error.
-  pub fn hdfsGetHosts(fs: *mut hdfsFS, path: *const c_char,
+  pub fn hdfsGetHosts(fs: *const hdfsFS, path: *const c_char,
             start: tOffset, length: tOffset) -> *mut *mut *mut c_char;
 
   /// Free up the structure returned by hdfsGetHosts
@@ -652,7 +652,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns the default blocksize, or -1 on error.
-  pub fn hdfsGetDefaultBlockSize(fs: *mut hdfsFS) -> tOffset;
+  pub fn hdfsGetDefaultBlockSize(fs: *const hdfsFS) -> tOffset;
 
   /// Get the default blocksize at the filesystem indicated by a given path.
   ///
@@ -663,7 +663,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns the default blocksize, or -1 on error.
-  pub fn hdfsGetDefaultBlockSizeAtPath(fs: *mut hdfsFS, path: *const c_char) 
+  pub fn hdfsGetDefaultBlockSizeAtPath(fs: *const hdfsFS, path: *const c_char) 
     -> tOffset;
 
   /// Return the raw capacity of the filesystem. 
@@ -673,7 +673,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns the raw-capacity; -1 on error. 
-  pub fn hdfsGetCapacity(fs: *mut hdfsFS) -> tOffset;
+  pub fn hdfsGetCapacity(fs: *const hdfsFS) -> tOffset;
 
   /// Return the total raw size of all files in the filesystem.
   ///
@@ -681,7 +681,7 @@ extern "C" {
   /// * ```fs``` - The configured filesystem handle.
   /// #### Return
   /// Returns the total-size; -1 on error. 
-  pub fn hdfsGetUsed(fs: *mut hdfsFS) -> tOffset;
+  pub fn hdfsGetUsed(fs: *const hdfsFS) -> tOffset;
 
   /// Change the user and/or group of a file or directory.
   ///
@@ -693,7 +693,7 @@ extern "C" {
   ///
   /// #### Return
   /// 0 on success else -1
-  pub fn hdfsChown(fs: *mut hdfsFS, path: *const c_char,
+  pub fn hdfsChown(fs: *const hdfsFS, path: *const c_char,
     owner: *const c_char, group: *const c_char) -> c_int;
 
   /// hdfsChmod
@@ -704,7 +704,7 @@ extern "C" {
   ///
   /// #### Return
   /// 0 on success else -1
-  pub fn hdfsChmod(fs: *mut hdfsFS, path: *const c_char, mode: c_short) 
+  pub fn hdfsChmod(fs: *const hdfsFS, path: *const c_char, mode: c_short) 
     -> c_int;
 
   /// hdfsUtime
@@ -717,7 +717,7 @@ extern "C" {
   ///
   /// #### Return
   /// 0 on success else -1
-  pub fn hdfsUtime(fs: *mut hdfsFS, path: *const c_char, mtime: tTime, 
+  pub fn hdfsUtime(fs: *const hdfsFS, path: *const c_char, mtime: tTime, 
     atime: tTime) -> c_int;
 
   /// Allocate a zero-copy options structure.
@@ -785,7 +785,7 @@ extern "C" {
   /// On failure, we will return ```NULL``` plus an errno code. 
   /// ```errno = EOPNOTSUPP``` indicates that we could not do a zero-copy
   ///  read, and there was no ByteBufferPool supplied.
-  pub fn hadoopReadZero(file: *mut hdfsFile, opts: *mut hadoopRzOptions, 
+  pub fn hadoopReadZero(file: *const hdfsFile, opts: *mut hadoopRzOptions, 
     maxLength: int32_t) -> *mut hadoopRzBuffer;
 
   /// Determine the length of the buffer returned from readZero.
@@ -815,7 +815,7 @@ extern "C" {
   ///
   /// #### Return
   /// The buffer to release.
-  pub fn hadoopRzBufferFree(file: *mut hdfsFile, buffer: *mut hadoopRzBuffer);
+  pub fn hadoopRzBufferFree(file: *const hdfsFile, buffer: *mut hadoopRzBuffer);
 }
 
 
