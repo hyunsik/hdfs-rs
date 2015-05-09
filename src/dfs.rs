@@ -7,7 +7,7 @@ use std::string::String;
 use std::sync::{Arc, Mutex};
 use url::{UrlParser, SchemeType};
 use binding::*;
-use libc::{c_char, c_int, c_short, c_void, int16_t, int32_t};
+use libc::{c_char, c_int, c_short, c_void, int16_t, int32_t, int64_t};
 
 pub static LOCALFS_SCHEME: &'static str = "file";
 
@@ -96,6 +96,7 @@ pub enum HdfsErr {
 
 pub struct HdfsUtil;
 
+/// HDFS Utility
 impl HdfsUtil {
 
   /// Copy file from one filesystem to another.
@@ -145,6 +146,7 @@ fn bool_to_c_int(val: bool) -> c_int {
   if val { 1 } else { 0 }
 }
 
+/// Options for zero-copy read
 pub struct RzOptions {
   ptr: *const hadoopRzOptions
 }
@@ -237,10 +239,21 @@ impl<'a> RzBuffer<'a> {
   }
 }
 
-pub struct HostList<'a> {
-  _marker: PhantomData<&'a ()>
+/// Includes hostnames where a particular block of a file is stored.
+pub struct BlockHosts {
+  ptr: *const *const *const c_char
 }
 
+impl Drop for BlockHosts {  
+  fn drop(&mut self) {
+    unsafe { hdfsFreeHosts(self.ptr) };
+  }
+}
+
+impl BlockHosts {
+}
+
+/// Hdfs Filesystem
 pub struct HdfsFS<'a> {
   fs_url: String,
   fs: *const hdfsFS,
@@ -351,6 +364,7 @@ impl<'a> HdfsFS<'a> {
     }
   }
 
+  /// Delete file. 
   pub fn delete(&self, path: &str, recursive: bool) -> Result<bool, HdfsErr> {
     let res = unsafe { 
       hdfsDelete(self.fs, str_to_chars(path), recursive as c_int) 
@@ -363,6 +377,7 @@ impl<'a> HdfsFS<'a> {
     }
   }
 
+  /// Checks if a given path exsits on the filesystem 
   pub fn exist(&self, path: &str) -> bool {
     if unsafe {hdfsExists(self.fs, str_to_chars(path))} == 0 {
       true
@@ -371,15 +386,32 @@ impl<'a> HdfsFS<'a> {
     }
   }
 
+  /// Get HDFS namenode url
   #[inline]
   pub fn fs_url(&'a self) -> &'a str {
     &self.fs_url.as_str()
   }
 
-  pub fn get_hosts(&self, path: &str) {
+  /// Get hostnames where a particular block (determined by
+  /// pos & blocksize) of a file is stored. The last element in the array
+  /// is NULL. Due to replication, a single block could be present on
+  /// multiple hosts.
+  pub fn get_hosts(&self, path: &str, start: usize, length: usize) 
+      -> Result<BlockHosts, HdfsErr> {
+    
+    let ptr = unsafe {
+      hdfsGetHosts(self.fs, str_to_chars(path), 
+        start as int64_t, length as int64_t)
+    };
 
+    if !ptr.is_null() {
+      Ok(BlockHosts {ptr: ptr})
+    } else {
+      Err(HdfsErr::UNKNOWN)
+    }
   }
 
+  /// create a directory
   pub fn mkdir(&self, path: &str) -> Result<bool, HdfsErr> {
     if unsafe{hdfsCreateDirectory(self.fs, str_to_chars(path))} == 0 {
       Ok(true)
@@ -388,11 +420,13 @@ impl<'a> HdfsFS<'a> {
     }
   }  
 
+  /// open a file to read
   #[inline]
   pub fn open(&self, path: &str) -> Result<HdfsFile, HdfsErr> {
     self.open_with_bufsize(path, 0)
   }
 
+  /// open a file to read with a buffer size
   pub fn open_with_bufsize(&self, path: &str, buf_size: i32) 
       -> Result<HdfsFile, HdfsErr> {    
 
@@ -408,6 +442,7 @@ impl<'a> HdfsFS<'a> {
     }
   }
 
+  /// Set the replication of the specified file to the supplied value
   pub fn set_replication(&self, path: &str, num: i16) 
       -> Result<bool, HdfsErr> {
 
@@ -422,6 +457,7 @@ impl<'a> HdfsFS<'a> {
     }
   }
 
+  /// Rename file.
   pub fn rename(&self, old_path: &str, new_path: &str) 
       -> Result<bool, HdfsErr> {
 
@@ -454,6 +490,7 @@ fn str_to_chars(s: &str) -> *const c_char {
   CString::new(s.as_bytes()).unwrap().as_ptr()
 }
 
+/// open hdfs file
 pub struct HdfsFile<'a> {
   fs: &'a HdfsFS<'a>,
   path: String,
@@ -512,6 +549,7 @@ impl<'a> HdfsFile<'a> {
     self.path.as_str()
   }
 
+  /// Get the current offset in the file, in bytes.
   pub fn pos(&self) -> Result<u64, HdfsErr> {
     let pos = unsafe {hdfsTell(self.fs.fs, self.file)};
     
@@ -522,6 +560,7 @@ impl<'a> HdfsFile<'a> {
     }    
   }
 
+  /// Read data from an open file.
   pub fn read(&self, buf: &mut [u8]) -> Result<i32, HdfsErr> {
     let read_len = unsafe { 
       hdfsRead(self.fs.fs, self.file, buf.as_ptr() as *mut c_void, 
@@ -535,6 +574,7 @@ impl<'a> HdfsFile<'a> {
     }
   }
 
+  /// Positional read of data from an open file.
   pub fn read_with_pos(&self, pos: i64, buf: &mut [u8]) -> Result<i32, HdfsErr> {
     let read_len = unsafe { 
       hdfsPread(self.fs.fs, self.file, pos as tOffset, 
@@ -562,10 +602,12 @@ impl<'a> HdfsFile<'a> {
     }
   }
 
+  /// Seek to given offset in file. 
   pub fn seek(&self, offset: u64) -> bool {
     (unsafe { hdfsSeek(self.fs.fs, self.file, offset as tOffset) }) == 0
   }
 
+  /// Write data into an open file.
   pub fn write(&self, buf: &[u8]) -> Result<i32, HdfsErr> {
     let written_len = unsafe {
       hdfsWrite(self.fs.fs, self.file, 

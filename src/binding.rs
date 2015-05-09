@@ -631,9 +631,10 @@ extern "C" {
   /// * ```length``` - The length of the block.
   ///
   /// #### Return
-  /// Returns a dynamically-allocated 2-d array of blocks-hosts; ```NULL``` on error.
+  /// Returns a dynamically-allocated 2-d array of blocks-hosts; ```NULL``` 
+  /// on error.
   pub fn hdfsGetHosts(fs: *const hdfsFS, path: *const c_char,
-            start: tOffset, length: tOffset) -> *mut *mut *mut c_char;
+            start: tOffset, length: tOffset) -> *const *const *const c_char;
 
   /// Free up the structure returned by hdfsGetHosts
   ///
@@ -641,7 +642,7 @@ extern "C" {
   /// * ```hdfsFileInfo``` - The array of dynamically-allocated 
   /// hdfsFileInfo objects.
   /// * ```numEntries``` - The size of the array.
-  pub fn hdfsFreeHosts(blockHosts: *mut *mut *mut c_char);
+  pub fn hdfsFreeHosts(blockHosts: *const *const *const c_char);
 
   /// Get the default blocksize.
   ///
