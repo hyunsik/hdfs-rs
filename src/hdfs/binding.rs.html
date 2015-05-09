@@ -999,6 +999,7 @@
 <span id="957">957</span>
 <span id="958">958</span>
 <span id="959">959</span>
+<span id="960">960</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_char</span>, <span class='ident'>c_int</span>, <span class='ident'>c_short</span>, <span class='ident'>c_uchar</span>, <span class='ident'>c_void</span>, <span class='ident'>int16_t</span>, <span class='ident'>int32_t</span>, 
   <span class='ident'>int64_t</span>, <span class='ident'>uint16_t</span>, <span class='ident'>size_t</span>, <span class='ident'>time_t</span>};
@@ -1086,7 +1087,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Return 1 if the file is open for read; 0 otherwise</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFileIsOpenForRead</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFileIsOpenForRead</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
   
   <span class='doccomment'>/// Determine if a file is open for write.</span>
   <span class='doccomment'>/// </span>
@@ -1095,7 +1096,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Return 1 if the file is open for write; 0 otherwise.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFileIsOpenForWrite</span>(<span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFileIsOpenForWrite</span>(<span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
   
   <span class='doccomment'>/// Get read statistics about a file.  This is only applicable to files </span>
   <span class='doccomment'>/// opened for reading.</span>
@@ -1111,7 +1112,7 @@
   <span class='doccomment'>/// * -1 otherwise.  On a failure, please check errno against</span>
   <span class='doccomment'>/// * ENOTSUP. webhdfs, LocalFilesystem, and so forth may </span>
   <span class='doccomment'>/// not support read statistics.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFileGetReadStatistics</span>(<span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>, 
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFileGetReadStatistics</span>(<span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>, 
                    <span class='ident'>stats</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsReadStatistics</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
   
   <span class='doccomment'>/// HDFS read statistics for a file,</span>
@@ -1142,7 +1143,7 @@
   <span class='doccomment'>/// Returns a handle to the filesystem or ```NULL``` on error.  </span>
   <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsConnectAsUser</span>(<span class='ident'>host</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, 
                        <span class='ident'>uint16_t</span>: <span class='ident'>u16</span>, <span class='ident'>user</span>: 
-                       <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>;
+                       <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>;
   
   <span class='doccomment'>/// Connect to a hdfs file system.</span>
   <span class='doccomment'>///</span>
@@ -1154,7 +1155,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns a handle to the filesystem or ```NULL``` on error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsConnect</span>(<span class='ident'>host</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>uint16_t</span>: <span class='ident'>tPort</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsConnect</span>(<span class='ident'>host</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>uint16_t</span>: <span class='ident'>tPort</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>;
   
   <span class='doccomment'>/// Connect to an hdfs file system.</span>
   <span class='doccomment'>/// </span>
@@ -1170,7 +1171,7 @@
   <span class='doccomment'>/// Returns a handle to the filesystem or ```NULL``` on error.</span>
   <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsConnectAsUserNewInstance</span>(<span class='ident'>host</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, 
                     <span class='ident'>uint16_t</span>: <span class='ident'>tPort</span>,
-                    <span class='ident'>user</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>;
+                    <span class='ident'>user</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>;
   
   <span class='doccomment'>/// Connect to an hdfs file system.</span>
   <span class='doccomment'>/// </span>
@@ -1184,7 +1185,7 @@
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns a handle to the filesystem or ```NULL``` on error.</span>
   <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsConnectNewInstance</span>(<span class='ident'>host</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, 
-                            <span class='ident'>uint16_t</span>: <span class='ident'>tPort</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>;
+                            <span class='ident'>uint16_t</span>: <span class='ident'>tPort</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>;
   
   <span class='doccomment'>/// Connect to HDFS using the parameters defined by the builder.</span>
   <span class='doccomment'>///</span>
@@ -1198,7 +1199,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns a handle to the filesystem, or ```NULL``` on error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsBuilderConnect</span>(<span class='ident'>bld</span> : <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsBuilder</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsBuilderConnect</span>(<span class='ident'>bld</span> : <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsBuilder</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>;
 
 
   <span class='doccomment'>/// Create an HDFS builder.</span>
@@ -1317,7 +1318,7 @@
   <span class='doccomment'>/// Returns 0 on success, -1 on error.</span>
   <span class='doccomment'>/// Even if there is an error, the resources associated with the</span>
   <span class='doccomment'>/// hdfsFS will be freed.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsDisconnect</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsDisconnect</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Open a hdfs file in given mode.</span>
   <span class='doccomment'>/// </span>
@@ -1340,9 +1341,9 @@
   <span class='doccomment'>/// Returns 0 on success, -1 on error. On error, errno will be set appropriately.</span>
   <span class='doccomment'>/// If the hdfs file was valid, the memory associated with it will</span>
   <span class='doccomment'>/// be freed at the end of this call, even if there was an I/O error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsOpenFile</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>flags</span>: <span class='ident'>c_int</span>, 
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsOpenFile</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>flags</span>: <span class='ident'>c_int</span>, 
                       <span class='ident'>bufferSize</span>: <span class='ident'>c_int</span>, <span class='ident'>replication</span>: <span class='ident'>c_short</span>, 
-                      <span class='ident'>blocksize</span>: <span class='ident'>int32_t</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>;
+                      <span class='ident'>blocksize</span>: <span class='ident'>int32_t</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>;
 
 
   <span class='doccomment'>/// Close an open file. </span>
@@ -1356,7 +1357,7 @@
   <span class='doccomment'>/// appropriately.If the hdfs file was valid, the memory associated </span>
   <span class='doccomment'>/// with it will be freed at the end of this call, even if there was </span>
   <span class='doccomment'>/// an I/O error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsCloseFile</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsCloseFile</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Checks if a given path exsits on the filesystem </span>
   <span class='doccomment'>///</span>
@@ -1366,7 +1367,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns 0 on success, -1 on error.  </span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsExists</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsExists</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
    
   <span class='doccomment'>/// Seek to given offset in file.</span>
@@ -1380,7 +1381,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// @return Returns 0 on success, -1 on error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsSeek</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>, 
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsSeek</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>, 
     <span class='ident'>desiredPos</span>: <span class='ident'>tOffset</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Get the current offset in the file, in bytes.</span>
@@ -1392,7 +1393,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Current offset, -1 on error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsTell</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>tOffset</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsTell</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>tOffset</span>;
 
   <span class='doccomment'>/// Read data from an open file.</span>
   <span class='doccomment'>///</span>
@@ -1408,7 +1409,7 @@
   <span class='doccomment'>/// Just like the POSIX read function, hdfsRead will return -1</span>
   <span class='doccomment'>/// and set errno to EINTR if data is temporarily unavailable,</span>
   <span class='doccomment'>/// but we are not yet at the end of the file.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsRead</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>, <span class='ident'>buffer</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>, 
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsRead</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>, <span class='ident'>buffer</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>, 
     <span class='ident'>length</span>: <span class='ident'>tSize</span>) <span class='op'>-&gt;</span> <span class='ident'>tSize</span>;
 
   <span class='doccomment'>/// Positional read of data from an open file.</span>
@@ -1422,7 +1423,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// See hdfsRead</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsPread</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>, <span class='ident'>position</span>: <span class='ident'>tOffset</span>,
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsPread</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>, <span class='ident'>position</span>: <span class='ident'>tOffset</span>,
     <span class='ident'>buffer</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>, <span class='ident'>length</span>: <span class='ident'>tSize</span>) <span class='op'>-&gt;</span> <span class='ident'>tSize</span>;
 
   <span class='doccomment'>/// Write data into an open file.</span>
@@ -1435,7 +1436,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// the number of bytes written, -1 on error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsWrite</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>, 
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsWrite</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>, 
     <span class='ident'>buffer</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_void</span>, <span class='ident'>length</span>: <span class='ident'>tSize</span>) <span class='op'>-&gt;</span> <span class='ident'>tSize</span>;
 
   <span class='doccomment'>/// Flush the data. </span>
@@ -1446,7 +1447,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns 0 on success, -1 on error. </span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFlush</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFlush</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Flush out the data in client&#39;s user buffer. After the return of this </span>
   <span class='doccomment'>/// call, new readers will see the data.</span>
@@ -1457,7 +1458,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// 0 on success, -1 on error and sets errno</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsHFlush</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsHFlush</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Similar to posix fsync, Flush out the data in client&#39;s </span>
   <span class='doccomment'>/// user buffer. all the way to the disk device (but the disk may have</span>
@@ -1469,7 +1470,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// 0 on success, -1 on error and sets errno</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsHSync</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsHSync</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Number of bytes that can be read from this input stream without </span>
   <span class='doccomment'>/// blocking.</span>
@@ -1480,7 +1481,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// 0 on success, -1 on error and sets errno</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsAvailable</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsAvailable</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Copy file from one filesystem to another.</span>
   <span class='doccomment'>///</span>
@@ -1492,8 +1493,8 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns 0 on success, -1 on error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsCopy</span>(<span class='ident'>srcFS</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>src</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, 
-    <span class='ident'>dstFS</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>dst</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsCopy</span>(<span class='ident'>srcFS</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>src</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, 
+    <span class='ident'>dstFS</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>dst</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Move file from one filesystem to another.</span>
   <span class='doccomment'>///</span>
@@ -1505,8 +1506,8 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns 0 on success, -1 on error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsMove</span>(<span class='ident'>srcFS</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>src</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, 
-    <span class='ident'>dstFS</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>dst</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsMove</span>(<span class='ident'>srcFS</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>src</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, 
+    <span class='ident'>dstFS</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>dst</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Delete file. </span>
   <span class='doccomment'>///</span>
@@ -1519,7 +1520,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns 0 on success, -1 on error. </span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsDelete</span>(<span class='ident'>srcFS</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, 
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsDelete</span>(<span class='ident'>srcFS</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, 
     <span class='ident'>recursive</span>: <span class='ident'>c_int</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Rename file. </span>
@@ -1531,7 +1532,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns 0 on success, -1 on error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsRename</span>(<span class='ident'>srcFS</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>oldPath</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, 
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsRename</span>(<span class='ident'>srcFS</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>oldPath</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, 
     <span class='ident'>newPath</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Get the current working directory for the given filesystem.</span>
@@ -1543,7 +1544,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns buffer, ```NULL``` on error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetWorkingDirectory</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>buffer</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_char</span>, 
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetWorkingDirectory</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>buffer</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_char</span>, 
     <span class='ident'>bufferSize</span>: <span class='ident'>size_t</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_char</span>;
 
   <span class='doccomment'>/// Set the working directory. All relative paths will be resolved relative </span>
@@ -1555,7 +1556,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns 0 on success, -1 on error. </span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsSetWorkingDirectory</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) 
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsSetWorkingDirectory</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) 
     <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Make the given file and all non-existent parents into directories.</span>
@@ -1566,7 +1567,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns 0 on success, -1 on error. </span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsCreateDirectory</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsCreateDirectory</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Set the replication of the specified file to the supplied value</span>
   <span class='doccomment'>///</span>
@@ -1576,7 +1577,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns 0 on success, -1 on error. </span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsSetReplication</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, 
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsSetReplication</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, 
     <span class='ident'>replication</span>: <span class='ident'>int16_t</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
 
@@ -1591,8 +1592,8 @@
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns a dynamically-allocated array of hdfsFileInfo objects; ```NULL``` on </span>
   <span class='doccomment'>/// error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsListDirectory</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
-    <span class='ident'>numEntries</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_int</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFileInfo</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsListDirectory</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
+    <span class='ident'>numEntries</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_int</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFileInfo</span>;
 
   <span class='doccomment'>/// Get information about a path as a (dynamically allocated) single</span>
   <span class='doccomment'>/// hdfsFileInfo struct. hdfsFreeFileInfo should be called when the </span>
@@ -1604,15 +1605,15 @@
   <span class='doccomment'>/// </span>
   <span class='doccomment'>/// #### Params</span>
   <span class='doccomment'>/// Returns a dynamically-allocated hdfsFileInfo object; ```NULL``` on error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetPathInfo</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) 
-    <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFileInfo</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetPathInfo</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) 
+    <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFileInfo</span>;
 
   <span class='doccomment'>/// Free up the hdfsFileInfo array (including fields) </span>
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Params</span>
   <span class='doccomment'>/// * ```hdfsFileInfo``` The array of dynamically-allocated hdfsFileInfo objects.</span>
   <span class='doccomment'>/// * ```numEntries``` The size of the array.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFreeFileInfo</span>(<span class='ident'>hdfsFileInfo</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFileInfo</span>, <span class='ident'>numEntries</span>: <span class='ident'>c_int</span>);
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFreeFileInfo</span>(<span class='ident'>hdfsFileInfo</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFileInfo</span>, <span class='ident'>numEntries</span>: <span class='ident'>c_int</span>);
 
   <span class='doccomment'>/// hdfsFileIsEncrypted: determine if a file is encrypted based on its</span>
   <span class='doccomment'>/// hdfsFileInfo.</span>
@@ -1620,7 +1621,7 @@
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// -1 if there was an error (errno will be set), 0 if the file is</span>
   <span class='doccomment'>/// not encrypted, 1 if the file is encrypted.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFileIsEncrypted</span>(<span class='ident'>hdfsFileInfo</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFileInfo</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFileIsEncrypted</span>(<span class='ident'>hdfsFileInfo</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFileInfo</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Get hostnames where a particular block (determined by pos &amp; blocksize) </span>
   <span class='doccomment'>/// of a file is stored. The last element in the array is ```NULL```. </span>
@@ -1633,9 +1634,10 @@
   <span class='doccomment'>/// * ```length``` - The length of the block.</span>
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
-  <span class='doccomment'>/// Returns a dynamically-allocated 2-d array of blocks-hosts; ```NULL``` on error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetHosts</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
-            <span class='ident'>start</span>: <span class='ident'>tOffset</span>, <span class='ident'>length</span>: <span class='ident'>tOffset</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_char</span>;
+  <span class='doccomment'>/// Returns a dynamically-allocated 2-d array of blocks-hosts; ```NULL``` </span>
+  <span class='doccomment'>/// on error.</span>
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetHosts</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
+            <span class='ident'>start</span>: <span class='ident'>tOffset</span>, <span class='ident'>length</span>: <span class='ident'>tOffset</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='op'>*</span><span class='kw'>const</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>;
 
   <span class='doccomment'>/// Free up the structure returned by hdfsGetHosts</span>
   <span class='doccomment'>///</span>
@@ -1643,7 +1645,7 @@
   <span class='doccomment'>/// * ```hdfsFileInfo``` - The array of dynamically-allocated </span>
   <span class='doccomment'>/// hdfsFileInfo objects.</span>
   <span class='doccomment'>/// * ```numEntries``` - The size of the array.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFreeHosts</span>(<span class='ident'>blockHosts</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_char</span>);
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsFreeHosts</span>(<span class='ident'>blockHosts</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='op'>*</span><span class='kw'>const</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>);
 
   <span class='doccomment'>/// Get the default blocksize.</span>
   <span class='doccomment'>///</span>
@@ -1654,7 +1656,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns the default blocksize, or -1 on error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetDefaultBlockSize</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>) <span class='op'>-&gt;</span> <span class='ident'>tOffset</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetDefaultBlockSize</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>) <span class='op'>-&gt;</span> <span class='ident'>tOffset</span>;
 
   <span class='doccomment'>/// Get the default blocksize at the filesystem indicated by a given path.</span>
   <span class='doccomment'>///</span>
@@ -1665,7 +1667,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns the default blocksize, or -1 on error.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetDefaultBlockSizeAtPath</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) 
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetDefaultBlockSizeAtPath</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) 
     <span class='op'>-&gt;</span> <span class='ident'>tOffset</span>;
 
   <span class='doccomment'>/// Return the raw capacity of the filesystem. </span>
@@ -1675,7 +1677,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns the raw-capacity; -1 on error. </span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetCapacity</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>) <span class='op'>-&gt;</span> <span class='ident'>tOffset</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetCapacity</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>) <span class='op'>-&gt;</span> <span class='ident'>tOffset</span>;
 
   <span class='doccomment'>/// Return the total raw size of all files in the filesystem.</span>
   <span class='doccomment'>///</span>
@@ -1683,7 +1685,7 @@
   <span class='doccomment'>/// * ```fs``` - The configured filesystem handle.</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// Returns the total-size; -1 on error. </span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetUsed</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>) <span class='op'>-&gt;</span> <span class='ident'>tOffset</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsGetUsed</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>) <span class='op'>-&gt;</span> <span class='ident'>tOffset</span>;
 
   <span class='doccomment'>/// Change the user and/or group of a file or directory.</span>
   <span class='doccomment'>///</span>
@@ -1695,7 +1697,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// 0 on success else -1</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsChown</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsChown</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
     <span class='ident'>owner</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>group</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// hdfsChmod</span>
@@ -1706,7 +1708,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// 0 on success else -1</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsChmod</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>mode</span>: <span class='ident'>c_short</span>) 
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsChmod</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>mode</span>: <span class='ident'>c_short</span>) 
     <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// hdfsUtime</span>
@@ -1719,7 +1721,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// 0 on success else -1</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsUtime</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>mtime</span>: <span class='ident'>tTime</span>, 
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hdfsUtime</span>(<span class='ident'>fs</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFS</span>, <span class='ident'>path</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>mtime</span>: <span class='ident'>tTime</span>, 
     <span class='ident'>atime</span>: <span class='ident'>tTime</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Allocate a zero-copy options structure.</span>
@@ -1730,7 +1732,7 @@
   <span class='doccomment'>/// #### Return </span>
   <span class='doccomment'>/// A zero-copy options structure, or ```NULL``` if one could not be allocated.</span>
   <span class='doccomment'>/// If ```NULL``` is returned, errno will contain the error number.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hadoopRzOptionsAlloc</span>() <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hadoopRzOptions</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hadoopRzOptionsAlloc</span>() <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hadoopRzOptions</span>;
 
   <span class='doccomment'>/// Determine whether we should skip checksums in read0.</span>
   <span class='doccomment'>///</span>
@@ -1742,7 +1744,7 @@
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// 0 on success; -1 plus errno on failure.</span>
   <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hadoopRzOptionsSetSkipChecksum</span>(
-            <span class='ident'>opts</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hadoopRzOptions</span>, <span class='ident'>skip</span>: <span class='ident'>c_int</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+            <span class='ident'>opts</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hadoopRzOptions</span>, <span class='ident'>skip</span>: <span class='ident'>c_int</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Set the ByteBufferPool to use with read0.</span>
   <span class='doccomment'>///</span>
@@ -1757,14 +1759,14 @@
   <span class='doccomment'>/// 0 if the ByteBufferPool class was found and instantiated;</span>
   <span class='doccomment'>/// -1 plus errno otherwise.</span>
   <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hadoopRzOptionsSetByteBufferPool</span>(
-            <span class='ident'>opts</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hadoopRzOptions</span>, <span class='ident'>className</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+            <span class='ident'>opts</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hadoopRzOptions</span>, <span class='ident'>className</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
 
   <span class='doccomment'>/// Free a hadoopRzOptionsFree structure.</span>
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Params</span>
   <span class='doccomment'>/// * ```opts``` - The options structure to free.</span>
   <span class='doccomment'>/// Any associated ByteBufferPool will also be freed.  </span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hadoopRzOptionsFree</span>(<span class='ident'>opts</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hadoopRzOptions</span>);
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hadoopRzOptionsFree</span>(<span class='ident'>opts</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hadoopRzOptions</span>);
 
   <span class='doccomment'>/// Perform a byte buffer read. If possible, this will be a zero-copy </span>
   <span class='doccomment'>/// (mmap) read.</span>
@@ -1787,8 +1789,8 @@
   <span class='doccomment'>/// On failure, we will return ```NULL``` plus an errno code. </span>
   <span class='doccomment'>/// ```errno = EOPNOTSUPP``` indicates that we could not do a zero-copy</span>
   <span class='doccomment'>///  read, and there was no ByteBufferPool supplied.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hadoopReadZero</span>(<span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>, <span class='ident'>opts</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hadoopRzOptions</span>, 
-    <span class='ident'>maxLength</span>: <span class='ident'>int32_t</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hadoopRzBuffer</span>;
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hadoopReadZero</span>(<span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>, <span class='ident'>opts</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hadoopRzOptions</span>, 
+    <span class='ident'>maxLength</span>: <span class='ident'>int32_t</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hadoopRzBuffer</span>;
 
   <span class='doccomment'>/// Determine the length of the buffer returned from readZero.</span>
   <span class='doccomment'>///</span>
@@ -1817,7 +1819,7 @@
   <span class='doccomment'>///</span>
   <span class='doccomment'>/// #### Return</span>
   <span class='doccomment'>/// The buffer to release.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hadoopRzBufferFree</span>(<span class='ident'>file</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hdfsFile</span>, <span class='ident'>buffer</span>: <span class='op'>*</span><span class='kw-2'>mut</span> <span class='ident'>hadoopRzBuffer</span>);
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>hadoopRzBufferFree</span>(<span class='ident'>file</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hdfsFile</span>, <span class='ident'>buffer</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>hadoopRzBuffer</span>);
 }
 
 

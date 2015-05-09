@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["HdfsErr",""]],"static":[["LOCALFS_SCHEME",""]],"struct":[["HdfsFS",""],["HdfsFile",""],["HdfsFsCache",""]]});
+initSidebarItems({"enum":[["HdfsErr",""]],"static":[["LOCALFS_SCHEME",""]],"struct":[["BlockHosts","Includes hostnames where a particular block of a file is stored."],["HdfsFS","Hdfs Filesystem"],["HdfsFile","open hdfs file"],["HdfsFsCache",""],["HdfsUtil",""],["RzBuffer","A buffer returned from zero-copy read. This buffer will be automatically freed when its lifetime is finished."],["RzOptions","Options for zero-copy read"]]});

@@ -44,7 +44,7 @@
 <h1 class='fqn'><span class='in-band'><a href='../index.html'>hdfs</a>::<wbr><a href='index.html'>binding</a>::<wbr><a class='fn' href=''>hdfsFreeFileInfo</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
         </span><a id='src-606' class='srclink' href='../../src/hdfs/binding.rs.html#613' title='goto source code'>[src]</a></span></h1>
-<pre class='rust fn'>pub unsafe extern fn hdfsFreeFileInfo(hdfsFileInfo: <a href='http://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='struct' href='../../hdfs/binding/struct.hdfsFileInfo.html' title='hdfs::binding::hdfsFileInfo'>hdfsFileInfo</a></a>, numEntries: <a class='type' href='../../libc/types/os/arch/c95/type.c_int.html' title='libc::types::os::arch::c95::c_int'>c_int</a>)</pre><div class='docblock'><p>Free up the hdfsFileInfo array (including fields)</p>
+<pre class='rust fn'>pub unsafe extern fn hdfsFreeFileInfo(hdfsFileInfo: <a href='http://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*const <a class='struct' href='../../hdfs/binding/struct.hdfsFileInfo.html' title='hdfs::binding::hdfsFileInfo'>hdfsFileInfo</a></a>, numEntries: <a class='type' href='../../libc/types/os/arch/c95/type.c_int.html' title='libc::types::os::arch::c95::c_int'>c_int</a>)</pre><div class='docblock'><p>Free up the hdfsFileInfo array (including fields)</p>
 
 <h4 id="params" class='section-header'><a
                            href="#params">Params</a></h4>

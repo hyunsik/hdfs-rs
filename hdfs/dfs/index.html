@@ -43,15 +43,25 @@
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>hdfs</a>::<wbr><a class='mod' href=''>dfs</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
-        </span><a id='src-1039' class='srclink' href='../../src/hdfs/dfs.rs.html#1-271' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-1039' class='srclink' href='../../src/hdfs/dfs.rs.html#1-675' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>Rust APIs wrapping libhdfs API, providing better semantic and abstraction</p>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                     <tr class=' module-item'>
+                        <td><a class='struct' href='struct.BlockHosts.html'
+                               title='hdfs::dfs::BlockHosts'>BlockHosts</a></td>
+                        <td class='docblock short'>
+                             <p>Includes hostnames where a particular block of a file is stored.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
                         <td><a class='struct' href='struct.HdfsFS.html'
                                title='hdfs::dfs::HdfsFS'>HdfsFS</a></td>
                         <td class='docblock short'>
-                             
+                             <p>Hdfs Filesystem</p>
+
                         </td>
                     </tr>
                 
@@ -59,7 +69,8 @@
                         <td><a class='struct' href='struct.HdfsFile.html'
                                title='hdfs::dfs::HdfsFile'>HdfsFile</a></td>
                         <td class='docblock short'>
-                             
+                             <p>open hdfs file</p>
+
                         </td>
                     </tr>
                 
@@ -68,6 +79,33 @@
                                title='hdfs::dfs::HdfsFsCache'>HdfsFsCache</a></td>
                         <td class='docblock short'>
                              
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.HdfsUtil.html'
+                               title='hdfs::dfs::HdfsUtil'>HdfsUtil</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.RzBuffer.html'
+                               title='hdfs::dfs::RzBuffer'>RzBuffer</a></td>
+                        <td class='docblock short'>
+                             <p>A buffer returned from zero-copy read.
+This buffer will be automatically freed when its lifetime is finished.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.RzOptions.html'
+                               title='hdfs::dfs::RzOptions'>RzOptions</a></td>
+                        <td class='docblock short'>
+                             <p>Options for zero-copy read</p>
+
                         </td>
                     </tr>
                 </table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
