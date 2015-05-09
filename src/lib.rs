@@ -19,6 +19,7 @@
 //! Rust APIs are highly recommended for most users.
 
 #![feature(convert)]
+#![feature(core)]
 #![feature(libc)]
 extern crate libc;
 #[macro_use]

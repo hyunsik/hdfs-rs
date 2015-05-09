@@ -728,7 +728,7 @@ extern "C" {
   /// #### Return 
   /// A zero-copy options structure, or ```NULL``` if one could not be allocated.
   /// If ```NULL``` is returned, errno will contain the error number.
-  pub fn hadoopRzOptionsAlloc() -> *mut hadoopRzOptions;
+  pub fn hadoopRzOptionsAlloc() -> *const hadoopRzOptions;
 
   /// Determine whether we should skip checksums in read0.
   ///
@@ -740,7 +740,7 @@ extern "C" {
   /// #### Return
   /// 0 on success; -1 plus errno on failure.
   pub fn hadoopRzOptionsSetSkipChecksum(
-            opts: *mut hadoopRzOptions, skip: c_int) -> c_int;
+            opts: *const hadoopRzOptions, skip: c_int) -> c_int;
 
   /// Set the ByteBufferPool to use with read0.
   ///
@@ -755,14 +755,14 @@ extern "C" {
   /// 0 if the ByteBufferPool class was found and instantiated;
   /// -1 plus errno otherwise.
   pub fn hadoopRzOptionsSetByteBufferPool(
-            opts: *mut hadoopRzOptions, className: *const c_char) -> c_int;
+            opts: *const hadoopRzOptions, className: *const c_char) -> c_int;
 
   /// Free a hadoopRzOptionsFree structure.
   ///
   /// #### Params
   /// * ```opts``` - The options structure to free.
   /// Any associated ByteBufferPool will also be freed.  
-  pub fn hadoopRzOptionsFree(opts: *mut hadoopRzOptions);
+  pub fn hadoopRzOptionsFree(opts: *const hadoopRzOptions);
 
   /// Perform a byte buffer read. If possible, this will be a zero-copy 
   /// (mmap) read.
@@ -785,8 +785,8 @@ extern "C" {
   /// On failure, we will return ```NULL``` plus an errno code. 
   /// ```errno = EOPNOTSUPP``` indicates that we could not do a zero-copy
   ///  read, and there was no ByteBufferPool supplied.
-  pub fn hadoopReadZero(file: *const hdfsFile, opts: *mut hadoopRzOptions, 
-    maxLength: int32_t) -> *mut hadoopRzBuffer;
+  pub fn hadoopReadZero(file: *const hdfsFile, opts: *const hadoopRzOptions, 
+    maxLength: int32_t) -> *const hadoopRzBuffer;
 
   /// Determine the length of the buffer returned from readZero.
   ///
@@ -815,7 +815,7 @@ extern "C" {
   ///
   /// #### Return
   /// The buffer to release.
-  pub fn hadoopRzBufferFree(file: *const hdfsFile, buffer: *mut hadoopRzBuffer);
+  pub fn hadoopRzBufferFree(file: *const hdfsFile, buffer: *const hadoopRzBuffer);
 }
 
 
