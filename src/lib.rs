@@ -18,10 +18,6 @@
 //! hiding manual memory management and some thread-safety problem of libhdfs.
 //! Rust APIs are highly recommended for most users.
 
-#![feature(convert)]
-#![feature(core)]
-#![feature(libc)]
-#![feature(raw)]
 extern crate libc;
 #[macro_use]
 extern crate log;
