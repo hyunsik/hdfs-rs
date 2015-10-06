@@ -8,7 +8,7 @@ export LD_LIBRARY_PATH=$HADOOP_HOME/lib/native
 
 HADOOP_MODULE_DIRS="$HADOOP_HOME/share/hadoop/common/lib/
 $HADOOP_HOME/share/hadoop/common/
-$HADOOP_HOME/share/hadoop/hdfs
+$HADOOP_HOME/share/hadoop/hdfs/
 $HADOOP_HOME/share/hadoop/hdfs/lib/
 $HADOOP_HOME/share/hadoop/yarn/lib/
 $HADOOP_HOME/share/hadoop/yarn/"
