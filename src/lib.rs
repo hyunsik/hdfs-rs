@@ -21,6 +21,7 @@
 #![feature(convert)]
 #![feature(core)]
 #![feature(libc)]
+#![feature(raw)]
 extern crate libc;
 #[macro_use]
 extern crate log;
