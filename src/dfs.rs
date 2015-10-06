@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::ffi::CString;
 use std::marker::PhantomData;
 use std::mem;
-use std::raw::Slice;
+use std::slice;
 use std::string::String;
 use std::sync::{Arc, Mutex};
 use url::{UrlParser, SchemeType};
@@ -30,22 +30,22 @@ impl<'a> HdfsFsCache<'a> {
     }
   }
 
-  pub fn get(&mut self, path: &str) -> Option<&HdfsFS> {   
+  pub fn get(&mut self, path: &str) -> Option<&HdfsFS> {
     let mut namenode_uri = String::new();
 
     match self.url_parser.parse(path) {
       Ok(url) => {
 
-        if url.scheme.as_str() == LOCALFS_SCHEME { 
+        if &url.scheme == LOCALFS_SCHEME {
           namenode_uri.push_str("file:///");
         } else {
 
-          if url.host().is_some() {              
-            namenode_uri.push_str(
-              format!("{}://{}", url.scheme.as_str(), url.host().unwrap()).as_str());
+          if url.host().is_some() {
+            namenode_uri.push_str(&(
+              format!("{}://{}", &url.scheme, url.host().unwrap())));
 
             if url.port().is_some() {
-              namenode_uri.push_str(format!(":{}", url.port().unwrap()).as_str());
+              namenode_uri.push_str(&(format!(":{}", url.port().unwrap())));
             }
 
           } else {
@@ -60,7 +60,7 @@ impl<'a> HdfsFsCache<'a> {
 
     self.lock.lock();
 
-    info!("Connect to Namenode ({})", namenode_uri.as_str());
+    info!("Connect to Namenode ({})", &namenode_uri);
 
     if !self.fs_map.contains_key(&namenode_uri) {
       unsafe {
@@ -75,12 +75,12 @@ impl<'a> HdfsFsCache<'a> {
         }
 
         self.fs_map.insert(
-          namenode_uri.clone(), 
+          namenode_uri.clone(),
           HdfsFS {fs_url: namenode_uri.clone(), fs: hdfs_fs, _marker: PhantomData});
       }
     }
 
-    Some(self.fs_map.get(&namenode_uri).unwrap())    
+    Some(self.fs_map.get(&namenode_uri).unwrap())
   }
 }
 
@@ -91,7 +91,7 @@ const O_APPEND: c_int = 1024;
 pub enum HdfsErr {
   FileNotFound(String),
   FileAlreadyExists(String),
-  UNKNOWN 
+  UNKNOWN
 }
 
 pub struct HdfsUtil;
@@ -103,10 +103,10 @@ impl HdfsUtil {
   ///
   /// #### Params
   /// * ```srcFS``` - The handle to source filesystem.
-  /// * ```src``` - The path of source file. 
+  /// * ```src``` - The path of source file.
   /// * ```dstFS``` - The handle to destination filesystem.
   /// * ```dst``` - The path of destination file.
-  pub fn copy(src_fs: &HdfsFS, src: &str, dst_fs: &HdfsFS, dst: &str) 
+  pub fn copy(src_fs: &HdfsFS, src: &str, dst_fs: &HdfsFS, dst: &str)
       -> Result<bool, HdfsErr> {
 
     let res = unsafe {
@@ -124,10 +124,10 @@ impl HdfsUtil {
   ///
   /// #### Params
   /// * ```srcFS``` - The handle to source filesystem.
-  /// * ```src``` - The path of source file. 
+  /// * ```src``` - The path of source file.
   /// * ```dstFS``` - The handle to destination filesystem.
   /// * ```dst``` - The path of destination file.
-  pub fn mv(src_fs: &HdfsFS, src: &str, dst_fs: &HdfsFS, dst: &str) 
+  pub fn mv(src_fs: &HdfsFS, src: &str, dst_fs: &HdfsFS, dst: &str)
       -> Result<bool, HdfsErr> {
 
     let res = unsafe {
@@ -174,7 +174,7 @@ impl RzOptions {
     }
   }
 
-  pub fn set_bytebuffer_pool(&self, class_name: &str) 
+  pub fn set_bytebuffer_pool(&self, class_name: &str)
       -> Result<bool, HdfsErr> {
 
     let res = unsafe {
@@ -189,7 +189,7 @@ impl RzOptions {
   }
 }
 
-/// A buffer returned from zero-copy read. 
+/// A buffer returned from zero-copy read.
 /// This buffer will be automatically freed when its lifetime is finished.
 pub struct RzBuffer<'a> {
   file: &'a HdfsFile<'a>,
@@ -227,12 +227,12 @@ impl<'a> RzBuffer<'a> {
         hadoopRzBufferGet(self.ptr) as *const u8
      };
 
-     let len = unsafe { 
+     let len = unsafe {
       hadoopRzBufferLength(self.ptr) as usize
      };
-    
+
      if !ptr.is_null() {
-      Ok(unsafe { mem::transmute(Slice {data: ptr, len: len as usize}) })
+      Ok(unsafe { mem::transmute(slice::from_raw_parts(ptr, len as usize)) })
      } else {
       Err(HdfsErr::UNKNOWN)
      }
@@ -244,7 +244,7 @@ pub struct BlockHosts {
   ptr: *const *const *const c_char
 }
 
-impl Drop for BlockHosts {  
+impl Drop for BlockHosts {
   fn drop(&mut self) {
     unsafe { hdfsFreeHosts(self.ptr) };
   }
@@ -263,13 +263,13 @@ pub struct HdfsFS<'a> {
 impl<'a> HdfsFS<'a> {
 
   /// Open a file for append
-  pub fn append(&self, path: &str) -> Result<HdfsFile, HdfsErr> {    
+  pub fn append(&self, path: &str) -> Result<HdfsFile, HdfsErr> {
     if !self.exist(path) {
       return Err(HdfsErr::FileNotFound(path.to_owned()));
     }
 
-    let file = unsafe { 
-      hdfsOpenFile(self.fs, str_to_chars(path), O_APPEND, 0,0,0) 
+    let file = unsafe {
+      hdfsOpenFile(self.fs, str_to_chars(path), O_APPEND, 0,0,0)
     };
 
     if file.is_null() {
@@ -281,13 +281,13 @@ impl<'a> HdfsFS<'a> {
 
   /// set permission
   pub fn chmod(&self, path: &str, mode: i16) -> bool {
-    (unsafe { 
+    (unsafe {
       hdfsChmod(self.fs, str_to_chars(path), mode as c_short)}) == 0
   }
 
   pub fn chown(&self, path: &str, owner: &str, group: &str) -> bool {
     (unsafe {
-      hdfsChown(self.fs, str_to_chars(path), 
+      hdfsChown(self.fs, str_to_chars(path),
         str_to_chars(owner), str_to_chars(group))}) == 0
   }
 
@@ -297,7 +297,7 @@ impl<'a> HdfsFS<'a> {
   }
 
   #[inline]
-  pub fn create_with_overwrite(&self, path: &str, 
+  pub fn create_with_overwrite(&self, path: &str,
     overwrite: bool) -> Result<HdfsFile, HdfsErr> {
 
     self.create_with_params(path, overwrite, 0, 0, 0)
@@ -305,7 +305,7 @@ impl<'a> HdfsFS<'a> {
 
   pub fn create_with_params(
     &'a self,
-    path: &str, 
+    path: &str,
     overwrite: bool,
     buf_size: i32,
     replica_num: i16,
@@ -315,9 +315,9 @@ impl<'a> HdfsFS<'a> {
       return Err(HdfsErr::FileAlreadyExists(path.to_owned()));
     }
 
-    let file = unsafe { 
-      hdfsOpenFile(self.fs, str_to_chars(path), O_WRONLY, 
-        buf_size as c_int, replica_num as c_short, block_size as int32_t) 
+    let file = unsafe {
+      hdfsOpenFile(self.fs, str_to_chars(path), O_WRONLY,
+        buf_size as c_int, replica_num as c_short, block_size as int32_t)
     };
 
     if file.is_null() {
@@ -340,8 +340,8 @@ impl<'a> HdfsFS<'a> {
 
   /// Get the default blocksize at the filesystem indicated by a given path.
   pub fn block_size(&self, path: &str) -> Result<usize, HdfsErr> {
-    let block_sz = unsafe { 
-      hdfsGetDefaultBlockSizeAtPath(self.fs, str_to_chars(path)) 
+    let block_sz = unsafe {
+      hdfsGetDefaultBlockSizeAtPath(self.fs, str_to_chars(path))
     };
 
     if block_sz > 0 {
@@ -351,10 +351,10 @@ impl<'a> HdfsFS<'a> {
     }
   }
 
-  /// Return the raw capacity of the filesystem. 
+  /// Return the raw capacity of the filesystem.
   pub fn capacity(&self) -> Result<usize, HdfsErr> {
-    let block_sz = unsafe { 
-      hdfsGetCapacity(self.fs) 
+    let block_sz = unsafe {
+      hdfsGetCapacity(self.fs)
     };
 
     if block_sz > 0 {
@@ -364,10 +364,10 @@ impl<'a> HdfsFS<'a> {
     }
   }
 
-  /// Delete file. 
+  /// Delete file.
   pub fn delete(&self, path: &str, recursive: bool) -> Result<bool, HdfsErr> {
-    let res = unsafe { 
-      hdfsDelete(self.fs, str_to_chars(path), recursive as c_int) 
+    let res = unsafe {
+      hdfsDelete(self.fs, str_to_chars(path), recursive as c_int)
     };
 
     if res == 0 {
@@ -377,7 +377,7 @@ impl<'a> HdfsFS<'a> {
     }
   }
 
-  /// Checks if a given path exsits on the filesystem 
+  /// Checks if a given path exsits on the filesystem
   pub fn exist(&self, path: &str) -> bool {
     if unsafe {hdfsExists(self.fs, str_to_chars(path))} == 0 {
       true
@@ -389,18 +389,18 @@ impl<'a> HdfsFS<'a> {
   /// Get HDFS namenode url
   #[inline]
   pub fn fs_url(&'a self) -> &'a str {
-    &self.fs_url.as_str()
+    &self.fs_url
   }
 
   /// Get hostnames where a particular block (determined by
   /// pos & blocksize) of a file is stored. The last element in the array
   /// is NULL. Due to replication, a single block could be present on
   /// multiple hosts.
-  pub fn get_hosts(&self, path: &str, start: usize, length: usize) 
+  pub fn get_hosts(&self, path: &str, start: usize, length: usize)
       -> Result<BlockHosts, HdfsErr> {
-    
+
     let ptr = unsafe {
-      hdfsGetHosts(self.fs, str_to_chars(path), 
+      hdfsGetHosts(self.fs, str_to_chars(path),
         start as int64_t, length as int64_t)
     };
 
@@ -418,7 +418,7 @@ impl<'a> HdfsFS<'a> {
     } else {
       Err(HdfsErr::UNKNOWN)
     }
-  }  
+  }
 
   /// open a file to read
   #[inline]
@@ -427,12 +427,12 @@ impl<'a> HdfsFS<'a> {
   }
 
   /// open a file to read with a buffer size
-  pub fn open_with_bufsize(&self, path: &str, buf_size: i32) 
-      -> Result<HdfsFile, HdfsErr> {    
+  pub fn open_with_bufsize(&self, path: &str, buf_size: i32)
+      -> Result<HdfsFile, HdfsErr> {
 
-    let file = unsafe { 
-      hdfsOpenFile(self.fs, str_to_chars(path), O_RDONLY, 
-        buf_size as c_int, 0, 0) 
+    let file = unsafe {
+      hdfsOpenFile(self.fs, str_to_chars(path), O_RDONLY,
+        buf_size as c_int, 0, 0)
     };
 
     if file.is_null() {
@@ -443,7 +443,7 @@ impl<'a> HdfsFS<'a> {
   }
 
   /// Set the replication of the specified file to the supplied value
-  pub fn set_replication(&self, path: &str, num: i16) 
+  pub fn set_replication(&self, path: &str, num: i16)
       -> Result<bool, HdfsErr> {
 
     let res = unsafe {
@@ -458,7 +458,7 @@ impl<'a> HdfsFS<'a> {
   }
 
   /// Rename file.
-  pub fn rename(&self, old_path: &str, new_path: &str) 
+  pub fn rename(&self, old_path: &str, new_path: &str)
       -> Result<bool, HdfsErr> {
 
     let res = unsafe {
@@ -474,8 +474,8 @@ impl<'a> HdfsFS<'a> {
 
   /// Return the total raw size of all files in the filesystem.
   pub fn used(&self) -> Result<usize, HdfsErr> {
-    let block_sz = unsafe { 
-      hdfsGetUsed(self.fs) 
+    let block_sz = unsafe {
+      hdfsGetUsed(self.fs)
     };
 
     if block_sz > 0 {
@@ -513,7 +513,7 @@ impl<'a> HdfsFile<'a> {
       Ok(true)
     } else {
       Err(HdfsErr::UNKNOWN)
-    }    
+    }
   }
 
   /// Flush the data.
@@ -521,17 +521,17 @@ impl<'a> HdfsFile<'a> {
     (unsafe { hdfsFlush(self.fs.fs, self.file) }) == 0
   }
 
-  /// Flush out the data in client's user buffer. After the return of this 
+  /// Flush out the data in client's user buffer. After the return of this
   /// call, new readers will see the data.
   pub fn hflush(&self) -> bool {
-    (unsafe { hdfsHFlush(self.fs.fs, self.file) }) == 0 
+    (unsafe { hdfsHFlush(self.fs.fs, self.file) }) == 0
   }
 
-  /// Similar to posix fsync, Flush out the data in client's 
+  /// Similar to posix fsync, Flush out the data in client's
   /// user buffer. all the way to the disk device (but the disk may have
   /// it in its cache).
   pub fn hsync(&self) -> bool {
-    (unsafe { hdfsHSync(self.fs.fs, self.file) }) == 0  
+    (unsafe { hdfsHSync(self.fs.fs, self.file) }) == 0
   }
 
   /// Determine if a file is open for read.
@@ -541,29 +541,29 @@ impl<'a> HdfsFile<'a> {
 
   /// Determine if a file is open for write.
   pub fn is_writable(&self) -> bool {
-    (unsafe { hdfsFileIsOpenForWrite(self.file) }) == 1 
-  }  
+    (unsafe { hdfsFileIsOpenForWrite(self.file) }) == 1
+  }
 
   /// Return a file path
   pub fn path(&'a self) -> &'a str {
-    self.path.as_str()
+    &self.path
   }
 
   /// Get the current offset in the file, in bytes.
   pub fn pos(&self) -> Result<u64, HdfsErr> {
     let pos = unsafe {hdfsTell(self.fs.fs, self.file)};
-    
+
     if pos > 0 {
       Ok(pos as u64)
     } else {
       Err(HdfsErr::UNKNOWN)
-    }    
+    }
   }
 
   /// Read data from an open file.
   pub fn read(&self, buf: &mut [u8]) -> Result<i32, HdfsErr> {
-    let read_len = unsafe { 
-      hdfsRead(self.fs.fs, self.file, buf.as_ptr() as *mut c_void, 
+    let read_len = unsafe {
+      hdfsRead(self.fs.fs, self.file, buf.as_ptr() as *mut c_void,
         buf.len() as tSize)
     };
 
@@ -576,8 +576,8 @@ impl<'a> HdfsFile<'a> {
 
   /// Positional read of data from an open file.
   pub fn read_with_pos(&self, pos: i64, buf: &mut [u8]) -> Result<i32, HdfsErr> {
-    let read_len = unsafe { 
-      hdfsPread(self.fs.fs, self.file, pos as tOffset, 
+    let read_len = unsafe {
+      hdfsPread(self.fs.fs, self.file, pos as tOffset,
         buf.as_ptr() as *mut c_void, buf.len() as tSize)
     };
 
@@ -588,7 +588,7 @@ impl<'a> HdfsFile<'a> {
     }
   }
 
-  /// Perform a byte buffer read. If possible, this will be a zero-copy 
+  /// Perform a byte buffer read. If possible, this will be a zero-copy
   /// (mmap) read.
   pub fn read_zc(&'a self, opts: &RzOptions, max_len: i32) -> Result<RzBuffer<'a>, HdfsErr> {
     let buf : *const hadoopRzBuffer = unsafe {
@@ -602,7 +602,7 @@ impl<'a> HdfsFile<'a> {
     }
   }
 
-  /// Seek to given offset in file. 
+  /// Seek to given offset in file.
   pub fn seek(&self, offset: u64) -> bool {
     (unsafe { hdfsSeek(self.fs.fs, self.file, offset as tOffset) }) == 0
   }
@@ -610,7 +610,7 @@ impl<'a> HdfsFile<'a> {
   /// Write data into an open file.
   pub fn write(&self, buf: &[u8]) -> Result<i32, HdfsErr> {
     let written_len = unsafe {
-      hdfsWrite(self.fs.fs, self.file, 
+      hdfsWrite(self.fs.fs, self.file,
         buf.as_ptr() as *mut c_void, buf.len() as tSize)
     };
 
@@ -619,7 +619,7 @@ impl<'a> HdfsFile<'a> {
     } else {
       Err(HdfsErr::UNKNOWN)
     }
-  }  
+  }
 }
 
 /// for HDFS URL scheme (i.e., hdfs://)
@@ -640,7 +640,7 @@ fn test_hdfs_connection() {
   let dfs = MiniDFS::start(&mut conf).unwrap();
   let port = dfs.namenode_port().unwrap();
 
-  let minidfs_addr = format!("hdfs://localhost:{}", port);  
+  let minidfs_addr = format!("hdfs://localhost:{}", port);
 
   let mut cache: HdfsFsCache = HdfsFsCache::new();
 
@@ -648,12 +648,12 @@ fn test_hdfs_connection() {
   // Parse namenode uris
   assert_eq!("file:///".to_string(), cache.get("file:/blah").unwrap().fs_url);
   let test_path = format!("hdfs://localhost:{}/users/test", port);
-  println!("Trying to get {}", test_path.as_str());
-  assert_eq!(minidfs_addr, cache.get(test_path.as_str()).unwrap().fs_url);
+  println!("Trying to get {}", &test_path);
+  assert_eq!(minidfs_addr, cache.get(&test_path).unwrap().fs_url);
 
 
   // create a file, check existence, and close
-  let fs = cache.get(test_path.as_str()).unwrap();
+  let fs = cache.get(&test_path).unwrap();
   let test_file = "/test_file";
   let created_file = match fs.create(test_file) {
     Ok(f) => f,
