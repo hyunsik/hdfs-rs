@@ -18,10 +18,15 @@ fn main() {
 
   match env::var("JAVA_HOME") {
     Ok(val) => { 
-      minidfs_config
-        .include(format!("{}/include/", val))
-        // TODO - to be changed to consider a dependent platform.
-        .include(format!("{}/include/linux", val));
+      minidfs_config.include(format!("{}/include/", val));
+      if cfg!(target_os = "linux") {
+        minidfs_config
+          .include(format!("{}/include/linux", val));
+      } else if cfg!(target_os = "macos") {
+        minidfs_config
+          .include(format!("{}/include/darwin", val));
+      }
+      // TODO - to be changed to consider a dependent platform.
     },
     Err(e) => { panic!("JAVA_HOME shell environment must be set: {}", e); }
   }
