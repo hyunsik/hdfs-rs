@@ -9,6 +9,7 @@ use std::sync::{Arc, Mutex};
 use url::{UrlParser,SchemeType};
 use libc::{c_char, c_int, c_short, c_void, int16_t, int32_t, int64_t, time_t};
 
+use err::HdfsErr;
 use native::*;
 use util::{chars_to_str, str_to_chars};
 
@@ -102,12 +103,6 @@ impl<'a> HdfsFsCache<'a> {
 const O_RDONLY: c_int = 0;
 const O_WRONLY: c_int = 1;
 const O_APPEND: c_int = 1024;
-
-pub enum HdfsErr {
-  FileNotFound(String),
-  FileAlreadyExists(String),
-  UNKNOWN
-}
 
 pub struct HdfsUtil;
 
