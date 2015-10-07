@@ -8,7 +8,7 @@ use url::{UrlParser,SchemeType};
 use dfs::HdfsFS;
 use native::*;
 
-pub static LOCALFS_SCHEME: &'static str = "file";
+pub static LOCAL_FS_SCHEME: &'static str = "file";
 
 
 /// for HDFS URL scheme (i.e., hdfs://)
@@ -23,15 +23,17 @@ pub fn hdfs_scheme_handler(scheme: &str) -> SchemeType
 
 /// HdfsFs Cache. Basically, It is a cache as well as a way to guarantees 
 /// thread-safe when you get HdfsFs.
-pub struct HdfsFsCache<'a> {
+pub struct HdfsFsCache<'a> 
+{
   fs_map: HashMap<String, HdfsFS<'a>>,
   lock: Arc<Mutex<i32>>,
   url_parser: UrlParser<'a>
 }
 
-impl<'a> HdfsFsCache<'a> {
-
-  pub fn new() -> HdfsFsCache<'a> {
+impl<'a> HdfsFsCache<'a> 
+{
+  pub fn new() -> HdfsFsCache<'a> 
+  {
     let mut url_parser = UrlParser::new();
     url_parser.scheme_type_mapper(hdfs_scheme_handler);
 
@@ -42,13 +44,14 @@ impl<'a> HdfsFsCache<'a> {
     }
   }
 
-  pub fn get(&mut self, path: &str) -> Option<&HdfsFS> {
+  pub fn get(&mut self, path: &str) -> Option<&HdfsFS> 
+  {
     let mut namenode_uri = String::new();
 
     match self.url_parser.parse(path) {
       Ok(url) => {
 
-        if &url.scheme == LOCALFS_SCHEME {
+        if &url.scheme == LOCAL_FS_SCHEME {
           namenode_uri.push_str("file:///");
         } else {
 
