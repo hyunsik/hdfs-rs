@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::ffi::CString;
+use std::rc::Rc;
 use std::string::String;
 use std::sync::{Arc, Mutex};
 
@@ -7,6 +8,7 @@ use url::{UrlParser,SchemeType};
 
 use dfs::HdfsFS;
 use native::*;
+use util::str_to_chars;
 
 pub static LOCAL_FS_SCHEME: &'static str = "file";
 
@@ -25,7 +27,7 @@ pub fn hdfs_scheme_handler(scheme: &str) -> SchemeType
 /// thread-safe when you get HdfsFs.
 pub struct HdfsFsCache<'a> 
 {
-  fs_map: HashMap<String, HdfsFS<'a>>,
+  fs_map: HashMap<String, Rc<HdfsFS<'a>>>,
   lock: Arc<Mutex<i32>>,
   url_parser: UrlParser<'a>
 }
@@ -44,7 +46,7 @@ impl<'a> HdfsFsCache<'a>
     }
   }
 
-  pub fn get(&mut self, path: &str) -> Option<&HdfsFS> 
+  pub fn get(&mut self, path: &str) -> Option<Rc<HdfsFS<'a>>> 
   {
     let mut namenode_uri = String::new();
 
@@ -80,9 +82,7 @@ impl<'a> HdfsFsCache<'a>
     if !self.fs_map.contains_key(&namenode_uri) {
       unsafe {
         let hdfs_builder = hdfsNewBuilder();
-        let namenode_uri_bytes: Vec<u8> = namenode_uri.bytes().collect();
-        let namenode_cstr = CString::new(namenode_uri_bytes).unwrap();
-        hdfsBuilderSetNameNode(hdfs_builder, namenode_cstr.as_ptr());
+        hdfsBuilderSetNameNode(hdfs_builder, str_to_chars(&namenode_uri));
         let hdfs_fs = hdfsBuilderConnect(hdfs_builder);
 
         if hdfs_fs.is_null() {
@@ -91,10 +91,10 @@ impl<'a> HdfsFsCache<'a>
 
         self.fs_map.insert(
           namenode_uri.clone(),
-          HdfsFS::new(namenode_uri.clone(), hdfs_fs));
+          Rc::new(HdfsFS::new(namenode_uri.clone(), hdfs_fs)));
       }
     }
 
-    Some(self.fs_map.get(&namenode_uri).unwrap())
+    Some(self.fs_map.get(&namenode_uri).unwrap().clone())
   }
 }
