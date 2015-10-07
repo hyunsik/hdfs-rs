@@ -928,7 +928,7 @@ extern "C" {
   /// #### Return
   /// * 0 on success; a non-zero error code if the cluster fails to
   /// come out of safe mode.
-  pub fn nmdWaitClusterUp(cl: *mut NativeMiniDfsCluster) -> c_int;
+  pub fn nmdWaitClusterUp(cl: *const NativeMiniDfsCluster) -> c_int;
 
   /// Shut down a NativeMiniDFS cluster
   ///
@@ -937,13 +937,13 @@ extern "C" {
   /// 
   /// #### Return
   /// * 0 on success; a non-zero error code if an exception is thrown.
-  pub fn nmdShutdown(cl: *mut NativeMiniDfsCluster) -> c_int;
+  pub fn nmdShutdown(cl: *const NativeMiniDfsCluster) -> c_int;
 
   /// Destroy a Native MiniDFSCluster
   ///
   /// #### Params
   /// * ```cl``` - The cluster to destroy
-  pub fn nmdFree(cl: *mut NativeMiniDfsCluster) -> c_void;
+  pub fn nmdFree(cl: *const NativeMiniDfsCluster) -> c_void;
 
   /// Get the port that's in use by the given (non-HA) nativeMiniDfs
   ///
@@ -972,6 +972,6 @@ extern "C" {
   /// 
   /// #### Return
   /// the port, or a negative error code
-  pub fn nmdConfigureHdfsBuilder(cl: *mut NativeMiniDfsCluster, 
-    bld: *mut hdfsBuilder) -> c_int;
+  pub fn nmdConfigureHdfsBuilder(cl: *const NativeMiniDfsCluster, 
+    bld: *const hdfsBuilder) -> c_int;
 }
