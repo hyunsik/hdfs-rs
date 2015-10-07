@@ -2,8 +2,19 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-use libc::{c_char, c_int, c_short, c_uchar, c_void, int16_t, int32_t, 
-  int64_t, uint16_t, size_t, time_t};
+use libc::{
+  c_char, 
+  c_int, 
+  c_short, 
+  c_uchar, 
+  c_void, 
+  int16_t, 
+  int32_t, 
+  int64_t,
+  uint16_t,
+  size_t,
+  time_t
+};
 
 /// Opaque Pointer of hdfsFS
 pub enum hdfsFS {}
@@ -30,14 +41,16 @@ pub type tOffset = int64_t;
 pub type tPort = uint16_t;
 
 #[repr(C)]
-pub enum tObjectKind {
+pub enum tObjectKind 
+{
   kObjectKindFile = 0x46, // 'F'
   kObjectKindDirectory = 0x44 // 'D'
 }
 
 /// Information about a file/directory.
 #[repr(C)]
-pub struct hdfsReadStatistics {
+pub struct hdfsReadStatistics 
+{
   pub totalBytesRead : u64,
   pub totalLocalBytesRead : u64,
   pub totalShortCircuitBytesRead : u64,
@@ -45,7 +58,8 @@ pub struct hdfsReadStatistics {
 }
 
 #[repr(C)]
-pub struct hdfsFileInfo {
+pub struct hdfsFileInfo 
+{
   /// file or directory
   pub mKind: tObjectKind,
   /// the name of the file
@@ -509,7 +523,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns 0 on success, -1 on error. 
-  pub fn hdfsDelete(srcFS: *const hdfsFS, path: *const c_char, 
+  pub fn hdfsDelete(fs: *const hdfsFS, path: *const c_char, 
     recursive: c_int) -> c_int;
 
   /// Rename file. 
@@ -521,7 +535,7 @@ extern "C" {
   ///
   /// #### Return
   /// Returns 0 on success, -1 on error.
-  pub fn hdfsRename(srcFS: *const hdfsFS, oldPath: *const c_char, 
+  pub fn hdfsRename(fs: *const hdfsFS, oldPath: *const c_char, 
     newPath: *const c_char) -> c_int;
 
   /// Get the current working directory for the given filesystem.
@@ -818,7 +832,8 @@ pub enum NativeMiniDfsCluster {}
 /// Represents a configuration to use for creating a Native MiniDFSCluster
 #[repr(C)]
 #[allow(non_snake_case)]
-pub struct MiniDfsConf {
+pub struct MiniDfsConf 
+{
   /// Nonzero if the cluster should be formatted prior to startup.
   do_format: c_uchar,
   /// Whether or not to enable webhdfs in MiniDfsCluster
@@ -829,8 +844,10 @@ pub struct MiniDfsConf {
   short_circuit_enabled: c_uchar
 }
 
-impl MiniDfsConf {
-  pub fn new() -> MiniDfsConf {
+impl MiniDfsConf 
+{
+  pub fn new() -> MiniDfsConf 
+  {
     MiniDfsConf {
       do_format: 1,
       webhdfs_enabled: 0,
@@ -840,46 +857,54 @@ impl MiniDfsConf {
   }
 
   /// Set TRUE if the cluster should be formatted prior to startup
-  pub fn set_do_format(&mut self, on: bool) -> &mut MiniDfsConf {
+  pub fn set_do_format(&mut self, on: bool) -> &mut MiniDfsConf 
+  {
     self.do_format = if on { 1 } else { 0 };
     self
   }
 
   /// The cluster will be formatted prior to startup if TRUE
-  pub fn do_format(&self) -> bool {
+  pub fn do_format(&self) -> bool 
+  {
     if self.do_format != 0 { true } else { false }
   }
 
   /// Set TRUE in order to enable webhdfs in MiniDfsCluster
-  pub fn set_web_hdfs(&mut self, enable: bool) -> &mut MiniDfsConf {
+  pub fn set_web_hdfs(&mut self, enable: bool) -> &mut MiniDfsConf 
+  {
     self.webhdfs_enabled = if enable { 1 } else { 0 };
     self
   }
 
   /// webhdfs in MiniDfsCluster will be available if TRUE
-  pub fn web_hdfs_enabled(&self) -> bool {
+  pub fn web_hdfs_enabled(&self) -> bool 
+  {
     if self.webhdfs_enabled != 0 { true } else { false } 
   }
 
   /// Set http port of the namenode in MiniDfsCluster
-  pub fn set_http_port(&mut self, port: i32) -> &mut MiniDfsConf {
+  pub fn set_http_port(&mut self, port: i32) -> &mut MiniDfsConf 
+  {
     self.namenode_http_port = port as c_int;
     self
   }
 
   /// The http port of the namenode in MiniDfsCluster
-  pub fn http_port(&self) -> i32 {
+  pub fn http_port(&self) -> i32 
+  {
     self.namenode_http_port
   }
 
   /// Set TRUE if we should configure short circuit.
-  pub fn set_short_circuit(&mut self, enable: bool) -> &mut MiniDfsConf {
+  pub fn set_short_circuit(&mut self, enable: bool) -> &mut MiniDfsConf 
+  {
     self.short_circuit_enabled = if enable { 1 } else { 0 };
     self
   }
 
   /// short circuit will be available if TRUE
-  pub fn short_circuit_enabled(&self) -> bool {
+  pub fn short_circuit_enabled(&self) -> bool 
+  {
     if self.short_circuit_enabled != 0 { true } else { false } 
   }
 }
