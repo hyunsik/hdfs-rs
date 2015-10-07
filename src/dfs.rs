@@ -11,7 +11,7 @@ use libc::{c_char, c_int, c_short, c_void, int16_t, int32_t, int64_t, time_t};
 
 use err::HdfsErr;
 use native::*;
-use util::{chars_to_str, str_to_chars};
+use util::{chars_to_str, str_to_chars, bool_to_c_int};
 use cache::HdfsFsCache;
 
 const O_RDONLY: c_int = 0;
@@ -34,7 +34,7 @@ impl HdfsUtil {
       -> Result<bool, HdfsErr> {
 
     let res = unsafe {
-      hdfsCopy(src_fs.fs, str_to_chars(src), dst_fs.fs, str_to_chars(dst))
+      hdfsCopy(src_fs.raw, str_to_chars(src), dst_fs.raw, str_to_chars(dst))
     };
 
     if res == 0 {
@@ -55,7 +55,7 @@ impl HdfsUtil {
       -> Result<bool, HdfsErr> {
 
     let res = unsafe {
-      hdfsMove(src_fs.fs, str_to_chars(src), dst_fs.fs, str_to_chars(dst))
+      hdfsMove(src_fs.raw, str_to_chars(src), dst_fs.raw, str_to_chars(dst))
     };
 
     if res == 0 {
@@ -64,10 +64,6 @@ impl HdfsUtil {
       Err(HdfsErr::UNKNOWN)
     }
   }
-}
-
-fn bool_to_c_int(val: bool) -> c_int {
-  if val { 1 } else { 0 }
 }
 
 /// Options for zero-copy read
@@ -258,19 +254,35 @@ impl<'a> Drop for FileInfo<'a> {
 
 /// Hdfs Filesystem
 pub struct HdfsFS<'a> {
-  fs_url: String,
-  fs: *const hdfsFS,
+  url: String,
+  pub raw: *const hdfsFS,
   _marker: PhantomData<&'a ()>
 }
 
 impl<'a> HdfsFS<'a> {
+  /// create HdfsFS instance. Please use HdfsFsCache rather than using this API directly. 
+  #[inline]
   pub fn new(url: String, raw: *const hdfsFS) -> HdfsFS<'a>
   {
     HdfsFS {
-      fs_url: url,
-      fs: raw,
+      url: url,
+      raw: raw,
       _marker: PhantomData
     }
+  }
+  
+  /// Get HDFS namenode url
+  #[inline]
+  pub fn url(&self) -> &str
+  {
+    &self.url
+  }
+  
+  /// Get a raw pointer of JNI API's hdfsFS
+  #[inline]
+  pub fn raw(&self) -> *const hdfsFS
+  {
+    self.raw
   }
 
   /// Open a file for append
@@ -280,7 +292,7 @@ impl<'a> HdfsFS<'a> {
     }
 
     let file = unsafe {
-      hdfsOpenFile(self.fs, str_to_chars(path), O_APPEND, 0,0,0)
+      hdfsOpenFile(self.raw, str_to_chars(path), O_APPEND, 0,0,0)
     };
 
     if file.is_null() {
@@ -293,12 +305,12 @@ impl<'a> HdfsFS<'a> {
   /// set permission
   pub fn chmod(&self, path: &str, mode: i16) -> bool {
     (unsafe {
-      hdfsChmod(self.fs, str_to_chars(path), mode as c_short)}) == 0
+      hdfsChmod(self.raw, str_to_chars(path), mode as c_short)}) == 0
   }
 
   pub fn chown(&self, path: &str, owner: &str, group: &str) -> bool {
     (unsafe {
-      hdfsChown(self.fs, str_to_chars(path),
+      hdfsChown(self.raw, str_to_chars(path),
         str_to_chars(owner), str_to_chars(group))}) == 0
   }
 
@@ -327,7 +339,7 @@ impl<'a> HdfsFS<'a> {
     }
 
     let file = unsafe {
-      hdfsOpenFile(self.fs, str_to_chars(path), O_WRONLY,
+      hdfsOpenFile(self.raw, str_to_chars(path), O_WRONLY,
         buf_size as c_int, replica_num as c_short, block_size as int32_t)
     };
 
@@ -340,7 +352,7 @@ impl<'a> HdfsFS<'a> {
 
   /// Get the default blocksize.
   pub fn default_blocksize(&self) -> Result<usize, HdfsErr> {
-    let block_sz = unsafe { hdfsGetDefaultBlockSize(self.fs) };
+    let block_sz = unsafe { hdfsGetDefaultBlockSize(self.raw) };
 
     if block_sz > 0 {
       Ok(block_sz as usize)
@@ -352,7 +364,7 @@ impl<'a> HdfsFS<'a> {
   /// Get the default blocksize at the filesystem indicated by a given path.
   pub fn block_size(&self, path: &str) -> Result<usize, HdfsErr> {
     let block_sz = unsafe {
-      hdfsGetDefaultBlockSizeAtPath(self.fs, str_to_chars(path))
+      hdfsGetDefaultBlockSizeAtPath(self.raw, str_to_chars(path))
     };
 
     if block_sz > 0 {
@@ -365,7 +377,7 @@ impl<'a> HdfsFS<'a> {
   /// Return the raw capacity of the filesystem.
   pub fn capacity(&self) -> Result<usize, HdfsErr> {
     let block_sz = unsafe {
-      hdfsGetCapacity(self.fs)
+      hdfsGetCapacity(self.raw)
     };
 
     if block_sz > 0 {
@@ -378,7 +390,7 @@ impl<'a> HdfsFS<'a> {
   /// Delete file.
   pub fn delete(&self, path: &str, recursive: bool) -> Result<bool, HdfsErr> {
     let res = unsafe {
-      hdfsDelete(self.fs, str_to_chars(path), recursive as c_int)
+      hdfsDelete(self.raw, str_to_chars(path), recursive as c_int)
     };
 
     if res == 0 {
@@ -390,17 +402,11 @@ impl<'a> HdfsFS<'a> {
 
   /// Checks if a given path exsits on the filesystem
   pub fn exist(&self, path: &str) -> bool {
-    if unsafe {hdfsExists(self.fs, str_to_chars(path))} == 0 {
+    if unsafe {hdfsExists(self.raw, str_to_chars(path))} == 0 {
       true
     } else {
       false
     }
-  }
-
-  /// Get HDFS namenode url
-  #[inline]
-  pub fn fs_url(&'a self) -> &'a str {
-    &self.fs_url
   }
 
   /// Get hostnames where a particular block (determined by
@@ -411,7 +417,7 @@ impl<'a> HdfsFS<'a> {
       -> Result<BlockHosts, HdfsErr> {
 
     let ptr = unsafe {
-      hdfsGetHosts(self.fs, str_to_chars(path),
+      hdfsGetHosts(self.raw, str_to_chars(path),
         start as int64_t, length as int64_t)
     };
 
@@ -424,7 +430,7 @@ impl<'a> HdfsFS<'a> {
 
   /// create a directory
   pub fn mkdir(&self, path: &str) -> Result<bool, HdfsErr> {
-    if unsafe{hdfsCreateDirectory(self.fs, str_to_chars(path))} == 0 {
+    if unsafe{hdfsCreateDirectory(self.raw, str_to_chars(path))} == 0 {
       Ok(true)
     } else {
       Err(HdfsErr::UNKNOWN)
@@ -442,7 +448,7 @@ impl<'a> HdfsFS<'a> {
       -> Result<HdfsFile, HdfsErr> {
 
     let file = unsafe {
-      hdfsOpenFile(self.fs, str_to_chars(path), O_RDONLY,
+      hdfsOpenFile(self.raw, str_to_chars(path), O_RDONLY,
         buf_size as c_int, 0, 0)
     };
 
@@ -458,7 +464,7 @@ impl<'a> HdfsFS<'a> {
       -> Result<bool, HdfsErr> {
 
     let res = unsafe {
-      hdfsSetReplication(self.fs, str_to_chars(path), num as int16_t)
+      hdfsSetReplication(self.raw, str_to_chars(path), num as int16_t)
     };
 
     if res == 0 {
@@ -473,7 +479,7 @@ impl<'a> HdfsFS<'a> {
       -> Result<bool, HdfsErr> {
 
     let res = unsafe {
-      hdfsRename(self.fs, str_to_chars(old_path), str_to_chars(new_path))
+      hdfsRename(self.raw, str_to_chars(old_path), str_to_chars(new_path))
     };
 
     if res == 0 {
@@ -486,7 +492,7 @@ impl<'a> HdfsFS<'a> {
   /// Return the total raw size of all files in the filesystem.
   pub fn used(&self) -> Result<usize, HdfsErr> {
     let block_sz = unsafe {
-      hdfsGetUsed(self.fs)
+      hdfsGetUsed(self.raw)
     };
 
     if block_sz > 0 {
@@ -498,7 +504,7 @@ impl<'a> HdfsFS<'a> {
   
   pub fn get_path_info(&self, path: &str) -> Result<FileInfo, HdfsErr> {
     let ptr = unsafe {
-      hdfsGetPathInfo(self.fs, str_to_chars(path))
+      hdfsGetPathInfo(self.raw, str_to_chars(path))
     };
     
     if ptr.is_null() {
@@ -522,7 +528,7 @@ pub struct HdfsFile<'a> {
 impl<'a> HdfsFile<'a> {
 
   pub fn available(&self) -> Result<bool, HdfsErr> {
-    if unsafe { hdfsAvailable(self.fs.fs, self.file) } == 0 {
+    if unsafe { hdfsAvailable(self.fs.raw, self.file) } == 0 {
       Ok(true)
     } else {
       Err(HdfsErr::UNKNOWN)
@@ -531,7 +537,7 @@ impl<'a> HdfsFile<'a> {
 
   /// Close the opened file
   pub fn close(&self) -> Result<bool, HdfsErr> {
-    if unsafe {hdfsCloseFile(self.fs.fs, self.file)} == 0 {
+    if unsafe {hdfsCloseFile(self.fs.raw, self.file)} == 0 {
       Ok(true)
     } else {
       Err(HdfsErr::UNKNOWN)
@@ -540,20 +546,20 @@ impl<'a> HdfsFile<'a> {
 
   /// Flush the data.
   pub fn flush(&self) -> bool {
-    (unsafe { hdfsFlush(self.fs.fs, self.file) }) == 0
+    (unsafe { hdfsFlush(self.fs.raw, self.file) }) == 0
   }
 
   /// Flush out the data in client's user buffer. After the return of this
   /// call, new readers will see the data.
   pub fn hflush(&self) -> bool {
-    (unsafe { hdfsHFlush(self.fs.fs, self.file) }) == 0
+    (unsafe { hdfsHFlush(self.fs.raw, self.file) }) == 0
   }
 
   /// Similar to posix fsync, Flush out the data in client's
   /// user buffer. all the way to the disk device (but the disk may have
   /// it in its cache).
   pub fn hsync(&self) -> bool {
-    (unsafe { hdfsHSync(self.fs.fs, self.file) }) == 0
+    (unsafe { hdfsHSync(self.fs.raw, self.file) }) == 0
   }
 
   /// Determine if a file is open for read.
@@ -573,7 +579,7 @@ impl<'a> HdfsFile<'a> {
 
   /// Get the current offset in the file, in bytes.
   pub fn pos(&self) -> Result<u64, HdfsErr> {
-    let pos = unsafe {hdfsTell(self.fs.fs, self.file)};
+    let pos = unsafe {hdfsTell(self.fs.raw, self.file)};
 
     if pos > 0 {
       Ok(pos as u64)
@@ -585,7 +591,7 @@ impl<'a> HdfsFile<'a> {
   /// Read data from an open file.
   pub fn read(&self, buf: &mut [u8]) -> Result<i32, HdfsErr> {
     let read_len = unsafe {
-      hdfsRead(self.fs.fs, self.file, buf.as_ptr() as *mut c_void,
+      hdfsRead(self.fs.raw, self.file, buf.as_ptr() as *mut c_void,
         buf.len() as tSize)
     };
 
@@ -599,7 +605,7 @@ impl<'a> HdfsFile<'a> {
   /// Positional read of data from an open file.
   pub fn read_with_pos(&self, pos: i64, buf: &mut [u8]) -> Result<i32, HdfsErr> {
     let read_len = unsafe {
-      hdfsPread(self.fs.fs, self.file, pos as tOffset,
+      hdfsPread(self.fs.raw, self.file, pos as tOffset,
         buf.as_ptr() as *mut c_void, buf.len() as tSize)
     };
 
@@ -626,13 +632,13 @@ impl<'a> HdfsFile<'a> {
 
   /// Seek to given offset in file.
   pub fn seek(&self, offset: u64) -> bool {
-    (unsafe { hdfsSeek(self.fs.fs, self.file, offset as tOffset) }) == 0
+    (unsafe { hdfsSeek(self.fs.raw, self.file, offset as tOffset) }) == 0
   }
 
   /// Write data into an open file.
   pub fn write(&self, buf: &[u8]) -> Result<i32, HdfsErr> {
     let written_len = unsafe {
-      hdfsWrite(self.fs.fs, self.file,
+      hdfsWrite(self.fs.raw, self.file,
         buf.as_ptr() as *mut c_void, buf.len() as tSize)
     };
 
@@ -657,10 +663,10 @@ fn test_hdfs_connection() {
 
 
   // Parse namenode uris
-  assert_eq!("file:///".to_string(), cache.get("file:/blah").unwrap().fs_url);
+  assert_eq!("file:///".to_string(), cache.get("file:/blah").unwrap().url);
   let test_path = format!("hdfs://localhost:{}/users/test", port);
   println!("Trying to get {}", &test_path);
-  assert_eq!(minidfs_addr, cache.get(&test_path).unwrap().fs_url);
+  assert_eq!(minidfs_addr, cache.get(&test_path).unwrap().url);
 
 
 
