@@ -1,8 +1,7 @@
-//! MiniDfs Cluster module
+//! MiniDfs Cluster
 //!
-//! MiniDFS launches a embedded HDFS cluster, which is a full feature of a real HDFS cluster
-//! It is usually for testing.
-//!
+//! MiniDFS provides a embedded HDFS cluster. It is usually for testing.
+//! 
 //! ## Example
 //!
 //! ```ignore
