@@ -14,7 +14,7 @@ fn main() {
 
   // for jvm.h and linking to jni libraries
   let mut minidfs_config = gcc::Config::new();  
-  minidfs_config.file("src/native/native_mini_dfs.c").include("src/native");
+  minidfs_config.file("src/libhdfs/native_mini_dfs.c").include("src/libhdfs");
 
   match env::var("JAVA_HOME") {
     Ok(val) => { 
