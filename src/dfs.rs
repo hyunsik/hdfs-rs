@@ -119,7 +119,8 @@ impl Drop for BlockHosts {
   }
 }
 
-pub struct HdfsFileInfoPtr {
+/// Safely deallocable hdfsFileInfo pointer
+struct HdfsFileInfoPtr {
   pub ptr: *const hdfsFileInfo,
   pub len: i32
 }
@@ -132,7 +133,7 @@ impl<'a> Drop for HdfsFileInfoPtr {
 }
 
 impl HdfsFileInfoPtr {
-  pub fn new(ptr: *const hdfsFileInfo) -> HdfsFileInfoPtr {
+  fn new(ptr: *const hdfsFileInfo) -> HdfsFileInfoPtr {
     HdfsFileInfoPtr {
       ptr: ptr,
       len: 1
@@ -147,6 +148,7 @@ impl HdfsFileInfoPtr {
   }
 }
 
+/// Interface that represents the client side information for a file or directory.
 pub struct FileStatus<'a> {
   raw: Rc<HdfsFileInfoPtr>,
   idx: u32,
@@ -155,7 +157,8 @@ pub struct FileStatus<'a> {
 
 impl<'a> FileStatus<'a> {
   #[inline]
-  pub fn new(ptr: *const hdfsFileInfo) -> FileStatus<'a> {
+  /// create FileStatus from *const hdfsFileInfo
+  fn new(ptr: *const hdfsFileInfo) -> FileStatus<'a> {
     FileStatus {
       raw: Rc::new(HdfsFileInfoPtr::new(ptr)),
       idx: 0,
@@ -163,8 +166,10 @@ impl<'a> FileStatus<'a> {
     }
   }
   
+  /// create FileStatus from *const hdfsFileInfo which points 
+  /// to dynamically allocated array.
   #[inline]
-  pub fn from_array(raw: Rc<HdfsFileInfoPtr>, idx: u32) -> FileStatus<'a> {
+  fn from_array(raw: Rc<HdfsFileInfoPtr>, idx: u32) -> FileStatus<'a> {
     FileStatus {
       raw: raw,
       idx: idx,
@@ -177,12 +182,14 @@ impl<'a> FileStatus<'a> {
     unsafe {self.raw.ptr.offset(self.idx as isize)}
   }
   
+  /// Get the name of the file
   #[inline]
   pub fn name(&self) -> &'a str 
   { 
     chars_to_str(unsafe {&*self.ptr()}.mName) 
   }
   
+  /// Is this a file?
   #[inline]
   pub fn is_file(&self) -> bool {
     match unsafe {&*self.ptr()}.mKind {
@@ -191,7 +198,8 @@ impl<'a> FileStatus<'a> {
     }
   }
   
-    #[inline]
+  /// Is this a directory?
+  #[inline]
   pub fn is_directory(&self) -> bool {
     match unsafe {&*self.ptr()}.mKind {
       tObjectKind::kObjectKindFile => false,
@@ -199,50 +207,58 @@ impl<'a> FileStatus<'a> {
     }
   }
   
+  /// Get the owner of the file
   #[inline]
   pub fn owner(&self) -> &'a str
   {
     chars_to_str(unsafe {&*self.ptr()}.mOwner)
   }
   
+  /// Get the group associated with the file
   #[inline]
   pub fn group(&self) -> &'a str
   {
     chars_to_str(unsafe {&*self.ptr()}.mGroup)
   }
   
+  /// Get the permissions associated with the file
   #[inline]
   pub fn permission(&self) -> i16
   {
     unsafe {&*self.ptr()}.mPermissions as i16
   }
   
+  /// Get the length of this file, in bytes.
   #[inline]
-  pub fn size(&self) -> usize 
+  pub fn len(&self) -> usize 
   {
     unsafe {&*self.ptr()}.mSize as usize
   }
   
-  #[inline]
-  pub fn replica_count(&self) -> i16
-  {
-    unsafe {&*self.ptr()}.mReplication as i16
-  }
-  
+  /// Get the block size of the file.
   #[inline]
   pub fn block_size(&self) -> usize
   {
     unsafe {&*self.ptr()}.mBlockSize as usize
   }
   
+  /// Get the replication factor of a file.
+  #[inline]
+  pub fn replica_count(&self) -> i16
+  {
+    unsafe {&*self.ptr()}.mReplication as i16
+  }
+  
+  /// Get the last modification time for the file in seconds
   #[inline]
   pub fn last_modified(&self) -> time_t
   {
     unsafe {&*self.ptr()}.mLastMod
   }
   
+  /// Get the last access time for the file in seconds
   #[inline]
-  pub fn mLastAccess(&self) -> time_t
+  pub fn last_accced(&self) -> time_t
   {
     unsafe {&*self.ptr()}.mLastAccess
   }
@@ -504,8 +520,6 @@ impl<'a> HdfsFS<'a> {
     let ptr = unsafe {
       hdfsListDirectory(self.raw, str_to_chars(path), &mut entry_num)
     };
-    
-    println!(">>>>>>>>> Got entry: {}", entry_num);
     
     if ptr.is_null() {
       return Err(HdfsErr::UNKNOWN)

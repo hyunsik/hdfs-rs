@@ -21,7 +21,8 @@ pub fn hdfs_scheme_handler(scheme: &str) -> SchemeType
   }
 }
 
-
+/// HdfsFs Cache. Basically, It is a cache as well as a way to guarantees 
+/// thread-safe when you get HdfsFs.
 pub struct HdfsFsCache<'a> {
   fs_map: HashMap<String, HdfsFS<'a>>,
   lock: Arc<Mutex<i32>>,

@@ -19,6 +19,7 @@ pub fn bool_to_c_int(val: bool) -> c_int {
   if val { 1 } else { 0 }
 }
 
+/// Hdfs Utility
 pub struct HdfsUtil;
 
 /// HDFS Utility
