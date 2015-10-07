@@ -66,6 +66,8 @@ pub struct hdfsFileInfo
   pub mName: *const c_char,
   /// the last modification time for the file in seconds
   pub mLastMod: tTime,
+  /// the size of the file in bytes
+  pub mSize: tOffset,
   /// the count of replicas
   pub mReplication: c_short,
   /// the block size for the file

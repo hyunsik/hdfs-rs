@@ -1,5 +1,6 @@
 use std::marker::PhantomData;
 use std::mem;
+use std::rc::Rc;
 use std::slice;
 use std::string::String;
 
@@ -118,26 +119,73 @@ impl Drop for BlockHosts {
   }
 }
 
-pub enum FileKind {
-  File,
-  Directory  
+pub struct HdfsFileInfoPtr {
+  pub ptr: *const hdfsFileInfo,
+  pub len: i32
 }
 
-pub struct FileInfo<'a> {
-  ptr: *const hdfsFileInfo,
+/// for safe deallocation
+impl<'a> Drop for HdfsFileInfoPtr {
+  fn drop(&mut self) {
+    unsafe { hdfsFreeFileInfo(self.ptr, self.len) };
+  }
+}
+
+impl HdfsFileInfoPtr {
+  pub fn new(ptr: *const hdfsFileInfo) -> HdfsFileInfoPtr {
+    HdfsFileInfoPtr {
+      ptr: ptr,
+      len: 1
+    }
+  }
+  
+  pub fn new_array(ptr: *const hdfsFileInfo, len: i32) -> HdfsFileInfoPtr {
+    HdfsFileInfoPtr {
+      ptr: ptr,
+      len: len
+    }
+  }
+}
+
+pub struct FileStatus<'a> {
+  raw: Rc<HdfsFileInfoPtr>,
+  idx: u32,
   _marker: PhantomData<&'a ()>
 }
 
-impl<'a> FileInfo<'a> {
+impl<'a> FileStatus<'a> {
+  #[inline]
+  pub fn new(ptr: *const hdfsFileInfo) -> FileStatus<'a> {
+    FileStatus {
+      raw: Rc::new(HdfsFileInfoPtr::new(ptr)),
+      idx: 0,
+      _marker: PhantomData
+    }
+  }
+  
+  #[inline]
+  pub fn from_array(raw: Rc<HdfsFileInfoPtr>, idx: u32) -> FileStatus<'a> {
+    FileStatus {
+      raw: raw,
+      idx: idx,
+      _marker: PhantomData
+    }
+  }
+  
+  #[inline]
+  fn ptr(&self) -> *const hdfsFileInfo {
+    unsafe {self.raw.ptr.offset(self.idx as isize)}
+  }
+  
   #[inline]
   pub fn name(&self) -> &'a str 
   { 
-    chars_to_str(unsafe {&*self.ptr}.mName) 
+    chars_to_str(unsafe {&*self.ptr()}.mName) 
   }
   
   #[inline]
   pub fn is_file(&self) -> bool {
-    match unsafe {&*self.ptr}.mKind {
+    match unsafe {&*self.ptr()}.mKind {
       tObjectKind::kObjectKindFile => true,
       tObjectKind::kObjectKindDirectory => false,
     }
@@ -145,7 +193,7 @@ impl<'a> FileInfo<'a> {
   
     #[inline]
   pub fn is_directory(&self) -> bool {
-    match unsafe {&*self.ptr}.mKind {
+    match unsafe {&*self.ptr()}.mKind {
       tObjectKind::kObjectKindFile => false,
       tObjectKind::kObjectKindDirectory => true,
     }
@@ -154,49 +202,49 @@ impl<'a> FileInfo<'a> {
   #[inline]
   pub fn owner(&self) -> &'a str
   {
-    chars_to_str(unsafe {&*self.ptr}.mOwner)
+    chars_to_str(unsafe {&*self.ptr()}.mOwner)
   }
   
   #[inline]
   pub fn group(&self) -> &'a str
   {
-    chars_to_str(unsafe {&*self.ptr}.mGroup)
+    chars_to_str(unsafe {&*self.ptr()}.mGroup)
   }
   
   #[inline]
   pub fn permission(&self) -> i16
   {
-    unsafe {&*self.ptr}.mPermissions as i16
+    unsafe {&*self.ptr()}.mPermissions as i16
+  }
+  
+  #[inline]
+  pub fn size(&self) -> usize 
+  {
+    unsafe {&*self.ptr()}.mSize as usize
   }
   
   #[inline]
   pub fn replica_count(&self) -> i16
   {
-    unsafe {&*self.ptr}.mReplication as i16
+    unsafe {&*self.ptr()}.mReplication as i16
   }
   
   #[inline]
-  pub fn block_size(&self) -> i64
+  pub fn block_size(&self) -> usize
   {
-    unsafe {&*self.ptr}.mBlockSize as i64
+    unsafe {&*self.ptr()}.mBlockSize as usize
   }
   
   #[inline]
   pub fn last_modified(&self) -> time_t
   {
-    unsafe {&*self.ptr}.mLastMod
+    unsafe {&*self.ptr()}.mLastMod
   }
   
   #[inline]
   pub fn mLastAccess(&self) -> time_t
   {
-    unsafe {&*self.ptr}.mLastAccess
-  }
-}
-
-impl<'a> Drop for FileInfo<'a> {
-  fn drop(&mut self) {
-    unsafe { hdfsFreeFileInfo(self.ptr, 1) };
+    unsafe {&*self.ptr()}.mLastAccess
   }
 }
 
@@ -450,7 +498,30 @@ impl<'a> HdfsFS<'a> {
     }
   }
   
-  pub fn get_path_info(&self, path: &str) -> Result<FileInfo, HdfsErr> {
+  pub fn list_status(&self, path: &str) -> Result<Vec<FileStatus>, HdfsErr> {
+    let mut entry_num: c_int = 0;
+    
+    let ptr = unsafe {
+      hdfsListDirectory(self.raw, str_to_chars(path), &mut entry_num)
+    };
+    
+    println!(">>>>>>>>> Got entry: {}", entry_num);
+    
+    if ptr.is_null() {
+      return Err(HdfsErr::UNKNOWN)
+    }
+    
+    let shared_ptr = Rc::new(HdfsFileInfoPtr::new_array(ptr, entry_num));
+    
+    let mut list = Vec::new(); 
+    for idx in 0 .. entry_num {
+      list.push(FileStatus::from_array(shared_ptr.clone(), idx as u32));
+    }
+    
+    Ok(list)
+  }    
+  
+  pub fn get_file_status(&self, path: &str) -> Result<FileStatus, HdfsErr> {
     let ptr = unsafe {
       hdfsGetPathInfo(self.raw, str_to_chars(path))
     };
@@ -458,10 +529,7 @@ impl<'a> HdfsFS<'a> {
     if ptr.is_null() {
       Err(HdfsErr::UNKNOWN)
     } else {
-      Ok(FileInfo {
-           ptr: ptr,
-           _marker: PhantomData
-        })
+      Ok(FileStatus::new(ptr))
     }
   }
 }
@@ -600,13 +668,19 @@ impl<'a> HdfsFile<'a> {
 
 #[cfg(test)]
 mod test {
+  use std::result::Result;
+  use itertools::Itertools;
+  
   use cache::HdfsFsCache;
   use native::MiniDfsConf;
   use super::*;
   
+  
   #[test]
   fn test_hdfs_connection() {
+    use std::mem;
     use minidfs::*;
+    use native::hdfsFileInfo;
   
     let mut conf = MiniDfsConf::new();
     let dfs = MiniDFS::start(&mut conf).unwrap();
@@ -647,7 +721,7 @@ mod test {
       Err(e) => panic!("Couldn't create /dir1 directory")
     };
     
-    let file_info = match fs.get_path_info("/dir1") {
+    let file_info = match fs.get_file_status("/dir1") {
       Ok(info) => info,
       Err(e) => panic!("Coudln't get path info")
     };
@@ -656,6 +730,27 @@ mod test {
     assert_eq!(&expected_path, file_info.name());
     assert!(!file_info.is_file());
     assert!(file_info.is_directory());
+    
+    
+    let sub_dir_num = 3;
+    let mut expected_list = Vec::new();
+    for x in 0..sub_dir_num {
+      let filename = format!("/dir1/{}", x);
+      expected_list.push(format!("hdfs://localhost:{}/dir1/{}", port, x));
+      
+      match fs.mkdir(&filename) {
+        Ok(b) => println!("/dir1.x created"),
+        Err(e) => panic!("Couldn't create /dir1 directory")
+      };
+    }
+    
+    let mut list = fs.list_status("/dir1").ok().unwrap();
+    assert_eq!(sub_dir_num, list.len());
+    
+    list.sort_by(|a, b| Ord::cmp(a.name(), b.name()));
+    for (expected, name) in izip!(expected_list, list.iter().map(|status| status.name())) {
+      assert_eq!(expected, name);
+    }
   
     dfs.stop();
   }

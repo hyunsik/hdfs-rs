@@ -18,9 +18,9 @@
 //! hiding manual memory management and some thread-safety problem of libhdfs.
 //! Rust APIs are highly recommended for most users.
 
+#[macro_use] extern crate itertools;
 extern crate libc;
-#[macro_use]
-extern crate log;
+#[macro_use] extern crate log;
 extern crate url;
 
 mod err;
