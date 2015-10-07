@@ -13,7 +13,7 @@
 // limitations under the License.
 
 //! hdfs-rs is a library for accessing to HDFS cluster. 
-//! Basically, this library provides libhdfs APIs bindings.
+//! Basically, it provides libhdfs FFI APIs.
 //! It also provides more idiomatic and abstract Rust APIs, 
 //! hiding manual memory management and some thread-safety problem of libhdfs.
 //! Rust APIs are highly recommended for most users.
@@ -23,7 +23,7 @@ extern crate libc;
 extern crate log;
 extern crate url;
 
-pub mod err;
+mod err;
 pub use err::HdfsErr;
 
 /// libhdfs native binding APIs
@@ -34,9 +34,11 @@ pub use cache::HdfsFsCache;
 pub mod native;
 
 /// Rust APIs wrapping libhdfs API, providing better semantic and abstraction
-pub mod dfs;
+mod dfs;
+pub use dfs::*;
 
 /// Mini HDFS Cluster for easily building unit tests
 pub mod minidfs;
 
-pub mod util;
+mod util;
+pub use util::HdfsUtil;

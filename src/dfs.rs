@@ -13,53 +13,6 @@ const O_RDONLY: c_int = 0;
 const O_WRONLY: c_int = 1;
 const O_APPEND: c_int = 1024;
 
-pub struct HdfsUtil;
-
-/// HDFS Utility
-impl HdfsUtil {
-
-  /// Copy file from one filesystem to another.
-  ///
-  /// #### Params
-  /// * ```srcFS``` - The handle to source filesystem.
-  /// * ```src``` - The path of source file.
-  /// * ```dstFS``` - The handle to destination filesystem.
-  /// * ```dst``` - The path of destination file.
-  pub fn copy(src_fs: &HdfsFS, src: &str, dst_fs: &HdfsFS, dst: &str)
-      -> Result<bool, HdfsErr> {
-
-    let res = unsafe {
-      hdfsCopy(src_fs.raw, str_to_chars(src), dst_fs.raw, str_to_chars(dst))
-    };
-
-    if res == 0 {
-      Ok(true)
-    } else {
-      Err(HdfsErr::UNKNOWN)
-    }
-  }
-
-  /// Move file from one filesystem to another.
-  ///
-  /// #### Params
-  /// * ```srcFS``` - The handle to source filesystem.
-  /// * ```src``` - The path of source file.
-  /// * ```dstFS``` - The handle to destination filesystem.
-  /// * ```dst``` - The path of destination file.
-  pub fn mv(src_fs: &HdfsFS, src: &str, dst_fs: &HdfsFS, dst: &str)
-      -> Result<bool, HdfsErr> {
-
-    let res = unsafe {
-      hdfsMove(src_fs.raw, str_to_chars(src), dst_fs.raw, str_to_chars(dst))
-    };
-
-    if res == 0 {
-      Ok(true)
-    } else {
-      Err(HdfsErr::UNKNOWN)
-    }
-  }
-}
 
 /// Options for zero-copy read
 pub struct RzOptions {
