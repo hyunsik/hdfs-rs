@@ -23,8 +23,12 @@ extern crate libc;
 extern crate log;
 extern crate url;
 
-mod err;
+pub mod err;
 pub use err::HdfsErr;
+
+/// libhdfs native binding APIs
+mod cache;
+pub use cache::HdfsFsCache;
 
 /// libhdfs native binding APIs
 pub mod native;
