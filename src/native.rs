@@ -1,41 +1,35 @@
+//! libhdfs FFI Binding APIs
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
+
 use libc::{c_char, c_int, c_short, c_uchar, c_void, int16_t, int32_t, 
   int64_t, uint16_t, size_t, time_t};
 
 /// Opaque Pointer of hdfsFS
-#[allow(non_camel_case_types)]
 pub enum hdfsFS {}
 
 /// Opaque Pointer of hdfsFile
-#[allow(non_camel_case_types)]
 pub enum hdfsFile {}
 
 /// Opaque Pointer of hdfsBuilder
-#[allow(non_camel_case_types)]
 pub enum hdfsBuilder {}
 
 /// Opaque Pointer of hadoopRzOptions
-#[allow(non_camel_case_types)] 
 pub enum hadoopRzOptions {}
 
 /// Opaque Pointer of hadoopRzBuffer
-#[allow(non_camel_case_types)]
 pub enum hadoopRzBuffer {}
 
 /// size of data for read/write io ops
-#[allow(non_camel_case_types)]
 pub type tSize = int32_t;
 /// time type in seconds
-#[allow(non_camel_case_types)]
 pub type tTime = time_t;
 /// offset within the file
-#[allow(non_camel_case_types)]
 pub type tOffset = int64_t;
 /// port
-#[allow(non_camel_case_types)]
 pub type tPort = uint16_t;
 
 #[repr(C)]
-#[allow(non_camel_case_types)]
 pub enum tObjectKind {
   kObjectKindFile = 0x46, // 'F'
   kObjectKindDirectory = 0x44 // 'D'
@@ -43,7 +37,6 @@ pub enum tObjectKind {
 
 /// Information about a file/directory.
 #[repr(C)]
-#[allow(non_snake_case)]
 pub struct hdfsReadStatistics {
   pub totalBytesRead : u64,
   pub totalLocalBytesRead : u64,
@@ -52,7 +45,6 @@ pub struct hdfsReadStatistics {
 }
 
 #[repr(C)]
-#[allow(non_snake_case)]
 pub struct hdfsFileInfo {
   /// file or directory
   pub mKind: tObjectKind,
