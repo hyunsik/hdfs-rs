@@ -7,9 +7,9 @@ use std::string::String;
 use std::sync::{Arc, Mutex};
 
 use url::{UrlParser,SchemeType};
-use binding::*;
 use libc::{c_char, c_int, c_short, c_void, int16_t, int32_t, int64_t, time_t};
 
+use native::*;
 use util::{chars_to_str, str_to_chars};
 
 pub static LOCALFS_SCHEME: &'static str = "file";

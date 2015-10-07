@@ -23,8 +23,8 @@ extern crate libc;
 extern crate log;
 extern crate url;
 
-/// libhdfs binding APIs
-pub mod binding;
+/// libhdfs native binding APIs
+pub mod native;
 
 /// Rust APIs wrapping libhdfs API, providing better semantic and abstraction
 pub mod dfs;
