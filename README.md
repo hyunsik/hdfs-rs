@@ -2,6 +2,11 @@
 
 libhdfs binding library and rust APIs which safely wraps libhdfs binding APIs
 
+# Current Status
+ * Alpha Status (Rust wrapping APIs can be changed)
+ * libhdfs C APIs all are ported.
+ * Some of Rust wrapping APIs are implemented.
+
 ## Documentation
 * [API documentation] (http://hyunsik.github.io/hdfs-rs/)
 
