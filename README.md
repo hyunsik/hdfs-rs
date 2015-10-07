@@ -7,7 +7,7 @@ libhdfs binding library and rust APIs which safely wraps libhdfs binding APIs
 
 ## Requirements
 * Hadoop which is compiled with ``-Pnative``
-  * Please fefer to https://github.com/apache/hadoop/blob/trunk/BUILDING.txt
+  * Please refer to https://github.com/apache/hadoop/blob/trunk/BUILDING.txt if you need more description.
 
 ## Usage
 Add this to your Cargo.toml:
