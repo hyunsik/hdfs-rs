@@ -1,18 +1,13 @@
-use std::collections::HashMap;
-use std::ffi::CString;
 use std::marker::PhantomData;
 use std::mem;
 use std::slice;
 use std::string::String;
-use std::sync::{Arc, Mutex};
 
-use url::{UrlParser,SchemeType};
 use libc::{c_char, c_int, c_short, c_void, int16_t, int32_t, int64_t, time_t};
 
 use err::HdfsErr;
 use native::*;
 use util::{chars_to_str, str_to_chars, bool_to_c_int};
-use cache::HdfsFsCache;
 
 const O_RDONLY: c_int = 0;
 const O_WRONLY: c_int = 1;
@@ -650,58 +645,65 @@ impl<'a> HdfsFile<'a> {
   }
 }
 
-#[test]
-fn test_hdfs_connection() {
-  use minidfs::*;
-
-  let mut conf = MiniDfsConf::new();
-  let dfs = MiniDFS::start(&mut conf).unwrap();
-  let port = dfs.namenode_port().unwrap();
-
-  let minidfs_addr = format!("hdfs://localhost:{}", port);
-  let mut cache: HdfsFsCache = HdfsFsCache::new();
-
-
-  // Parse namenode uris
-  assert_eq!("file:///".to_string(), cache.get("file:/blah").unwrap().url);
-  let test_path = format!("hdfs://localhost:{}/users/test", port);
-  println!("Trying to get {}", &test_path);
-  assert_eq!(minidfs_addr, cache.get(&test_path).unwrap().url);
-
-
-
-  // create a file, check existence, and close
-  let fs = cache.get(&test_path).unwrap();
-  let test_file = "/test_file";
-  let created_file = match fs.create(test_file) {
-    Ok(f) => f,
-    Err(e) => panic!("Couldn't create a file")
-  };
-  assert!(created_file.close().is_ok());
-  assert!(fs.exist(test_file));
-
-
-  // open a file and close
-  let opened_file = match fs.open(test_file) {
-    Ok(f) => f,
-    Err(e) => panic!("Couldn't open a file")
-  };
-  assert!(opened_file.close().is_ok());
-
-  match fs.mkdir("/dir1") {
-    Ok(b) => println!("/dir1 created"),
-    Err(e) => panic!("Couldn't create /dir1 directory")
-  };
+#[cfg(test)]
+mod test {
+  use cache::HdfsFsCache;
+  use native::MiniDfsConf;
+  use super::*;
   
-  let file_info = match fs.get_path_info("/dir1") {
-    Ok(info) => info,
-    Err(e) => panic!("Coudln't get path info")
-  };
+  #[test]
+  fn test_hdfs_connection() {
+    use minidfs::*;
   
-  let expected_path = format!("hdfs://localhost:{}/dir1", port);
-  assert_eq!(&expected_path, file_info.name());
-  assert!(!file_info.is_file());
-  assert!(file_info.is_directory());
-
-  dfs.stop();
+    let mut conf = MiniDfsConf::new();
+    let dfs = MiniDFS::start(&mut conf).unwrap();
+    let port = dfs.namenode_port().unwrap();
+  
+    let minidfs_addr = format!("hdfs://localhost:{}", port);
+    let mut cache: HdfsFsCache = HdfsFsCache::new();
+  
+  
+    // Parse namenode uris
+    assert_eq!("file:///".to_string(), cache.get("file:/blah").unwrap().url);
+    let test_path = format!("hdfs://localhost:{}/users/test", port);
+    println!("Trying to get {}", &test_path);
+    assert_eq!(minidfs_addr, cache.get(&test_path).unwrap().url);
+  
+  
+  
+    // create a file, check existence, and close
+    let fs = cache.get(&test_path).unwrap();
+    let test_file = "/test_file";
+    let created_file = match fs.create(test_file) {
+      Ok(f) => f,
+      Err(e) => panic!("Couldn't create a file")
+    };
+    assert!(created_file.close().is_ok());
+    assert!(fs.exist(test_file));
+  
+  
+    // open a file and close
+    let opened_file = match fs.open(test_file) {
+      Ok(f) => f,
+      Err(e) => panic!("Couldn't open a file")
+    };
+    assert!(opened_file.close().is_ok());
+  
+    match fs.mkdir("/dir1") {
+      Ok(b) => println!("/dir1 created"),
+      Err(e) => panic!("Couldn't create /dir1 directory")
+    };
+    
+    let file_info = match fs.get_path_info("/dir1") {
+      Ok(info) => info,
+      Err(e) => panic!("Coudln't get path info")
+    };
+    
+    let expected_path = format!("hdfs://localhost:{}/dir1", port);
+    assert_eq!(&expected_path, file_info.name());
+    assert!(!file_info.is_file());
+    assert!(file_info.is_directory());
+  
+    dfs.stop();
+  }
 }

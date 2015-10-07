@@ -5,7 +5,6 @@ use libc::{c_char, c_int};
 use err::HdfsErr;
 use native::*;
 use dfs::HdfsFS;
-use cache::HdfsFsCache;
 
 pub fn str_to_chars(s: &str) -> *const c_char {
   CString::new(s.as_bytes()).unwrap().as_ptr()

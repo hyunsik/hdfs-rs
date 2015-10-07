@@ -1,18 +1,12 @@
 use std::collections::HashMap;
 use std::ffi::CString;
-use std::marker::PhantomData;
-use std::mem;
-use std::slice;
 use std::string::String;
 use std::sync::{Arc, Mutex};
 
 use url::{UrlParser,SchemeType};
-use libc::{c_char, c_int, c_short, c_void, int16_t, int32_t, int64_t, time_t};
 
-use err::HdfsErr;
 use dfs::HdfsFS;
 use native::*;
-use util::{chars_to_str, str_to_chars};
 
 pub static LOCALFS_SCHEME: &'static str = "file";
 

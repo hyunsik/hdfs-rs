@@ -14,7 +14,7 @@ pub enum hdfsFile {}
 pub enum hdfsBuilder {}
 
 /// Opaque Pointer of hadoopRzOptions
- #[allow(non_camel_case_types)]
+#[allow(non_camel_case_types)] 
 pub enum hadoopRzOptions {}
 
 /// Opaque Pointer of hadoopRzBuffer
