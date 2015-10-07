@@ -5,15 +5,26 @@ use std::mem;
 use std::slice;
 use std::string::String;
 use std::sync::{Arc, Mutex};
-use url::{UrlParser, SchemeType};
+
+use url::{UrlParser,SchemeType};
 use binding::*;
 use libc::{c_char, c_int, c_short, c_void, int16_t, int32_t, int64_t};
 
+use util::str_to_chars;
+
 pub static LOCALFS_SCHEME: &'static str = "file";
 
-mod util {
-  
+
+/// for HDFS URL scheme (i.e., hdfs://)
+pub fn hdfs_scheme_handler(scheme: &str) -> SchemeType 
+{
+  match scheme {
+    "file" => SchemeType::FileLike,
+    "hdfs" => SchemeType::Relative(50070),
+    _ => panic!("Unsupported scheme: {}", scheme)
+  }
 }
+
 
 pub struct HdfsFsCache<'a> {
   fs_map: HashMap<String, HdfsFS<'a>>,
@@ -514,10 +525,6 @@ impl<'a> HdfsFS<'a> {
   }
 }
 
-fn str_to_chars(s: &str) -> *const c_char {
-  CString::new(s.as_bytes()).unwrap().as_ptr()
-}
-
 /// open hdfs file
 pub struct HdfsFile<'a> {
   fs: &'a HdfsFS<'a>,
@@ -647,15 +654,6 @@ impl<'a> HdfsFile<'a> {
     } else {
       Err(HdfsErr::UNKNOWN)
     }
-  }
-}
-
-/// for HDFS URL scheme (i.e., hdfs://)
-fn hdfs_scheme_handler(scheme: &str) -> SchemeType {
-  match scheme {
-    "file" => SchemeType::FileLike,
-    "hdfs" => SchemeType::Relative(50070),
-    _ => panic!("Unsupported scheme: {}", scheme)
   }
 }
 

@@ -31,3 +31,5 @@ pub mod dfs;
 
 /// Mini HDFS Cluster for easily building unit tests
 pub mod minidfs;
+
+pub mod util;
