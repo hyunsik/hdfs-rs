@@ -19,7 +19,7 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-hdfs = "0.0.2"
+hdfs = "0.0.3"
 ```
 
 and this to your crate root:
