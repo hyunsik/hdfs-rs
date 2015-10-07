@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["HdfsUtil","Hdfs Utility"]]});

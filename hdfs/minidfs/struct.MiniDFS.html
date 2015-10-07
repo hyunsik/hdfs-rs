@@ -24,17 +24,17 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'><a href='../index.html'>hdfs</a>::<wbr><a href='index.html'>minidfs</a></p><script>window.sidebarCurrent = {name: 'MiniDFS', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -42,51 +42,66 @@
 
     <section id='main' class="content struct">
 <h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>hdfs</a>::<wbr><a href='index.html'>minidfs</a>::<wbr><a class='struct' href=''>MiniDFS</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
-        </span><a id='src-3210' class='srclink' href='../../src/hdfs/minidfs.rs.html#19-21' title='goto source code'>[src]</a></span></h1>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-604' class='srclink' href='../../src/hdfs/minidfs.rs.html#22-25' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct MiniDFS {
     // some fields omitted
-}</pre><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../hdfs/minidfs/struct.MiniDFS.html' title='hdfs::minidfs::MiniDFS'>MiniDFS</a></code></h3><div class='impl-items'><h4 id='method.start' class='method'><code>fn <a href='#method.start' class='fnname'>start</a>(conf: &amp;mut <a class='struct' href='../../hdfs/binding/struct.MiniDfsConf.html' title='hdfs::binding::MiniDfsConf'>MiniDfsConf</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../hdfs/minidfs/struct.MiniDFS.html' title='hdfs::minidfs::MiniDFS'>MiniDFS</a>&gt;</code></h4>
+}</pre><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../hdfs/minidfs/struct.MiniDFS.html' title='hdfs::minidfs::MiniDFS'>MiniDFS</a></code></h3><div class='impl-items'><h4 id='method.start' class='method'><code>fn <a href='#method.start' class='fnname'>start</a>(conf: &amp;<a class='struct' href='../../hdfs/native/struct.MiniDfsConf.html' title='hdfs::native::MiniDfsConf'>MiniDfsConf</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../hdfs/minidfs/struct.MiniDFS.html' title='hdfs::minidfs::MiniDFS'>MiniDFS</a>&gt;</code></h4>
 <h4 id='method.stop' class='method'><code>fn <a href='#method.stop' class='fnname'>stop</a>(&amp;self)</code></h4>
-<h4 id='method.wait_for_clusterup' class='method'><code>fn <a href='#method.wait_for_clusterup' class='fnname'>wait_for_clusterup</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
-<h4 id='method.namenode_port' class='method'><code>fn <a href='#method.namenode_port' class='fnname'>namenode_port</a>(&amp;self) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>&gt;</code></h4>
-<h4 id='method.namenode_http_addr' class='method'><code>fn <a href='#method.namenode_http_addr' class='fnname'>namenode_http_addr</a>(&amp;self) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(&amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, <a href='http://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>)</a>&gt;</code></h4>
-<h4 id='method.set_hdfs_builder' class='method'><code>fn <a href='#method.set_hdfs_builder' class='fnname'>set_hdfs_builder</a>(&amp;self, builder: <a href='http://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='enum' href='../../hdfs/binding/enum.hdfsBuilder.html' title='hdfs::binding::hdfsBuilder'>hdfsBuilder</a></a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<h4 id='method.wait_for_clusterup' class='method'><code>fn <a href='#method.wait_for_clusterup' class='fnname'>wait_for_clusterup</a>(&amp;self) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<h4 id='method.namenode_port' class='method'><code>fn <a href='#method.namenode_port' class='fnname'>namenode_port</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>&gt;</code></h4>
+<h4 id='method.namenode_http_addr' class='method'><code>fn <a href='#method.namenode_http_addr' class='fnname'>namenode_http_addr</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(&amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, <a href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>)</a>&gt;</code></h4>
+<h4 id='method.set_hdfs_builder' class='method'><code>fn <a href='#method.set_hdfs_builder' class='fnname'>set_hdfs_builder</a>(&amp;self, builder: <a href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut <a class='enum' href='../../hdfs/native/enum.hdfsBuilder.html' title='hdfs::native::hdfsBuilder'>hdfsBuilder</a></a>) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
         </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-        </div>
-    </div>
+    </aside>
 
     
 

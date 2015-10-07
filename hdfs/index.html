@@ -24,17 +24,17 @@
 
     
 
-    <section class="sidebar">
+    <nav class="sidebar">
         
         <p class='location'></p><script>window.sidebarCurrent = {name: 'hdfs', ty: 'mod', relpath: '../'};</script>
-    </section>
+    </nav>
 
     <nav class="sub">
         <form class="search-form js-only">
             <div class="search-container">
                 <input class="search-input" name="search"
                        autocomplete="off"
-                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
                        type="search">
             </div>
         </form>
@@ -42,39 +42,118 @@
 
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>hdfs</a></span><span class='out-of-band'><span id='render-detail'>
-            <a id="toggle-all-docs" href="#" title="collapse all docs">[&minus;]</a>
-        </span><a id='src-0' class='srclink' href='../src/hdfs/lib.rs.html#15-36' title='goto source code'>[src]</a></span></h1>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-0' class='srclink' href='../src/hdfs/lib.rs.html#15-44' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>hdfs-rs is a library for accessing to HDFS cluster.
-Basically, this library provides libhdfs APIs bindings.
+Basically, it provides libhdfs FFI APIs.
 It also provides more idiomatic and abstract Rust APIs, 
 hiding manual memory management and some thread-safety problem of libhdfs.
 Rust APIs are highly recommended for most users.</p>
 </div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                     <tr class=' module-item'>
-                        <td><a class='mod' href='binding/index.html'
-                               title='hdfs::binding'>binding</a></td>
-                        <td class='docblock short'>
-                             <p>libhdfs binding APIs</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='mod' href='dfs/index.html'
-                               title='hdfs::dfs'>dfs</a></td>
-                        <td class='docblock short'>
-                             <p>Rust APIs wrapping libhdfs API, providing better semantic and abstraction</p>
-
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
                         <td><a class='mod' href='minidfs/index.html'
                                title='hdfs::minidfs'>minidfs</a></td>
                         <td class='docblock short'>
-                             <p>Mini HDFS Cluster for easily building unit tests</p>
+                             <p>Mini HDFS Cluster for easily building unit tests
+MiniDfs Cluster</p>
 
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='native/index.html'
+                               title='hdfs::native'>native</a></td>
+                        <td class='docblock short'>
+                             <p>libhdfs native binding APIs
+libhdfs FFI Binding APIs</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.BlockHosts.html'
+                               title='hdfs::BlockHosts'>BlockHosts</a></td>
+                        <td class='docblock short'>
+                             <p>Includes hostnames where a particular block of a file is stored.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.FileStatus.html'
+                               title='hdfs::FileStatus'>FileStatus</a></td>
+                        <td class='docblock short'>
+                             <p>Interface that represents the client side information for a file or directory.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.HdfsFS.html'
+                               title='hdfs::HdfsFS'>HdfsFS</a></td>
+                        <td class='docblock short'>
+                             <p>Hdfs Filesystem</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.HdfsFile.html'
+                               title='hdfs::HdfsFile'>HdfsFile</a></td>
+                        <td class='docblock short'>
+                             <p>open hdfs file</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.HdfsFsCache.html'
+                               title='hdfs::HdfsFsCache'>HdfsFsCache</a></td>
+                        <td class='docblock short'>
+                             <p>HdfsFs Cache. Basically, It is a cache as well as a way to guarantees
+thread-safe when you get HdfsFs.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.HdfsUtil.html'
+                               title='hdfs::HdfsUtil'>HdfsUtil</a></td>
+                        <td class='docblock short'>
+                             <p>Hdfs Utility</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.RzBuffer.html'
+                               title='hdfs::RzBuffer'>RzBuffer</a></td>
+                        <td class='docblock short'>
+                             <p>A buffer returned from zero-copy read.
+This buffer will be automatically freed when its lifetime is finished.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.RzOptions.html'
+                               title='hdfs::RzOptions'>RzOptions</a></td>
+                        <td class='docblock short'>
+                             <p>Options for zero-copy read</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='enum' href='enum.HdfsErr.html'
+                               title='hdfs::HdfsErr'>HdfsErr</a></td>
+                        <td class='docblock short'>
+                             
                         </td>
                     </tr>
                 </table></section>
@@ -82,36 +161,49 @@ Rust APIs are highly recommended for most users.</p>
 
     <section class="footer"></section>
 
-    <div id="help" class="hidden">
-        <div class="shortcuts">
-            <h1>Keyboard shortcuts</h1>
-            <dl>
-                <dt>?</dt>
-                <dd>Show this help dialog</dd>
-                <dt>S</dt>
-                <dd>Focus the search field</dd>
-                <dt>&larrb;</dt>
-                <dd>Move up in search results</dd>
-                <dt>&rarrb;</dt>
-                <dd>Move down in search results</dd>
-                <dt>&#9166;</dt>
-                <dd>Go to active search result</dd>
-            </dl>
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
         </div>
-        <div class="infos">
-            <h1>Search tricks</h1>
-            <p>
-                Prefix searches with a type followed by a colon (e.g.
-                <code>fn:</code>) to restrict the search to a given type.
-            </p>
-            <p>
-                Accepted types are: <code>fn</code>, <code>mod</code>,
-                <code>struct</code>, <code>enum</code>,
-                <code>trait</code>, <code>typedef</code> (or
-                <code>tdef</code>).
-            </p>
-        </div>
-    </div>
+    </aside>
 
     
 

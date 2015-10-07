@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `HdfsFS` struct in crate `hdfs`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, HdfsFS">
+
+    <title>hdfs::HdfsFS - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>hdfs</a></p><script>window.sidebarCurrent = {name: 'HdfsFS', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>hdfs</a>::<wbr><a class='struct' href=''>HdfsFS</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-445' class='srclink' href='../src/hdfs/dfs.rs.html#268-272' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct HdfsFS&lt;'a&gt; {
+    pub raw: <a href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*const <a class='enum' href='../hdfs/native/enum.hdfsFS.html' title='hdfs::native::hdfsFS'>hdfsFS</a></a>,
+    // some fields omitted
+}</pre><div class='docblock'><p>Hdfs Filesystem</p>
+</div><h2 class='fields'>Fields</h2>
+<table><tr class='stab '>
+                                  <td id='structfield.raw'><code>raw</code></td><td></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'a&gt; <a class='struct' href='../hdfs/struct.HdfsFS.html' title='hdfs::HdfsFS'>HdfsFS</a>&lt;'a&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(url: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>, raw: <a href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*const <a class='enum' href='../hdfs/native/enum.hdfsFS.html' title='hdfs::native::hdfsFS'>hdfsFS</a></a>) -&gt; <a class='struct' href='../hdfs/struct.HdfsFS.html' title='hdfs::HdfsFS'>HdfsFS</a>&lt;'a&gt;</code></h4>
+<div class='docblock'><p>create HdfsFS instance. Please use HdfsFsCache rather than using this API directly.</p>
+</div><h4 id='method.url' class='method'><code>fn <a href='#method.url' class='fnname'>url</a>(&amp;self) -&gt; &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></h4>
+<div class='docblock'><p>Get HDFS namenode url</p>
+</div><h4 id='method.raw' class='method'><code>fn <a href='#method.raw' class='fnname'>raw</a>(&amp;self) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*const <a class='enum' href='../hdfs/native/enum.hdfsFS.html' title='hdfs::native::hdfsFS'>hdfsFS</a></a></code></h4>
+<div class='docblock'><p>Get a raw pointer of JNI API&#39;s hdfsFS</p>
+</div><h4 id='method.append' class='method'><code>fn <a href='#method.append' class='fnname'>append</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../hdfs/struct.HdfsFile.html' title='hdfs::HdfsFile'>HdfsFile</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<div class='docblock'><p>Open a file for append</p>
+</div><h4 id='method.chmod' class='method'><code>fn <a href='#method.chmod' class='fnname'>chmod</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, mode: <a href='https://doc.rust-lang.org/nightly/std/primitive.i16.html'>i16</a>) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>set permission</p>
+</div><h4 id='method.chown' class='method'><code>fn <a href='#method.chown' class='fnname'>chown</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, owner: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, group: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<h4 id='method.create' class='method'><code>fn <a href='#method.create' class='fnname'>create</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../hdfs/struct.HdfsFile.html' title='hdfs::HdfsFile'>HdfsFile</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<h4 id='method.create_with_overwrite' class='method'><code>fn <a href='#method.create_with_overwrite' class='fnname'>create_with_overwrite</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, overwrite: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../hdfs/struct.HdfsFile.html' title='hdfs::HdfsFile'>HdfsFile</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<h4 id='method.create_with_params' class='method'><code>fn <a href='#method.create_with_params' class='fnname'>create_with_params</a>(&amp;'a self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, overwrite: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, buf_size: <a href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>, replica_num: <a href='https://doc.rust-lang.org/nightly/std/primitive.i16.html'>i16</a>, block_size: <a href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../hdfs/struct.HdfsFile.html' title='hdfs::HdfsFile'>HdfsFile</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<h4 id='method.default_blocksize' class='method'><code>fn <a href='#method.default_blocksize' class='fnname'>default_blocksize</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<div class='docblock'><p>Get the default blocksize.</p>
+</div><h4 id='method.block_size' class='method'><code>fn <a href='#method.block_size' class='fnname'>block_size</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<div class='docblock'><p>Get the default blocksize at the filesystem indicated by a given path.</p>
+</div><h4 id='method.capacity' class='method'><code>fn <a href='#method.capacity' class='fnname'>capacity</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<div class='docblock'><p>Return the raw capacity of the filesystem.</p>
+</div><h4 id='method.delete' class='method'><code>fn <a href='#method.delete' class='fnname'>delete</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, recursive: <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<div class='docblock'><p>Delete file.</p>
+</div><h4 id='method.exist' class='method'><code>fn <a href='#method.exist' class='fnname'>exist</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Checks if a given path exsits on the filesystem</p>
+</div><h4 id='method.get_hosts' class='method'><code>fn <a href='#method.get_hosts' class='fnname'>get_hosts</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, start: <a href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, length: <a href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../hdfs/struct.BlockHosts.html' title='hdfs::BlockHosts'>BlockHosts</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<div class='docblock'><p>Get hostnames where a particular block (determined by
+pos &amp; blocksize) of a file is stored. The last element in the array
+is NULL. Due to replication, a single block could be present on
+multiple hosts.</p>
+</div><h4 id='method.mkdir' class='method'><code>fn <a href='#method.mkdir' class='fnname'>mkdir</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<div class='docblock'><p>create a directory</p>
+</div><h4 id='method.open' class='method'><code>fn <a href='#method.open' class='fnname'>open</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../hdfs/struct.HdfsFile.html' title='hdfs::HdfsFile'>HdfsFile</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<div class='docblock'><p>open a file to read</p>
+</div><h4 id='method.open_with_bufsize' class='method'><code>fn <a href='#method.open_with_bufsize' class='fnname'>open_with_bufsize</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, buf_size: <a href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../hdfs/struct.HdfsFile.html' title='hdfs::HdfsFile'>HdfsFile</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<div class='docblock'><p>open a file to read with a buffer size</p>
+</div><h4 id='method.set_replication' class='method'><code>fn <a href='#method.set_replication' class='fnname'>set_replication</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, num: <a href='https://doc.rust-lang.org/nightly/std/primitive.i16.html'>i16</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<div class='docblock'><p>Set the replication of the specified file to the supplied value</p>
+</div><h4 id='method.rename' class='method'><code>fn <a href='#method.rename' class='fnname'>rename</a>(&amp;self, old_path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, new_path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<div class='docblock'><p>Rename file.</p>
+</div><h4 id='method.used' class='method'><code>fn <a href='#method.used' class='fnname'>used</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<div class='docblock'><p>Return the total raw size of all files in the filesystem.</p>
+</div><h4 id='method.list_status' class='method'><code>fn <a href='#method.list_status' class='fnname'>list_status</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../hdfs/struct.FileStatus.html' title='hdfs::FileStatus'>FileStatus</a>&gt;, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+<h4 id='method.get_file_status' class='method'><code>fn <a href='#method.get_file_status' class='fnname'>get_file_status</a>(&amp;self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../hdfs/struct.FileStatus.html' title='hdfs::FileStatus'>FileStatus</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "hdfs";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>

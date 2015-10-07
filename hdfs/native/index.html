@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `native` mod in crate `hdfs`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, native">
+
+    <title>hdfs::native - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>hdfs</a></p><script>window.sidebarCurrent = {name: 'native', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>hdfs</a>::<wbr><a class='mod' href=''>native</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-65' class='srclink' href='../../src/hdfs/native.rs.html#1-979' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>libhdfs native binding APIs
+libhdfs FFI Binding APIs</p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.MiniDfsConf.html'
+                               title='hdfs::native::MiniDfsConf'>MiniDfsConf</a></td>
+                        <td class='docblock short'>
+                             <p>Represents a configuration to use for creating a Native MiniDFSCluster</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.hdfsFileInfo.html'
+                               title='hdfs::native::hdfsFileInfo'>hdfsFileInfo</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.hdfsReadStatistics.html'
+                               title='hdfs::native::hdfsReadStatistics'>hdfsReadStatistics</a></td>
+                        <td class='docblock short'>
+                             <p>Information about a file/directory.</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='enum' href='enum.NativeMiniDfsCluster.html'
+                               title='hdfs::native::NativeMiniDfsCluster'>NativeMiniDfsCluster</a></td>
+                        <td class='docblock short'>
+                             <p>Opaque Pointer for NativeMiniDfsCluster</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='enum' href='enum.hadoopRzBuffer.html'
+                               title='hdfs::native::hadoopRzBuffer'>hadoopRzBuffer</a></td>
+                        <td class='docblock short'>
+                             <p>Opaque Pointer of hadoopRzBuffer</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='enum' href='enum.hadoopRzOptions.html'
+                               title='hdfs::native::hadoopRzOptions'>hadoopRzOptions</a></td>
+                        <td class='docblock short'>
+                             <p>Opaque Pointer of hadoopRzOptions</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='enum' href='enum.hdfsBuilder.html'
+                               title='hdfs::native::hdfsBuilder'>hdfsBuilder</a></td>
+                        <td class='docblock short'>
+                             <p>Opaque Pointer of hdfsBuilder</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='enum' href='enum.hdfsFS.html'
+                               title='hdfs::native::hdfsFS'>hdfsFS</a></td>
+                        <td class='docblock short'>
+                             <p>Opaque Pointer of hdfsFS</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='enum' href='enum.hdfsFile.html'
+                               title='hdfs::native::hdfsFile'>hdfsFile</a></td>
+                        <td class='docblock short'>
+                             <p>Opaque Pointer of hdfsFile</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='enum' href='enum.tObjectKind.html'
+                               title='hdfs::native::tObjectKind'>tObjectKind</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                </table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hadoopReadZero.html'
+                               title='hdfs::native::hadoopReadZero'>hadoopReadZero</a></td>
+                        <td class='docblock short'>
+                             <p>Perform a byte buffer read. If possible, this will be a zero-copy
+(mmap) read.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hadoopRzBufferFree.html'
+                               title='hdfs::native::hadoopRzBufferFree'>hadoopRzBufferFree</a></td>
+                        <td class='docblock short'>
+                             <p>Release a buffer obtained through readZero.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hadoopRzBufferGet.html'
+                               title='hdfs::native::hadoopRzBufferGet'>hadoopRzBufferGet</a></td>
+                        <td class='docblock short'>
+                             <p>Get a pointer to the raw buffer returned from readZero.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hadoopRzBufferLength.html'
+                               title='hdfs::native::hadoopRzBufferLength'>hadoopRzBufferLength</a></td>
+                        <td class='docblock short'>
+                             <p>Determine the length of the buffer returned from readZero.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hadoopRzOptionsAlloc.html'
+                               title='hdfs::native::hadoopRzOptionsAlloc'>hadoopRzOptionsAlloc</a></td>
+                        <td class='docblock short'>
+                             <p>Allocate a zero-copy options structure.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hadoopRzOptionsFree.html'
+                               title='hdfs::native::hadoopRzOptionsFree'>hadoopRzOptionsFree</a></td>
+                        <td class='docblock short'>
+                             <p>Free a hadoopRzOptionsFree structure.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hadoopRzOptionsSetByteBufferPool.html'
+                               title='hdfs::native::hadoopRzOptionsSetByteBufferPool'>hadoopRzOptionsSetByteBufferPool</a></td>
+                        <td class='docblock short'>
+                             <p>Set the ByteBufferPool to use with read0.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hadoopRzOptionsSetSkipChecksum.html'
+                               title='hdfs::native::hadoopRzOptionsSetSkipChecksum'>hadoopRzOptionsSetSkipChecksum</a></td>
+                        <td class='docblock short'>
+                             <p>Determine whether we should skip checksums in read0.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsAvailable.html'
+                               title='hdfs::native::hdfsAvailable'>hdfsAvailable</a></td>
+                        <td class='docblock short'>
+                             <p>Number of bytes that can be read from this input stream without
+blocking.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsBuilderConfSetStr.html'
+                               title='hdfs::native::hdfsBuilderConfSetStr'>hdfsBuilderConfSetStr</a></td>
+                        <td class='docblock short'>
+                             <p>Set a configuration string for an HdfsBuilder.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsBuilderConnect.html'
+                               title='hdfs::native::hdfsBuilderConnect'>hdfsBuilderConnect</a></td>
+                        <td class='docblock short'>
+                             <p>Connect to HDFS using the parameters defined by the builder.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsBuilderSetForceNewInstance.html'
+                               title='hdfs::native::hdfsBuilderSetForceNewInstance'>hdfsBuilderSetForceNewInstance</a></td>
+                        <td class='docblock short'>
+                             <p>Force the builder to always create a new instance of the FileSystem,
+rather than possibly finding one in the cache.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsBuilderSetKerbTicketCachePath.html'
+                               title='hdfs::native::hdfsBuilderSetKerbTicketCachePath'>hdfsBuilderSetKerbTicketCachePath</a></td>
+                        <td class='docblock short'>
+                             <p>Set the path to the Kerberos ticket cache to use when connecting to
+the HDFS cluster.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsBuilderSetNameNode.html'
+                               title='hdfs::native::hdfsBuilderSetNameNode'>hdfsBuilderSetNameNode</a></td>
+                        <td class='docblock short'>
+                             <p>Set the HDFS NameNode to connect to.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsBuilderSetNameNodePort.html'
+                               title='hdfs::native::hdfsBuilderSetNameNodePort'>hdfsBuilderSetNameNodePort</a></td>
+                        <td class='docblock short'>
+                             <p>Set the port of the HDFS NameNode to connect to.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsBuilderSetUserName.html'
+                               title='hdfs::native::hdfsBuilderSetUserName'>hdfsBuilderSetUserName</a></td>
+                        <td class='docblock short'>
+                             <p>Set the username to use when connecting to the HDFS cluster.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsChmod.html'
+                               title='hdfs::native::hdfsChmod'>hdfsChmod</a></td>
+                        <td class='docblock short'>
+                             <p>hdfsChmod</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsChown.html'
+                               title='hdfs::native::hdfsChown'>hdfsChown</a></td>
+                        <td class='docblock short'>
+                             <p>Change the user and/or group of a file or directory.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsCloseFile.html'
+                               title='hdfs::native::hdfsCloseFile'>hdfsCloseFile</a></td>
+                        <td class='docblock short'>
+                             <p>Close an open file.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsConfGetInt.html'
+                               title='hdfs::native::hdfsConfGetInt'>hdfsConfGetInt</a></td>
+                        <td class='docblock short'>
+                             <p>Get a configuration integer.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsConfGetStr.html'
+                               title='hdfs::native::hdfsConfGetStr'>hdfsConfGetStr</a></td>
+                        <td class='docblock short'>
+                             <p>Get a configuration string.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsConfStrFree.html'
+                               title='hdfs::native::hdfsConfStrFree'>hdfsConfStrFree</a></td>
+                        <td class='docblock short'>
+                             <p>Free a configuration string found with hdfsConfGetStr.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsConnect.html'
+                               title='hdfs::native::hdfsConnect'>hdfsConnect</a></td>
+                        <td class='docblock short'>
+                             <p>Connect to a hdfs file system.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsConnectAsUser.html'
+                               title='hdfs::native::hdfsConnectAsUser'>hdfsConnectAsUser</a></td>
+                        <td class='docblock short'>
+                             <p>Connect to a hdfs file system as a specific user.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsConnectAsUserNewInstance.html'
+                               title='hdfs::native::hdfsConnectAsUserNewInstance'>hdfsConnectAsUserNewInstance</a></td>
+                        <td class='docblock short'>
+                             <p>Connect to an hdfs file system.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsConnectNewInstance.html'
+                               title='hdfs::native::hdfsConnectNewInstance'>hdfsConnectNewInstance</a></td>
+                        <td class='docblock short'>
+                             <p>Connect to an hdfs file system.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsCopy.html'
+                               title='hdfs::native::hdfsCopy'>hdfsCopy</a></td>
+                        <td class='docblock short'>
+                             <p>Copy file from one filesystem to another.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsCreateDirectory.html'
+                               title='hdfs::native::hdfsCreateDirectory'>hdfsCreateDirectory</a></td>
+                        <td class='docblock short'>
+                             <p>Make the given file and all non-existent parents into directories.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsDelete.html'
+                               title='hdfs::native::hdfsDelete'>hdfsDelete</a></td>
+                        <td class='docblock short'>
+                             <p>Delete file.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsDisconnect.html'
+                               title='hdfs::native::hdfsDisconnect'>hdfsDisconnect</a></td>
+                        <td class='docblock short'>
+                             <p>hdfsDisconnect - Disconnect from the hdfs file system.
+Disconnect from hdfs.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsExists.html'
+                               title='hdfs::native::hdfsExists'>hdfsExists</a></td>
+                        <td class='docblock short'>
+                             <p>Checks if a given path exsits on the filesystem</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsFileFreeReadStatistics.html'
+                               title='hdfs::native::hdfsFileFreeReadStatistics'>hdfsFileFreeReadStatistics</a></td>
+                        <td class='docblock short'>
+                             <p>Free some HDFS read statistics.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsFileGetReadStatistics.html'
+                               title='hdfs::native::hdfsFileGetReadStatistics'>hdfsFileGetReadStatistics</a></td>
+                        <td class='docblock short'>
+                             <p>Get read statistics about a file.  This is only applicable to files
+opened for reading.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsFileIsEncrypted.html'
+                               title='hdfs::native::hdfsFileIsEncrypted'>hdfsFileIsEncrypted</a></td>
+                        <td class='docblock short'>
+                             <p>hdfsFileIsEncrypted: determine if a file is encrypted based on its
+hdfsFileInfo.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsFileIsOpenForRead.html'
+                               title='hdfs::native::hdfsFileIsOpenForRead'>hdfsFileIsOpenForRead</a></td>
+                        <td class='docblock short'>
+                             <p>Determine if a file is open for read.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsFileIsOpenForWrite.html'
+                               title='hdfs::native::hdfsFileIsOpenForWrite'>hdfsFileIsOpenForWrite</a></td>
+                        <td class='docblock short'>
+                             <p>Determine if a file is open for write.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsFlush.html'
+                               title='hdfs::native::hdfsFlush'>hdfsFlush</a></td>
+                        <td class='docblock short'>
+                             <p>Flush the data.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsFreeBuilder.html'
+                               title='hdfs::native::hdfsFreeBuilder'>hdfsFreeBuilder</a></td>
+                        <td class='docblock short'>
+                             <p>Free an HDFS builder.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsFreeFileInfo.html'
+                               title='hdfs::native::hdfsFreeFileInfo'>hdfsFreeFileInfo</a></td>
+                        <td class='docblock short'>
+                             <p>Free up the hdfsFileInfo array (including fields)</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsFreeHosts.html'
+                               title='hdfs::native::hdfsFreeHosts'>hdfsFreeHosts</a></td>
+                        <td class='docblock short'>
+                             <p>Free up the structure returned by hdfsGetHosts</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsGetCapacity.html'
+                               title='hdfs::native::hdfsGetCapacity'>hdfsGetCapacity</a></td>
+                        <td class='docblock short'>
+                             <p>Return the raw capacity of the filesystem.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsGetDefaultBlockSize.html'
+                               title='hdfs::native::hdfsGetDefaultBlockSize'>hdfsGetDefaultBlockSize</a></td>
+                        <td class='docblock short'>
+                             <p>Get the default blocksize.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsGetDefaultBlockSizeAtPath.html'
+                               title='hdfs::native::hdfsGetDefaultBlockSizeAtPath'>hdfsGetDefaultBlockSizeAtPath</a></td>
+                        <td class='docblock short'>
+                             <p>Get the default blocksize at the filesystem indicated by a given path.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsGetHosts.html'
+                               title='hdfs::native::hdfsGetHosts'>hdfsGetHosts</a></td>
+                        <td class='docblock short'>
+                             <p>Get hostnames where a particular block (determined by pos &amp; blocksize)
+of a file is stored. The last element in the array is <code>NULL</code>. 
+Due to replication, a single block could be present on multiple hosts.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsGetPathInfo.html'
+                               title='hdfs::native::hdfsGetPathInfo'>hdfsGetPathInfo</a></td>
+                        <td class='docblock short'>
+                             <p>Get information about a path as a (dynamically allocated) single
+hdfsFileInfo struct. hdfsFreeFileInfo should be called when the 
+pointer is no longer needed.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsGetUsed.html'
+                               title='hdfs::native::hdfsGetUsed'>hdfsGetUsed</a></td>
+                        <td class='docblock short'>
+                             <p>Return the total raw size of all files in the filesystem.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsGetWorkingDirectory.html'
+                               title='hdfs::native::hdfsGetWorkingDirectory'>hdfsGetWorkingDirectory</a></td>
+                        <td class='docblock short'>
+                             <p>Get the current working directory for the given filesystem.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsHFlush.html'
+                               title='hdfs::native::hdfsHFlush'>hdfsHFlush</a></td>
+                        <td class='docblock short'>
+                             <p>Flush out the data in client&#39;s user buffer. After the return of this
+call, new readers will see the data.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsHSync.html'
+                               title='hdfs::native::hdfsHSync'>hdfsHSync</a></td>
+                        <td class='docblock short'>
+                             <p>Similar to posix fsync, Flush out the data in client&#39;s
+user buffer. all the way to the disk device (but the disk may have
+it in its cache).</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsListDirectory.html'
+                               title='hdfs::native::hdfsListDirectory'>hdfsListDirectory</a></td>
+                        <td class='docblock short'>
+                             <p>Get list of files/directories for a given directory-path.
+hdfsFreeFileInfo should be called to deallocate memory.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsMove.html'
+                               title='hdfs::native::hdfsMove'>hdfsMove</a></td>
+                        <td class='docblock short'>
+                             <p>Move file from one filesystem to another.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsNewBuilder.html'
+                               title='hdfs::native::hdfsNewBuilder'>hdfsNewBuilder</a></td>
+                        <td class='docblock short'>
+                             <p>Create an HDFS builder.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsOpenFile.html'
+                               title='hdfs::native::hdfsOpenFile'>hdfsOpenFile</a></td>
+                        <td class='docblock short'>
+                             <p>Open a hdfs file in given mode.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsPread.html'
+                               title='hdfs::native::hdfsPread'>hdfsPread</a></td>
+                        <td class='docblock short'>
+                             <p>Positional read of data from an open file.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsRead.html'
+                               title='hdfs::native::hdfsRead'>hdfsRead</a></td>
+                        <td class='docblock short'>
+                             <p>Read data from an open file.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsReadStatisticsGetRemoteBytesRead.html'
+                               title='hdfs::native::hdfsReadStatisticsGetRemoteBytesRead'>hdfsReadStatisticsGetRemoteBytesRead</a></td>
+                        <td class='docblock short'>
+                             <p>HDFS read statistics for a file,</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsRename.html'
+                               title='hdfs::native::hdfsRename'>hdfsRename</a></td>
+                        <td class='docblock short'>
+                             <p>Rename file.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsSeek.html'
+                               title='hdfs::native::hdfsSeek'>hdfsSeek</a></td>
+                        <td class='docblock short'>
+                             <p>Seek to given offset in file.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsSetReplication.html'
+                               title='hdfs::native::hdfsSetReplication'>hdfsSetReplication</a></td>
+                        <td class='docblock short'>
+                             <p>Set the replication of the specified file to the supplied value</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsSetWorkingDirectory.html'
+                               title='hdfs::native::hdfsSetWorkingDirectory'>hdfsSetWorkingDirectory</a></td>
+                        <td class='docblock short'>
+                             <p>Set the working directory. All relative paths will be resolved relative
+to it.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsTell.html'
+                               title='hdfs::native::hdfsTell'>hdfsTell</a></td>
+                        <td class='docblock short'>
+                             <p>Get the current offset in the file, in bytes.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsUtime.html'
+                               title='hdfs::native::hdfsUtime'>hdfsUtime</a></td>
+                        <td class='docblock short'>
+                             <p>hdfsUtime</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.hdfsWrite.html'
+                               title='hdfs::native::hdfsWrite'>hdfsWrite</a></td>
+                        <td class='docblock short'>
+                             <p>Write data into an open file.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.nmdConfigureHdfsBuilder.html'
+                               title='hdfs::native::nmdConfigureHdfsBuilder'>nmdConfigureHdfsBuilder</a></td>
+                        <td class='docblock short'>
+                             <p>Configure the HDFS builder appropriately to connect to this cluster.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.nmdCreate.html'
+                               title='hdfs::native::nmdCreate'>nmdCreate</a></td>
+                        <td class='docblock short'>
+                             <p>Create a NativeMiniDfsCluster</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.nmdFree.html'
+                               title='hdfs::native::nmdFree'>nmdFree</a></td>
+                        <td class='docblock short'>
+                             <p>Destroy a Native MiniDFSCluster</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.nmdGetNameNodeHttpAddress.html'
+                               title='hdfs::native::nmdGetNameNodeHttpAddress'>nmdGetNameNodeHttpAddress</a></td>
+                        <td class='docblock short'>
+                             <p>Get the http address that&#39;s in use by the given (non-HA) nativeMiniDfs</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.nmdGetNameNodePort.html'
+                               title='hdfs::native::nmdGetNameNodePort'>nmdGetNameNodePort</a></td>
+                        <td class='docblock short'>
+                             <p>Get the port that&#39;s in use by the given (non-HA) nativeMiniDfs</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.nmdShutdown.html'
+                               title='hdfs::native::nmdShutdown'>nmdShutdown</a></td>
+                        <td class='docblock short'>
+                             <p>Shut down a NativeMiniDFS cluster</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.nmdWaitClusterUp.html'
+                               title='hdfs::native::nmdWaitClusterUp'>nmdWaitClusterUp</a></td>
+                        <td class='docblock short'>
+                             <p>Wait until a MiniDFSCluster comes out of safe mode.</p>
+
+                        </td>
+                    </tr>
+                </table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='type' href='type.tOffset.html'
+                               title='hdfs::native::tOffset'>tOffset</a></td>
+                        <td class='docblock short'>
+                             <p>offset within the file</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='type' href='type.tPort.html'
+                               title='hdfs::native::tPort'>tPort</a></td>
+                        <td class='docblock short'>
+                             <p>port</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='type' href='type.tSize.html'
+                               title='hdfs::native::tSize'>tSize</a></td>
+                        <td class='docblock short'>
+                             <p>size of data for read/write io ops</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='type' href='type.tTime.html'
+                               title='hdfs::native::tTime'>tTime</a></td>
+                        <td class='docblock short'>
+                             <p>time type in seconds</p>
+
+                        </td>
+                    </tr>
+                </table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "hdfs";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

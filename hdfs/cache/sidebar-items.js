@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["HdfsFsCache","HdfsFs Cache. Basically, It is a cache as well as a way to guarantees thread-safe when you get HdfsFs."]]});
