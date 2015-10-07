@@ -11,6 +11,10 @@ use libc::{c_char, c_int, c_short, c_void, int16_t, int32_t, int64_t};
 
 pub static LOCALFS_SCHEME: &'static str = "file";
 
+mod util {
+  
+}
+
 pub struct HdfsFsCache<'a> {
   fs_map: HashMap<String, HdfsFS<'a>>,
   lock: Arc<Mutex<i32>>,
@@ -250,7 +254,19 @@ impl Drop for BlockHosts {
   }
 }
 
-impl BlockHosts {
+pub enum FileKind {
+  File,
+  Directory  
+}
+
+pub struct FileInfo {
+  ptr: *const hdfsFileInfo,
+}
+
+impl Drop for FileInfo {
+  fn drop(&mut self) {
+    unsafe { hdfsFreeFileInfo(self.ptr, 1) };
+  }
 }
 
 /// Hdfs Filesystem
@@ -484,6 +500,18 @@ impl<'a> HdfsFS<'a> {
       Err(HdfsErr::UNKNOWN)
     }
   }
+  
+  pub fn get_path_info(&self, path: &str) -> Result<FileInfo, HdfsErr> {
+    let ptr = unsafe {
+      hdfsGetPathInfo(self.fs, str_to_chars(path))
+    };
+    
+    if ptr.is_null() {
+      Err(HdfsErr::UNKNOWN)
+    } else {
+      Ok(FileInfo {ptr: ptr})
+    }
+  }
 }
 
 fn str_to_chars(s: &str) -> *const c_char {
@@ -631,7 +659,6 @@ fn hdfs_scheme_handler(scheme: &str) -> SchemeType {
   }
 }
 
-
 #[test]
 fn test_hdfs_connection() {
   use minidfs::*;
@@ -641,7 +668,6 @@ fn test_hdfs_connection() {
   let port = dfs.namenode_port().unwrap();
 
   let minidfs_addr = format!("hdfs://localhost:{}", port);
-
   let mut cache: HdfsFsCache = HdfsFsCache::new();
 
 
@@ -650,6 +676,7 @@ fn test_hdfs_connection() {
   let test_path = format!("hdfs://localhost:{}/users/test", port);
   println!("Trying to get {}", &test_path);
   assert_eq!(minidfs_addr, cache.get(&test_path).unwrap().fs_url);
+
 
 
   // create a file, check existence, and close
@@ -670,6 +697,15 @@ fn test_hdfs_connection() {
   };
   assert!(opened_file.close().is_ok());
 
+  match fs.mkdir("/dir1") {
+    Ok(b) => println!("/dir1 created"),
+    Err(e) => panic!("Couldn't create /dir1 directory")
+  };
+  
+  match fs.get_path_info("/dir1") {
+    Ok(info) => {},
+    Err(e) => panic!("Coudln't get path info")
+  };
 
   dfs.stop();
 }

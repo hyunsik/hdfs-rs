@@ -57,7 +57,7 @@ pub struct hdfsFileInfo {
   /// file or directory
   mKind: tObjectKind,
   /// the name of the file
-  mName: *mut c_char,
+  mName: *const c_char,
   /// the last modification time for the file in seconds
   mLastMod: tTime,
   /// the count of replicas
@@ -65,9 +65,9 @@ pub struct hdfsFileInfo {
   /// the block size for the file
   mBlockSize: tOffset,
   /// the owner of the file
-  mOwner: *mut c_char,
+  mOwner: *const c_char,
   /// the group associated with the file
-  mGroup: *mut c_char,
+  mGroup: *const c_char,
   /// the permissions associated with the file
   mPermissions: c_short,
   /// the last access time for the file in seconds
