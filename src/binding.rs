@@ -55,23 +55,23 @@ pub struct hdfsReadStatistics {
 #[allow(non_snake_case)]
 pub struct hdfsFileInfo {
   /// file or directory
-  mKind: tObjectKind,
+  pub mKind: tObjectKind,
   /// the name of the file
-  mName: *const c_char,
+  pub mName: *const c_char,
   /// the last modification time for the file in seconds
-  mLastMod: tTime,
+  pub mLastMod: tTime,
   /// the count of replicas
-  mReplication: c_short,
+  pub mReplication: c_short,
   /// the block size for the file
-  mBlockSize: tOffset,
+  pub mBlockSize: tOffset,
   /// the owner of the file
-  mOwner: *const c_char,
+  pub mOwner: *const c_char,
   /// the group associated with the file
-  mGroup: *const c_char,
+  pub mGroup: *const c_char,
   /// the permissions associated with the file
-  mPermissions: c_short,
+  pub mPermissions: c_short,
   /// the last access time for the file in seconds
-  mLastAccess: tTime,
+  pub mLastAccess: tTime,
 }
 
 #[link(name="hdfs")]

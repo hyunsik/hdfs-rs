@@ -8,9 +8,9 @@ use std::sync::{Arc, Mutex};
 
 use url::{UrlParser,SchemeType};
 use binding::*;
-use libc::{c_char, c_int, c_short, c_void, int16_t, int32_t, int64_t};
+use libc::{c_char, c_int, c_short, c_void, int16_t, int32_t, int64_t, time_t};
 
-use util::str_to_chars;
+use util::{chars_to_str, str_to_chars};
 
 pub static LOCALFS_SCHEME: &'static str = "file";
 
@@ -270,11 +270,78 @@ pub enum FileKind {
   Directory  
 }
 
-pub struct FileInfo {
+pub struct FileInfo<'a> {
   ptr: *const hdfsFileInfo,
+  _marker: PhantomData<&'a ()>
 }
 
-impl Drop for FileInfo {
+impl<'a> FileInfo<'a> {
+  #[inline]
+  pub fn name(&self) -> &'a str 
+  { 
+    chars_to_str(unsafe {&*self.ptr}.mName) 
+  }
+  
+  #[inline]
+  pub fn is_file(&self) -> bool {
+    match unsafe {&*self.ptr}.mKind {
+      tObjectKind::kObjectKindFile => true,
+      tObjectKind::kObjectKindDirectory => false,
+    }
+  }
+  
+    #[inline]
+  pub fn is_directory(&self) -> bool {
+    match unsafe {&*self.ptr}.mKind {
+      tObjectKind::kObjectKindFile => false,
+      tObjectKind::kObjectKindDirectory => true,
+    }
+  }
+  
+  #[inline]
+  pub fn owner(&self) -> &'a str
+  {
+    chars_to_str(unsafe {&*self.ptr}.mOwner)
+  }
+  
+  #[inline]
+  pub fn group(&self) -> &'a str
+  {
+    chars_to_str(unsafe {&*self.ptr}.mGroup)
+  }
+  
+  #[inline]
+  pub fn permission(&self) -> i16
+  {
+    unsafe {&*self.ptr}.mPermissions as i16
+  }
+  
+  #[inline]
+  pub fn replica_count(&self) -> i16
+  {
+    unsafe {&*self.ptr}.mReplication as i16
+  }
+  
+  #[inline]
+  pub fn block_size(&self) -> i64
+  {
+    unsafe {&*self.ptr}.mBlockSize as i64
+  }
+  
+  #[inline]
+  pub fn last_modified(&self) -> time_t
+  {
+    unsafe {&*self.ptr}.mLastMod
+  }
+  
+  #[inline]
+  pub fn mLastAccess(&self) -> time_t
+  {
+    unsafe {&*self.ptr}.mLastAccess
+  }
+}
+
+impl<'a> Drop for FileInfo<'a> {
   fn drop(&mut self) {
     unsafe { hdfsFreeFileInfo(self.ptr, 1) };
   }
@@ -520,7 +587,10 @@ impl<'a> HdfsFS<'a> {
     if ptr.is_null() {
       Err(HdfsErr::UNKNOWN)
     } else {
-      Ok(FileInfo {ptr: ptr})
+      Ok(FileInfo {
+           ptr: ptr,
+           _marker: PhantomData
+        })
     }
   }
 }
@@ -700,10 +770,15 @@ fn test_hdfs_connection() {
     Err(e) => panic!("Couldn't create /dir1 directory")
   };
   
-  match fs.get_path_info("/dir1") {
-    Ok(info) => {},
+  let file_info = match fs.get_path_info("/dir1") {
+    Ok(info) => info,
     Err(e) => panic!("Coudln't get path info")
   };
+  
+  let expected_path = format!("hdfs://localhost:{}/dir1", port);
+  assert_eq!(&expected_path, file_info.name());
+  assert!(!file_info.is_file());
+  assert!(file_info.is_directory());
 
   dfs.stop();
 }
