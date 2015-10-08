@@ -116,7 +116,7 @@
 
 <span class='kw'>use</span> <span class='ident'>err</span>::<span class='ident'>HdfsErr</span>;
 <span class='kw'>use</span> <span class='ident'>native</span>::<span class='op'>*</span>;
-<span class='kw'>use</span> <span class='ident'>dfs</span>::<span class='ident'>HdfsFS</span>;
+<span class='kw'>use</span> <span class='ident'>dfs</span>::<span class='ident'>HdfsFs</span>;
 
 <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>str_to_chars</span>(<span class='ident'>s</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span> {
   <span class='ident'>CString</span>::<span class='ident'>new</span>(<span class='ident'>s</span>.<span class='ident'>as_bytes</span>()).<span class='ident'>unwrap</span>().<span class='ident'>as_ptr</span>()
@@ -144,17 +144,17 @@
   <span class='doccomment'>/// * ```src``` - The path of source file.</span>
   <span class='doccomment'>/// * ```dstFS``` - The handle to destination filesystem.</span>
   <span class='doccomment'>/// * ```dst``` - The path of destination file.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>copy</span>(<span class='ident'>src_fs</span>: <span class='kw-2'>&amp;</span><span class='ident'>HdfsFS</span>, <span class='ident'>src</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>dst_fs</span>: <span class='kw-2'>&amp;</span><span class='ident'>HdfsFS</span>, <span class='ident'>dst</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>)
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>copy</span>(<span class='ident'>src_fs</span>: <span class='kw-2'>&amp;</span><span class='ident'>HdfsFs</span>, <span class='ident'>src</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>dst_fs</span>: <span class='kw-2'>&amp;</span><span class='ident'>HdfsFs</span>, <span class='ident'>dst</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>)
       <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>bool</span>, <span class='ident'>HdfsErr</span><span class='op'>&gt;</span> {
 
     <span class='kw'>let</span> <span class='ident'>res</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
-      <span class='ident'>hdfsCopy</span>(<span class='ident'>src_fs</span>.<span class='ident'>raw</span>, <span class='ident'>str_to_chars</span>(<span class='ident'>src</span>), <span class='ident'>dst_fs</span>.<span class='ident'>raw</span>, <span class='ident'>str_to_chars</span>(<span class='ident'>dst</span>))
+      <span class='ident'>hdfsCopy</span>(<span class='ident'>src_fs</span>.<span class='ident'>raw</span>(), <span class='ident'>str_to_chars</span>(<span class='ident'>src</span>), <span class='ident'>dst_fs</span>.<span class='ident'>raw</span>(), <span class='ident'>str_to_chars</span>(<span class='ident'>dst</span>))
     };
 
     <span class='kw'>if</span> <span class='ident'>res</span> <span class='op'>==</span> <span class='number'>0</span> {
       <span class='prelude-val'>Ok</span>(<span class='boolval'>true</span>)
     } <span class='kw'>else</span> {
-      <span class='prelude-val'>Err</span>(<span class='ident'>HdfsErr</span>::<span class='ident'>UNKNOWN</span>)
+      <span class='prelude-val'>Err</span>(<span class='ident'>HdfsErr</span>::<span class='ident'>Unknown</span>)
     }
   }
 
@@ -165,17 +165,17 @@
   <span class='doccomment'>/// * ```src``` - The path of source file.</span>
   <span class='doccomment'>/// * ```dstFS``` - The handle to destination filesystem.</span>
   <span class='doccomment'>/// * ```dst``` - The path of destination file.</span>
-  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>mv</span>(<span class='ident'>src_fs</span>: <span class='kw-2'>&amp;</span><span class='ident'>HdfsFS</span>, <span class='ident'>src</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>dst_fs</span>: <span class='kw-2'>&amp;</span><span class='ident'>HdfsFS</span>, <span class='ident'>dst</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>)
+  <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>mv</span>(<span class='ident'>src_fs</span>: <span class='kw-2'>&amp;</span><span class='ident'>HdfsFs</span>, <span class='ident'>src</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>dst_fs</span>: <span class='kw-2'>&amp;</span><span class='ident'>HdfsFs</span>, <span class='ident'>dst</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>)
       <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>bool</span>, <span class='ident'>HdfsErr</span><span class='op'>&gt;</span> {
 
     <span class='kw'>let</span> <span class='ident'>res</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
-      <span class='ident'>hdfsMove</span>(<span class='ident'>src_fs</span>.<span class='ident'>raw</span>, <span class='ident'>str_to_chars</span>(<span class='ident'>src</span>), <span class='ident'>dst_fs</span>.<span class='ident'>raw</span>, <span class='ident'>str_to_chars</span>(<span class='ident'>dst</span>))
+      <span class='ident'>hdfsMove</span>(<span class='ident'>src_fs</span>.<span class='ident'>raw</span>(), <span class='ident'>str_to_chars</span>(<span class='ident'>src</span>), <span class='ident'>dst_fs</span>.<span class='ident'>raw</span>(), <span class='ident'>str_to_chars</span>(<span class='ident'>dst</span>))
     };
 
     <span class='kw'>if</span> <span class='ident'>res</span> <span class='op'>==</span> <span class='number'>0</span> {
       <span class='prelude-val'>Ok</span>(<span class='boolval'>true</span>)
     } <span class='kw'>else</span> {
-      <span class='prelude-val'>Err</span>(<span class='ident'>HdfsErr</span>::<span class='ident'>UNKNOWN</span>)
+      <span class='prelude-val'>Err</span>(<span class='ident'>HdfsErr</span>::<span class='ident'>Unknown</span>)
     }
   }
 }</pre>

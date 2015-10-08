@@ -45,13 +45,16 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-32' class='srclink' href='../src/hdfs/cache.rs.html#26-30' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-568' class='srclink' href='../src/hdfs/dfs.rs.html#707-711' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct HdfsFsCache&lt;'a&gt; {
     // some fields omitted
-}</pre><div class='docblock'><p>HdfsFs Cache. Basically, It is a cache as well as a way to guarantees
-thread-safe when you get HdfsFs.</p>
+}</pre><div class='docblock'><p>HdfsFsCache which caches HdfsFs instances.</p>
+
+<p>The original libhdfs allows only one HdfsFs instance for the same namenode. In otherwords,
+Some APIs of libhdfs are not thread-safe. So, You must get HdfsFs instance through HdfsFsCache, 
+caching initialized HdfsFs instances and returning them.  </p>
 </div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;'a&gt; <a class='struct' href='../hdfs/struct.HdfsFsCache.html' title='hdfs::HdfsFsCache'>HdfsFsCache</a>&lt;'a&gt;</code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; <a class='struct' href='../hdfs/struct.HdfsFsCache.html' title='hdfs::HdfsFsCache'>HdfsFsCache</a>&lt;'a&gt;</code></h4>
-<h4 id='method.get' class='method'><code>fn <a href='#method.get' class='fnname'>get</a>(&amp;mut self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;<a class='struct' href='../hdfs/struct.HdfsFS.html' title='hdfs::HdfsFS'>HdfsFS</a>&gt;</code></h4>
+<h4 id='method.get' class='method'><code>fn <a href='#method.get' class='fnname'>get</a>(&amp;mut self, path: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../hdfs/struct.HdfsFs.html' title='hdfs::HdfsFs'>HdfsFs</a>&lt;'a&gt;, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 

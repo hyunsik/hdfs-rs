@@ -45,10 +45,10 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-642' class='srclink' href='../src/hdfs/util.rs.html#23' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-645' class='srclink' href='../src/hdfs/util.rs.html#23' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct HdfsUtil;</pre><div class='docblock'><p>Hdfs Utility</p>
 </div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../hdfs/struct.HdfsUtil.html' title='hdfs::HdfsUtil'>HdfsUtil</a></code></h3><div class='docblock'><p>HDFS Utility</p>
-</div><div class='impl-items'><h4 id='method.copy' class='method'><code>fn <a href='#method.copy' class='fnname'>copy</a>(src_fs: &amp;<a class='struct' href='../hdfs/struct.HdfsFS.html' title='hdfs::HdfsFS'>HdfsFS</a>, src: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, dst_fs: &amp;<a class='struct' href='../hdfs/struct.HdfsFS.html' title='hdfs::HdfsFS'>HdfsFS</a>, dst: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+</div><div class='impl-items'><h4 id='method.copy' class='method'><code>fn <a href='#method.copy' class='fnname'>copy</a>(src_fs: &amp;<a class='struct' href='../hdfs/struct.HdfsFs.html' title='hdfs::HdfsFs'>HdfsFs</a>, src: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, dst_fs: &amp;<a class='struct' href='../hdfs/struct.HdfsFs.html' title='hdfs::HdfsFs'>HdfsFs</a>, dst: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
 <div class='docblock'><p>Copy file from one filesystem to another.</p>
 
 <h4 id='params' class='section-header'><a href='#params'>Params</a></h4>
@@ -58,7 +58,7 @@
 <li><code>dstFS</code> - The handle to destination filesystem.</li>
 <li><code>dst</code> - The path of destination file.</li>
 </ul>
-</div><h4 id='method.mv' class='method'><code>fn <a href='#method.mv' class='fnname'>mv</a>(src_fs: &amp;<a class='struct' href='../hdfs/struct.HdfsFS.html' title='hdfs::HdfsFS'>HdfsFS</a>, src: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, dst_fs: &amp;<a class='struct' href='../hdfs/struct.HdfsFS.html' title='hdfs::HdfsFS'>HdfsFS</a>, dst: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
+</div><h4 id='method.mv' class='method'><code>fn <a href='#method.mv' class='fnname'>mv</a>(src_fs: &amp;<a class='struct' href='../hdfs/struct.HdfsFs.html' title='hdfs::HdfsFs'>HdfsFs</a>, src: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, dst_fs: &amp;<a class='struct' href='../hdfs/struct.HdfsFs.html' title='hdfs::HdfsFs'>HdfsFs</a>, dst: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>, <a class='enum' href='../hdfs/enum.HdfsErr.html' title='hdfs::HdfsErr'>HdfsErr</a>&gt;</code></h4>
 <div class='docblock'><p>Move file from one filesystem to another.</p>
 
 <h4 id='params' class='section-header'><a href='#params'>Params</a></h4>

@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["HdfsErr",""]]});
+initSidebarItems({"enum":[["HdfsErr","Errors which can occur during accessing Hdfs cluster"]]});
