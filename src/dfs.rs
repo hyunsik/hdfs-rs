@@ -1,9 +1,12 @@
+use std::collections::HashMap;
 use std::marker::PhantomData;
 use std::mem;
 use std::rc::Rc;
 use std::slice;
 use std::string::String;
+use std::sync::Mutex;
 
+use url::{UrlParser,SchemeType};
 use libc::{c_char, c_int, c_short, c_void, int16_t, int32_t, int64_t, time_t};
 
 use err::HdfsErr;
@@ -13,7 +16,6 @@ use util::{chars_to_str, str_to_chars, bool_to_c_int};
 const O_RDONLY: c_int = 0;
 const O_WRONLY: c_int = 1;
 const O_APPEND: c_int = 1024;
-
 
 /// Options for zero-copy read
 pub struct RzOptions {
@@ -39,7 +41,7 @@ impl RzOptions {
     if res == 0 {
       Ok(true)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -53,7 +55,7 @@ impl RzOptions {
     if res == 0 {
       Ok(true)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 }
@@ -86,7 +88,7 @@ impl<'a> RzBuffer<'a> {
     if !ptr.is_null() {
       Ok( ptr as *const u8 )
      } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
      }
   }
 
@@ -103,7 +105,7 @@ impl<'a> RzBuffer<'a> {
      if !ptr.is_null() {
       Ok(unsafe { mem::transmute(slice::from_raw_parts(ptr, len as usize)) })
      } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
      }
   }
 }
@@ -265,16 +267,20 @@ impl<'a> FileStatus<'a> {
 }
 
 /// Hdfs Filesystem
+///
+/// It is basically thread safe because the native API for hdfsFS is thread-safe. 
+#[derive(Clone)]
+#[allow(raw_pointer_derive)]
 pub struct HdfsFS<'a> {
   url: String,
-  pub raw: *const hdfsFS,
+  raw: *const hdfsFS,
   _marker: PhantomData<&'a ()>
 }
 
 impl<'a> HdfsFS<'a> {
   /// create HdfsFS instance. Please use HdfsFsCache rather than using this API directly. 
   #[inline]
-  pub fn new(url: String, raw: *const hdfsFS) -> HdfsFS<'a>
+  fn new(url: String, raw: *const hdfsFS) -> HdfsFS<'a>
   {
     HdfsFS {
       url: url,
@@ -308,7 +314,7 @@ impl<'a> HdfsFS<'a> {
     };
 
     if file.is_null() {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     } else {
       Ok(HdfsFile {fs: self, path: path.to_owned(), file: file})
     }
@@ -356,7 +362,7 @@ impl<'a> HdfsFS<'a> {
     };
 
     if file.is_null() {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     } else {
       Ok(HdfsFile {fs: self, path: path.to_owned(), file: file})
     }
@@ -369,7 +375,7 @@ impl<'a> HdfsFS<'a> {
     if block_sz > 0 {
       Ok(block_sz as usize)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -382,7 +388,7 @@ impl<'a> HdfsFS<'a> {
     if block_sz > 0 {
       Ok(block_sz as usize)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -395,7 +401,7 @@ impl<'a> HdfsFS<'a> {
     if block_sz > 0 {
       Ok(block_sz as usize)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -408,7 +414,7 @@ impl<'a> HdfsFS<'a> {
     if res == 0 {
       Ok(true)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -436,7 +442,7 @@ impl<'a> HdfsFS<'a> {
     if !ptr.is_null() {
       Ok(BlockHosts {ptr: ptr})
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -445,7 +451,7 @@ impl<'a> HdfsFS<'a> {
     if unsafe{hdfsCreateDirectory(self.raw, str_to_chars(path))} == 0 {
       Ok(true)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -465,7 +471,7 @@ impl<'a> HdfsFS<'a> {
     };
 
     if file.is_null() {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     } else {
       Ok(HdfsFile {fs: self, path: path.to_owned(), file: file})
     }
@@ -482,7 +488,7 @@ impl<'a> HdfsFS<'a> {
     if res == 0 {
       Ok(true)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -497,7 +503,7 @@ impl<'a> HdfsFS<'a> {
     if res == 0 {
       Ok(true)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -510,7 +516,7 @@ impl<'a> HdfsFS<'a> {
     if block_sz > 0 {
       Ok(block_sz as usize)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
   
@@ -522,7 +528,7 @@ impl<'a> HdfsFS<'a> {
     };
     
     if ptr.is_null() {
-      return Err(HdfsErr::UNKNOWN)
+      return Err(HdfsErr::Unknown)
     }
     
     let shared_ptr = Rc::new(HdfsFileInfoPtr::new_array(ptr, entry_num));
@@ -541,7 +547,7 @@ impl<'a> HdfsFS<'a> {
     };
     
     if ptr.is_null() {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     } else {
       Ok(FileStatus::new(ptr))
     }
@@ -561,7 +567,7 @@ impl<'a> HdfsFile<'a> {
     if unsafe { hdfsAvailable(self.fs.raw, self.file) } == 0 {
       Ok(true)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -570,7 +576,7 @@ impl<'a> HdfsFile<'a> {
     if unsafe {hdfsCloseFile(self.fs.raw, self.file)} == 0 {
       Ok(true)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -614,7 +620,7 @@ impl<'a> HdfsFile<'a> {
     if pos > 0 {
       Ok(pos as u64)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -628,7 +634,7 @@ impl<'a> HdfsFile<'a> {
     if read_len > 0 {
       Ok(read_len as i32)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -642,7 +648,7 @@ impl<'a> HdfsFile<'a> {
     if read_len > 0 {
       Ok(read_len as i32)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -656,7 +662,7 @@ impl<'a> HdfsFile<'a> {
     if !buf.is_null() {
       Ok(RzBuffer {file: self, ptr: buf})
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -675,26 +681,111 @@ impl<'a> HdfsFile<'a> {
     if written_len > 0 {
       Ok(written_len)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
+  }
+}
+
+
+static LOCAL_FS_SCHEME: &'static str = "file";
+
+/// for HDFS URL scheme (i.e., hdfs://)
+fn hdfs_scheme_handler(scheme: &str) -> SchemeType 
+{
+  match scheme {
+    "file" => SchemeType::FileLike,
+    "hdfs" => SchemeType::Relative(50070),
+    _ => panic!("Unsupported scheme: {}", scheme)
+  }
+}
+
+/// HdfsFs Cache. Basically, It is a cache as well as a way to guarantees 
+/// thread-safe when you get HdfsFs.
+pub struct HdfsFsCache<'a> 
+{
+  fs_map: Mutex<HashMap<String, HdfsFS<'a>>>,
+  url_parser: UrlParser<'a>
+}
+
+impl<'a> HdfsFsCache<'a> 
+{
+  pub fn new() -> HdfsFsCache<'a> 
+  {
+    let mut url_parser = UrlParser::new();
+    url_parser.scheme_type_mapper(hdfs_scheme_handler);
+
+    HdfsFsCache {
+      fs_map: Mutex::new(HashMap::new()),
+      url_parser: url_parser
+    }
+  }
+
+  #[inline]
+  fn get_namenode_uri(&self, path: &str) -> Result<String, HdfsErr> 
+  {
+    match self.url_parser.parse(path) {
+      Ok(url) => {
+        
+        if &url.scheme == LOCAL_FS_SCHEME {
+          return Ok("file:///".to_string());
+          
+        } else {
+          let mut uri_builder = String::new();
+          if url.host().is_some() {
+            uri_builder.push_str(&(
+              format!("{}://{}", &url.scheme, url.host().unwrap())));
+
+            if url.port().is_some() {
+              uri_builder.push_str(&(format!(":{}", url.port().unwrap())));
+            }
+
+            return Ok(uri_builder);
+          } else {
+            Err(HdfsErr::InvalidUrl(path.to_string()))
+          }
+        }
+      },
+      Err(_) => Err(HdfsErr::InvalidUrl(path.to_string()))
+    }
+  }
+
+  pub fn get(&mut self, path: &str) -> Result<HdfsFS<'a>, HdfsErr> 
+  {
+    let namenode_uri = try!(self.get_namenode_uri(path));
+ 
+    let mut map = self.fs_map.lock().unwrap();
+      
+    if !map.contains_key(&namenode_uri) {  
+      let hdfs_fs = unsafe {
+        let hdfs_builder = hdfsNewBuilder();
+        hdfsBuilderSetNameNode(hdfs_builder, str_to_chars(&namenode_uri));
+        info!("Connecting to Namenode ({})", &namenode_uri);
+        hdfsBuilderConnect(hdfs_builder)
+      };
+        
+      if hdfs_fs.is_null() {
+        return Err(HdfsErr::Unknown)
+      }
+          
+      map.insert(
+        namenode_uri.clone(),
+        HdfsFS::new(namenode_uri.clone(), hdfs_fs));
+    }
+      
+    Ok(map.get(&namenode_uri).unwrap().clone())
   }
 }
 
 #[cfg(test)]
 mod test {
-  use std::result::Result;
   use itertools::Itertools;
   
-  use cache::HdfsFsCache;
+  use super::HdfsFsCache;
   use native::MiniDfsConf;
-  use super::*;
-  
+  use minidfs::*;
   
   #[test]
   fn test_hdfs_connection() {
-    use std::mem;
-    use minidfs::*;
-    use native::hdfsFileInfo;
   
     let mut conf = MiniDfsConf::new();
     let dfs = MiniDFS::start(&mut conf).unwrap();
@@ -705,40 +796,34 @@ mod test {
   
   
     // Parse namenode uris
-    assert_eq!("file:///".to_string(), cache.get("file:/blah").unwrap().url);
+    assert_eq!("file:///".to_string(), cache.get("file:/blah").ok().unwrap().url);
     let test_path = format!("hdfs://localhost:{}/users/test", port);
     println!("Trying to get {}", &test_path);
-    assert_eq!(minidfs_addr, cache.get(&test_path).unwrap().url);
+    assert_eq!(minidfs_addr, cache.get(&test_path).ok().unwrap().url);
   
   
   
     // create a file, check existence, and close
-    let fs = cache.get(&test_path).unwrap();
+    let fs = cache.get(&test_path).ok().unwrap();
     let test_file = "/test_file";
     let created_file = match fs.create(test_file) {
       Ok(f) => f,
-      Err(e) => panic!("Couldn't create a file")
+      Err(_) => panic!("Couldn't create a file")
     };
     assert!(created_file.close().is_ok());
     assert!(fs.exist(test_file));
   
   
     // open a file and close
-    let opened_file = match fs.open(test_file) {
-      Ok(f) => f,
-      Err(e) => panic!("Couldn't open a file")
-    };
+    let opened_file = fs.open(test_file).ok().unwrap();
     assert!(opened_file.close().is_ok());
   
     match fs.mkdir("/dir1") {
-      Ok(b) => println!("/dir1 created"),
-      Err(e) => panic!("Couldn't create /dir1 directory")
+      Ok(_) => println!("/dir1 created"),
+      Err(_) => panic!("Couldn't create /dir1 directory")
     };
     
-    let file_info = match fs.get_file_status("/dir1") {
-      Ok(info) => info,
-      Err(e) => panic!("Coudln't get path info")
-    };
+    let file_info = fs.get_file_status("/dir1").ok().unwrap();
     
     let expected_path = format!("hdfs://localhost:{}/dir1", port);
     assert_eq!(&expected_path, file_info.name());
@@ -753,8 +838,8 @@ mod test {
       expected_list.push(format!("hdfs://localhost:{}/dir1/{}", port, x));
       
       match fs.mkdir(&filename) {
-        Ok(b) => println!("/dir1.x created"),
-        Err(e) => panic!("Couldn't create /dir1 directory")
+        Ok(_) => println!("/dir1.x created"),
+        Err(_) => panic!("Couldn't create /dir1 directory")
       };
     }
     

@@ -27,10 +27,6 @@ mod err;
 pub use err::HdfsErr;
 
 /// libhdfs native binding APIs
-mod cache;
-pub use cache::HdfsFsCache;
-
-/// libhdfs native binding APIs
 pub mod native;
 
 /// Rust APIs wrapping libhdfs API, providing better semantic and abstraction

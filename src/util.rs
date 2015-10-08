@@ -36,13 +36,13 @@ impl HdfsUtil {
       -> Result<bool, HdfsErr> {
 
     let res = unsafe {
-      hdfsCopy(src_fs.raw, str_to_chars(src), dst_fs.raw, str_to_chars(dst))
+      hdfsCopy(src_fs.raw(), str_to_chars(src), dst_fs.raw(), str_to_chars(dst))
     };
 
     if res == 0 {
       Ok(true)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 
@@ -57,13 +57,13 @@ impl HdfsUtil {
       -> Result<bool, HdfsErr> {
 
     let res = unsafe {
-      hdfsMove(src_fs.raw, str_to_chars(src), dst_fs.raw, str_to_chars(dst))
+      hdfsMove(src_fs.raw(), str_to_chars(src), dst_fs.raw(), str_to_chars(dst))
     };
 
     if res == 0 {
       Ok(true)
     } else {
-      Err(HdfsErr::UNKNOWN)
+      Err(HdfsErr::Unknown)
     }
   }
 }
