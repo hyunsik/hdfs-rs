@@ -11,7 +11,7 @@ libhdfs binding library and rust APIs which safely wraps libhdfs binding APIs
 * [API documentation] (http://hyunsik.github.io/hdfs-rs/)
 
 ## Requirements
-* Hadoop which is compiled with ``-Pnative``
+* Hadoop compiled with native library (i.e., maven profile ``-Pnative``)
   * Please refer to https://github.com/apache/hadoop/blob/trunk/BUILDING.txt if you need more description.
 
 ## Usage
