@@ -18,8 +18,16 @@
 //! hiding manual memory management and some thread-safety problem of libhdfs.
 //! Rust APIs are highly recommended for most users.
 //!
+//! ## Important Note
+//! The original ``libhdfs`` implementation allows only one ``HdfsFs`` instance for the 
+//! same namenode because ``libhdfs`` only keeps a single ``hdfsFs`` entry for each namenode.
+//! As a result, you need to keep a singleton ``HdfsFsCache`` in an entire program, and
+//! you must get ``HdfsFs`` through only ``HdfsFsCache``. For it, you need to share 
+//! ``HdfsFsCache`` instance across all threads in the program. 
+//! Contrast, ``HdfsFs`` instance itself is thread-safe. 
+//!
 //! ## Usage
-//! in Cargo.toml
+//! in Cargo.toml:
 //!
 //! ```ignore
 //! [dependencies]
@@ -32,10 +40,33 @@
 //! git = "https://github.com/hyunsik/hdfs-rs.git"
 //! ```
 //! 
-//! Then, in your source code.
+//! and this to your crate root:
 //! 
 //! ```ignore
 //! extern crate hdfs;
+//! ```
+//!
+//! hdfs-rs uses libhdfs, which is JNI native implementation. JNI native implementation 
+//! requires the proper ``CLASSPATH``. exec.sh included in the source code root plays a role to 
+//! execute your program with the proper ``CLASSPATH``. ``exec.sh`` requires ``HADOOP_HOME``. 
+//! So, you firstly set ``HADOOP_HOME`` shell environment variable as follows:
+//! 
+//! ```ignore
+//! export HADOOP_HOME=<hadoop install dir>
+//! ```
+//! 
+//! Then, you can execute your program as follows:
+//! 
+//! ```ignore
+//! ./exec.sh your_program arg1 arg2
+//! ```
+//!
+//! ## Testing
+//! The test also requires the ``CLASSPATH``. So, you should run ``cargo test`` 
+//! through ``exec.sh``.
+//!
+//! ```ignore
+//! ./exec.sh cargo test
 //! ```
 //!
 //! ## Example
@@ -44,10 +75,10 @@
 //! use std::rc::Rc;
 //! use std::cell::RefCell;
 //! use hdfs::HdfsFsCache;
-//!
-//! // You should get HdfsFs through HdfsFsCache in order to guarantee the thread safety.
-//! // HdfsFs itself is thread-safe, but the original libhdfs allows only one HdfsFs instance 
-//! // for the same namenode.
+//! 
+//! // You must get HdfsFs instance through HdfsFsCache. Also, HdfsFsCache 
+//! // must be shared across all threads in the entire program in order to
+//! // avoid the thread-safe problem of the original libhdfs.
 //! let cache = Rc::new(RefCell::new(HdfsFsCache::new()));  
 //! let fs: HdfsFs = cache.borrow_mut().get("hdfs://localhost:8020/").ok().unwrap();
 //! match fs.mkdir("/data") {

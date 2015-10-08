@@ -1,7 +1,7 @@
 [package]
 name = "hdfs"
 description = "libhdfs binding library and safe Rust APIs"
-version = "0.0.3"
+version = "0.0.4"
 authors = [ "Hyunsik Choi <hyunsik.choi@gmail.com>" ]
 license = "Apache-2.0"
 
