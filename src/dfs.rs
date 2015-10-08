@@ -268,21 +268,21 @@ impl<'a> FileStatus<'a> {
 
 /// Hdfs Filesystem
 ///
-/// It is basically thread safe because the native API for hdfsFS is thread-safe. 
+/// It is basically thread safe because the native API for hdfsFs is thread-safe. 
 #[derive(Clone)]
 #[allow(raw_pointer_derive)]
-pub struct HdfsFS<'a> {
+pub struct HdfsFs<'a> {
   url: String,
   raw: *const hdfsFS,
   _marker: PhantomData<&'a ()>
 }
 
-impl<'a> HdfsFS<'a> {
-  /// create HdfsFS instance. Please use HdfsFsCache rather than using this API directly. 
+impl<'a> HdfsFs<'a> {
+  /// create HdfsFs instance. Please use HdfsFsCache rather than using this API directly. 
   #[inline]
-  fn new(url: String, raw: *const hdfsFS) -> HdfsFS<'a>
+  fn new(url: String, raw: *const hdfsFS) -> HdfsFs<'a>
   {
-    HdfsFS {
+    HdfsFs {
       url: url,
       raw: raw,
       _marker: PhantomData
@@ -296,7 +296,7 @@ impl<'a> HdfsFS<'a> {
     &self.url
   }
   
-  /// Get a raw pointer of JNI API's hdfsFS
+  /// Get a raw pointer of JNI API's HdfsFs
   #[inline]
   pub fn raw(&self) -> *const hdfsFS
   {
@@ -556,7 +556,7 @@ impl<'a> HdfsFS<'a> {
 
 /// open hdfs file
 pub struct HdfsFile<'a> {
-  fs: &'a HdfsFS<'a>,
+  fs: &'a HdfsFs<'a>,
   path: String,
   file: *const hdfsFile
 }
@@ -703,7 +703,7 @@ fn hdfs_scheme_handler(scheme: &str) -> SchemeType
 /// thread-safe when you get HdfsFs.
 pub struct HdfsFsCache<'a> 
 {
-  fs_map: Mutex<HashMap<String, HdfsFS<'a>>>,
+  fs_map: Mutex<HashMap<String, HdfsFs<'a>>>,
   url_parser: UrlParser<'a>
 }
 
@@ -749,7 +749,7 @@ impl<'a> HdfsFsCache<'a>
     }
   }
 
-  pub fn get(&mut self, path: &str) -> Result<HdfsFS<'a>, HdfsErr> 
+  pub fn get(&mut self, path: &str) -> Result<HdfsFs<'a>, HdfsErr> 
   {
     let namenode_uri = try!(self.get_namenode_uri(path));
  
@@ -764,12 +764,12 @@ impl<'a> HdfsFsCache<'a>
       };
         
       if hdfs_fs.is_null() {
-        return Err(HdfsErr::Unknown)
+        return Err(HdfsErr::CannotConnectToNameNode(namenode_uri.clone()))
       }
           
       map.insert(
         namenode_uri.clone(),
-        HdfsFS::new(namenode_uri.clone(), hdfs_fs));
+        HdfsFs::new(namenode_uri.clone(), hdfs_fs));
     }
       
     Ok(map.get(&namenode_uri).unwrap().clone())

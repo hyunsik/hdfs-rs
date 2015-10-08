@@ -4,7 +4,7 @@ use libc::{c_char, c_int};
 
 use err::HdfsErr;
 use native::*;
-use dfs::HdfsFS;
+use dfs::HdfsFs;
 
 pub fn str_to_chars(s: &str) -> *const c_char {
   CString::new(s.as_bytes()).unwrap().as_ptr()
@@ -32,7 +32,7 @@ impl HdfsUtil {
   /// * ```src``` - The path of source file.
   /// * ```dstFS``` - The handle to destination filesystem.
   /// * ```dst``` - The path of destination file.
-  pub fn copy(src_fs: &HdfsFS, src: &str, dst_fs: &HdfsFS, dst: &str)
+  pub fn copy(src_fs: &HdfsFs, src: &str, dst_fs: &HdfsFs, dst: &str)
       -> Result<bool, HdfsErr> {
 
     let res = unsafe {
@@ -53,7 +53,7 @@ impl HdfsUtil {
   /// * ```src``` - The path of source file.
   /// * ```dstFS``` - The handle to destination filesystem.
   /// * ```dst``` - The path of destination file.
-  pub fn mv(src_fs: &HdfsFS, src: &str, dst_fs: &HdfsFS, dst: &str)
+  pub fn mv(src_fs: &HdfsFs, src: &str, dst_fs: &HdfsFs, dst: &str)
       -> Result<bool, HdfsErr> {
 
     let res = unsafe {
