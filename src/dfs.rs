@@ -699,8 +699,11 @@ fn hdfs_scheme_handler(scheme: &str) -> SchemeType
   }
 }
 
-/// HdfsFs Cache. Basically, It is a cache as well as a way to guarantees 
-/// thread-safe when you get HdfsFs.
+/// HdfsFsCache which caches HdfsFs instances.  
+///
+/// The original libhdfs allows only one HdfsFs instance for the same namenode. In otherwords,
+/// Some APIs of libhdfs are not thread-safe. So, You must get HdfsFs instance through HdfsFsCache, 
+/// caching initialized HdfsFs instances and returning them.  
 pub struct HdfsFsCache<'a> 
 {
   fs_map: Mutex<HashMap<String, HdfsFs<'a>>>,
@@ -778,11 +781,14 @@ impl<'a> HdfsFsCache<'a>
 
 #[cfg(test)]
 mod test {
+  use std::rc::Rc;
+  use std::cell::RefCell;
+  
   use itertools::Itertools;
   
-  use super::HdfsFsCache;
   use native::MiniDfsConf;
   use minidfs::*;
+  use super::HdfsFsCache;
   
   #[test]
   fn test_hdfs_connection() {
@@ -792,19 +798,19 @@ mod test {
     let port = dfs.namenode_port().unwrap();
   
     let minidfs_addr = format!("hdfs://localhost:{}", port);
-    let mut cache: HdfsFsCache = HdfsFsCache::new();
+    let cache = Rc::new(RefCell::new(HdfsFsCache::new()));
   
   
     // Parse namenode uris
-    assert_eq!("file:///".to_string(), cache.get("file:/blah").ok().unwrap().url);
+    assert_eq!("file:///".to_string(), cache.borrow_mut().get("file:/blah").ok().unwrap().url);
     let test_path = format!("hdfs://localhost:{}/users/test", port);
     println!("Trying to get {}", &test_path);
-    assert_eq!(minidfs_addr, cache.get(&test_path).ok().unwrap().url);
+    assert_eq!(minidfs_addr, cache.borrow_mut().get(&test_path).ok().unwrap().url);
   
   
   
     // create a file, check existence, and close
-    let fs = cache.get(&test_path).ok().unwrap();
+    let fs = cache.borrow_mut().get(&test_path).ok().unwrap();
     let test_file = "/test_file";
     let created_file = match fs.create(test_file) {
       Ok(f) => f,

@@ -17,6 +17,44 @@
 //! It also provides more idiomatic and abstract Rust APIs, 
 //! hiding manual memory management and some thread-safety problem of libhdfs.
 //! Rust APIs are highly recommended for most users.
+//!
+//! ## Usage
+//! in Cargo.toml
+//!
+//! ```ignore
+//! [dependencies]
+//! hdfs = "0.0.4"
+//! ```
+//! or
+//!
+//! ```ignore
+//! [dependencies.hdfs]
+//! git = "https://github.com/hyunsik/hdfs-rs.git"
+//! ```
+//! 
+//! Then, in your source code.
+//! 
+//! ```ignore
+//! extern crate hdfs;
+//! ```
+//!
+//! ## Example
+//!
+//! ```ignore
+//! use std::rc::Rc;
+//! use std::cell::RefCell;
+//! use hdfs::HdfsFsCache;
+//!
+//! // You should get HdfsFs through HdfsFsCache in order to guarantee the thread safety.
+//! // HdfsFs itself is thread-safe, but the original libhdfs allows only one HdfsFs instance 
+//! // for the same namenode.
+//! let cache = Rc::new(RefCell::new(HdfsFsCache::new()));  
+//! let fs: HdfsFs = cache.borrow_mut().get("hdfs://localhost:8020/").ok().unwrap();
+//! match fs.mkdir("/data") {
+//!   Ok(_) => { println!("/data has been created") },
+//!   Err(_)  => { panic!("/data creation has failed") }
+//! }; 
+//! ```
 
 #[macro_use] extern crate itertools;
 extern crate libc;
